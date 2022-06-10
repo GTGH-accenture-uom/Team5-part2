@@ -70,9 +70,9 @@ public class DoctorService {
             System.err.println("Timeslot can not be added");
         }
     }
+
     //3rd requirement
     public void displayVaccinationsOfAllDoctorsPerCenter(){
         System.out.println(getVaccinationsOfAllDoctors());
-
     }
 }

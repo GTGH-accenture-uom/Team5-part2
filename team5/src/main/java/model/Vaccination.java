@@ -1,9 +1,12 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Vaccination {
 
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private final int id;
     private String vacc_brand;
     private Insured insured;
     private Doctor doctor;
@@ -17,7 +20,10 @@ public class Vaccination {
         this.doctor = doctor;
         this.vaccinationDate = vaccinationDate;
         this.expirationDate = expirationDate;
+        this.id = count.incrementAndGet();
     }
+
+    public int getId() { return id; }
 
     public String getVacc_brand() {
         return vacc_brand;

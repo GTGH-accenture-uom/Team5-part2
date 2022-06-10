@@ -1,9 +1,11 @@
 package model;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Reservation {
-
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private final int id;
     private Insured insured;
     private Timeslot timeslot;
 
@@ -11,7 +13,10 @@ public class Reservation {
     public Reservation(Insured insured, Timeslot timeslot) {
         this.insured = insured;
         this.timeslot = timeslot;
+        this.id = count.incrementAndGet();
     }
+
+    public int getId() { return id; }
 
     public Insured getInsured() {
         return insured;

@@ -158,7 +158,5 @@ public class App {
                 insuredService.getInsuredAbove60WhoDidntReserve(insuredList, vaccinationCenters).stream()
                         .map(t -> t.getName()+ " " + t.getSurname() + " with afm :" + t.getAfm()).collect(Collectors.joining("\n"));
         RecordWriter.writeFile(totalRecords);
-
-
     }
 }

@@ -2,22 +2,27 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Timeslot {
 
+    private static final AtomicInteger count = new AtomicInteger(0);
+    private final int id;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private boolean isAvailable;
     private int duration;
     private Doctor doctor;
 
-
     public Timeslot(LocalDateTime startDateTime, int duration) {
         this.startDateTime = startDateTime;
         this.isAvailable = true;
         this.duration = duration;
         this.endDateTime = startDateTime.plusMinutes(duration);
+        this.id = count.incrementAndGet();
     }
+
+    public int getId() { return id; }
 
     public LocalDateTime getStartDateTime() {
         return startDateTime;
