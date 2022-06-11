@@ -52,31 +52,31 @@ public class SyntheticData implements CommandLineRunner {
 
 
 
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 9, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 14, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 19, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 18, 30), 30);
+        long t1 = timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
+        long t2 = timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 9, 30), 30);
+        long t3 = timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 14, 30), 30);
+        long t4 = timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 19, 30), 30);
+        long t5 = timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 18, 30), 30);
 
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 18, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 7, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 15, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 18, 30), 30);
+        long t6 = timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 18, 30), 30);
+        long t7 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 7, 30), 30);
+        long t8 = timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
+        long t9 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 15, 30), 30);
+        long t10 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 18, 30), 30);
 
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 14, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 10, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 17, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 15, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 20, 30), 30);
+        long t11 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 14, 30), 30);
+        long t12 = timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 10, 30), 30);
+        long t13 = timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 17, 30), 30);
+        long t14 = timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 15, 30), 30);
+        long t15 = timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 20, 30), 30);
 
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 13, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 9, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 12, 30), 30);
-        timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 16, 30), 30);
+        long t16 = timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 13, 30), 30);
+        long t17 = timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
+        long t18 = timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 9, 30), 30);
+        long t19 = timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 12, 30), 30);
+        long t20 = timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 16, 30), 30);
 
-//doctorService.addTimeslotToDoctor();
+        //doctorService.addTimeslotToDoctor();
 
 
 

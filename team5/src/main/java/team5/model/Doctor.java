@@ -8,9 +8,9 @@ public class Doctor {
     private String amka;
     private String name;
     private String surname;
-    private List<Timeslot> timeslots = new ArrayList<>();
+    private VaccinationCenter vaccinationCenter;
     private List<Vaccination> vaccinations = new ArrayList<>();
-    private List<Vaccination> reservations = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
 
     public Doctor(String amka, String name, String surname) {
         this.amka = amka;
@@ -42,18 +42,6 @@ public class Doctor {
         this.surname = surname;
     }
 
-    public List<Timeslot> getTimeslots() {
-        return timeslots;
-    }
-
-    public void setTimeslots(List<Timeslot> timeslots) {
-        this.timeslots = timeslots;
-    }
-
-    public void addTimeslot(Timeslot timeslot) {
-        timeslots.add(timeslot);
-    }
-
     public List<Vaccination> getVaccinations() {
         return vaccinations;
     }
@@ -66,6 +54,21 @@ public class Doctor {
         vaccinations.add(vaccination);
     }
 
+    public VaccinationCenter getVaccinationCenter() {
+        return vaccinationCenter;
+    }
+
+    public void setVaccinationCenter(VaccinationCenter vaccinationCenter) {
+        this.vaccinationCenter = vaccinationCenter;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -86,7 +89,9 @@ public class Doctor {
         sb.append("amka='").append(amka).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", surname='").append(surname).append('\'');
-        sb.append(", timeslots=").append(timeslots);
+        sb.append(", vaccinationCenter=").append(vaccinationCenter);
+        sb.append(", vaccinations=").append(vaccinations);
+        sb.append(", reservations=").append(reservations);
         sb.append('}');
         return sb.toString();
     }

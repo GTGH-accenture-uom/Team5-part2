@@ -63,17 +63,17 @@ public class DoctorService {
         return foundDoctor;
     }
 
-    public void addTimeslotToDoctor(String amka, Timeslot timeslot) {
-        Doctor doctor = findDoctorByAmka(amka);
-        if (doctor != null && timeslot != null && timeslot.isAvailable()
-                && !doctor.getTimeslots().contains(timeslot)) {
-            //bidirectional relationship doctor.addtimeslot timeslots are added to doctor list and timeslots is added to doctor
-            doctor.addTimeslot(timeslot);
-            timeslot.setDoctor(doctor);
-        } else {
-            System.err.println("Timeslot can not be added");
-        }
-    }
+//    public void addTimeslotToDoctor(String amka, Timeslot timeslot) {
+//        Doctor doctor = findDoctorByAmka(amka);
+//        if (doctor != null && timeslot != null && timeslot.isAvailable()
+//                && !doctor.getVaccinationCenter().getTimeslots().contains(timeslot)) {
+//            //bidirectional relationship doctor.addtimeslot timeslots are added to doctor list and timeslots is added to doctor
+//            doctor.getVaccinationCenter().addTimeslot(timeslot);
+//            timeslot.setDoctor(doctor);
+//        } else {
+//            System.err.println("Timeslot can not be added");
+//        }
+//    }
 
     public List<Doctor> getAllDoctors() {
         return allDoctors;

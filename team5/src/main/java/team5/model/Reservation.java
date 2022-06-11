@@ -2,10 +2,11 @@ package team5.model;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Reservation {
-    private static final AtomicInteger count = new AtomicInteger(0);
-    private final int id;
+    private static final AtomicLong count = new AtomicLong(0);
+    private final long id;
     private Insured insured;
     private Timeslot timeslot;
 
@@ -16,7 +17,7 @@ public class Reservation {
         this.id = count.incrementAndGet();
     }
 
-    public int getId() { return id; }
+    public long getId() { return id; }
 
     public Insured getInsured() {
         return insured;

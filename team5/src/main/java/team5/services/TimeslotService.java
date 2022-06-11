@@ -15,10 +15,11 @@ public class TimeslotService {
     private final List<Timeslot> allTimeslots = new ArrayList<>();
 
 
-    public void createTimeslot(LocalDateTime startDateTime, int duration){
+    public long createTimeslot(LocalDateTime startDateTime, int duration){
         Timeslot timeslot = new Timeslot(startDateTime, duration);
         System.out.println("Timeslot with id: " + timeslot.getId() + " created: " + timeslot);
         allTimeslots.add(timeslot);
+        return timeslot.getId();
     }
 
     public Timeslot findTimeslotById(int id) {

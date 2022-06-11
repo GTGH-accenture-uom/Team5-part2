@@ -2,11 +2,12 @@ package team5.model;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Vaccination {
 
-    private static final AtomicInteger count = new AtomicInteger(0);
-    private final int id;
+    private static final AtomicLong count = new AtomicLong(0);
+    private final long id;
     private String vacc_brand;
     private Insured insured;
     private Doctor doctor;
@@ -23,7 +24,7 @@ public class Vaccination {
         this.id = count.incrementAndGet();
     }
 
-    public int getId() { return id; }
+    public long getId() { return id; }
 
     public String getVacc_brand() {
         return vacc_brand;
