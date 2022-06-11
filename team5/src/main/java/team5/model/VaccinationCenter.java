@@ -68,6 +68,7 @@ public class VaccinationCenter {
 
     public void addTimeSlot(Timeslot timeslot) {
         timeslots.add(timeslot);
+        timeslot.setVaccinationCenter(this);
     }
 
     public void addReservation(Reservation reservation) {

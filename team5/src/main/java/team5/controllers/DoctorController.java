@@ -22,7 +22,7 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    @GetMapping(path="/doctor")
+    @GetMapping(path="/doctors")
     public List<Doctor> getAllDoctors() {
         return doctorService.getAllDoctors();
     }

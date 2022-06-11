@@ -20,7 +20,7 @@ public class InsuredController {
         this.insuredService = insuredService;
     }
 
-    @GetMapping(path="/insured")
+    @GetMapping(path="/insureds")
     public List<Insured> getAllInsured() {
         return insuredService.getAllInsured();
     }

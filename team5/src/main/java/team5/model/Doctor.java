@@ -10,6 +10,7 @@ public class Doctor {
     private String surname;
     private List<Timeslot> timeslots = new ArrayList<>();
     private List<Vaccination> vaccinations = new ArrayList<>();
+    private List<Vaccination> reservations = new ArrayList<>();
 
     public Doctor(String amka, String name, String surname) {
         this.amka = amka;

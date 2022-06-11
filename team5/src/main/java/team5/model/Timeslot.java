@@ -15,6 +15,7 @@ public class Timeslot {
     private boolean isAvailable;
     private int duration;
     private Doctor doctor;
+    private VaccinationCenter vaccinationCenter;
 
     public Timeslot(LocalDateTime startDateTime, int duration) {
         this.startDateTime = startDateTime;
@@ -65,6 +66,14 @@ public class Timeslot {
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
+    }
+
+    public VaccinationCenter getVaccinationCenter() {
+        return vaccinationCenter;
+    }
+
+    public void setVaccinationCenter(VaccinationCenter vaccinationCenter) {
+        this.vaccinationCenter = vaccinationCenter;
     }
 
     @Override

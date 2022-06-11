@@ -67,6 +67,7 @@ public class DoctorService {
         Doctor doctor = findDoctorByAmka(amka);
         if (doctor != null && timeslot != null && timeslot.isAvailable()
                 && !doctor.getTimeslots().contains(timeslot)) {
+            //bidirectional relationship doctor.addtimeslot timeslots are added to doctor list and timeslots is added to doctor
             doctor.addTimeslot(timeslot);
             timeslot.setDoctor(doctor);
         } else {

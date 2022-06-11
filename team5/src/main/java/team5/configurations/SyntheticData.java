@@ -76,9 +76,7 @@ public class SyntheticData implements CommandLineRunner {
         timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 12, 30), 30);
         timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 16, 30), 30);
 
-
-
-
+//doctorService.addTimeslotToDoctor();
 
 
 

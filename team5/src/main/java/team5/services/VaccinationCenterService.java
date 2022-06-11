@@ -26,9 +26,11 @@ public class VaccinationCenterService {
         }
     }
 
+
+
     public void createReservation(Insured insured, Timeslot timeSlot, VaccinationCenter vaccinationCenter) {
         if (insured!=null && timeSlot!=null && vaccinationCenter!=null
-            && timeSlot.getDoctor()!=null){
+                && timeSlot.getDoctor()!=null){
             Reservation reservation = new Reservation(insured, timeSlot);
             vaccinationCenter.addReservation(reservation);
             timeSlot.setAvailable(false);
