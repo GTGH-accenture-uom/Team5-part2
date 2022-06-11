@@ -17,6 +17,7 @@ public class Timeslot {
     private int duration;
     private Doctor doctor;
     private VaccinationCenter vaccinationCenter;
+    private Reservation reservation;
 
     public Timeslot(LocalDateTime startDateTime, int duration) {
         this.startDateTime = startDateTime;
