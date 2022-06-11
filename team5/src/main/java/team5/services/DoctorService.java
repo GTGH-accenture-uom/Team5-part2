@@ -1,9 +1,10 @@
-package services;
+package team5.services;
 
-import model.Doctor;
-import model.Timeslot;
-import model.Vaccination;
-import utilities.InputValidator;
+import team5.model.Doctor;
+import team5.model.Timeslot;
+import team5.model.Vaccination;
+import team5.utilities.InputValidator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

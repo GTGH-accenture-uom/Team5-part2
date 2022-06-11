@@ -1,4 +1,4 @@
-package model;
+package team5.model;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;

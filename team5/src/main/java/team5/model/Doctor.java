@@ -1,7 +1,5 @@
-package model;
+package team5.model;
 
-
-import utilities.InputValidator;
 
 import java.util.*;
 

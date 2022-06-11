@@ -1,10 +1,8 @@
-package utilities;
+package team5.utilities;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
-import model.Reservation;
 import org.apache.commons.io.FileUtils;
 
 public class RecordWriter {

@@ -1,6 +1,4 @@
-package model;
-
-import utilities.InputValidator;
+package team5.model;
 
 import java.time.LocalDate;
 import java.util.Objects;
