@@ -1,4 +1,4 @@
-package team5.utilities;
+package team5.configurations;
 
 import team5.model.Insured;
 import org.springframework.beans.factory.annotation.Autowired;
