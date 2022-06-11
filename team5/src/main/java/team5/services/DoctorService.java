@@ -1,5 +1,6 @@
 package team5.services;
 
+import org.springframework.stereotype.Service;
 import team5.model.Doctor;
 import team5.model.Timeslot;
 import team5.model.Vaccination;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
+@Service
 public class DoctorService {
 
 
@@ -35,6 +36,7 @@ public class DoctorService {
             if (InputValidator.checkAmka(amka)) {
                 Doctor doctor = new Doctor(amka, firstName, lastName);
                 allDoctors.add(doctor);
+                System.out.println("Created doctor: " + doctor);
             } else {
                 System.err.println("Please provide a right amka.");
             }
@@ -70,6 +72,10 @@ public class DoctorService {
         } else {
             System.err.println("Timeslot can not be added");
         }
+    }
+
+    public List<Doctor> getAllDoctors() {
+        return allDoctors;
     }
 
     //3rd requirement

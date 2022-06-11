@@ -4,6 +4,7 @@ import team5.model.Insured;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import team5.services.DoctorService;
 import team5.services.InsuredService;
 import java.time.LocalDate;
 
@@ -11,10 +12,12 @@ import java.time.LocalDate;
 public class SyntheticData implements CommandLineRunner {
 
     private final InsuredService insuredService;
+    private final DoctorService doctorService;
 
     @Autowired
-    public SyntheticData(InsuredService insuredService){
+    public SyntheticData(InsuredService insuredService, DoctorService doctorService){
         this.insuredService = insuredService;
+        this.doctorService = doctorService;
     }
 
     @Override
@@ -35,5 +38,32 @@ public class SyntheticData implements CommandLineRunner {
         insuredService.createInsured("211129177", "32228223333", "giotis", LocalDate.of(2010, 8, 23), "andreou", "mail88@mail.gr");
         insuredService.createInsured("221111177", "32202723333", "xrisa", LocalDate.of(2017, 6, 20), "papas", "mail228@mail.gr");
         insuredService.createInsured("211131179", "32228223309", "alexis", LocalDate.of(1930, 8, 23), "nakis", "mail238@mail.gr");
+
+        doctorService.createDoctor("12345678912", "nikolaos", "vasileiou");
+        doctorService.createDoctor("12345678919", "vasilis", "dimitriou");
+        doctorService.createDoctor("12345678914", "maria", "dimitriou");
+        doctorService.createDoctor("12345678915", "xristina", "deli");
+
+//        //Reservations for Center1
+//        vaccinationCenterService.createReservation(insured1, timeslot1center1, vaccCenter1);
+//        vaccinationCenterService.createReservation(insured2, timeslot2center1, vaccCenter1);
+//        vaccinationCenterService.createReservation(insured3, timeslot3center1, vaccCenter1);
+//        vaccinationCenterService.createReservation(insured4, timeslot4center1, vaccCenter1);
+//
+//        //Reservations for Center2
+//        vaccinationCenterService.createReservation(insured5, timeslot1center2, vaccCenter2);
+//        vaccinationCenterService.createReservation(insured6, timeslot2center2, vaccCenter2);
+//        vaccinationCenterService.createReservation(insured7, timeslot3center2, vaccCenter2);
+//        vaccinationCenterService.createReservation(insured8, timeslot4center2, vaccCenter2);
+//
+//        //vaccinations
+//        vaccinationCenterService.createVaccination("Pfizer", 2, insured1, vaccCenter1);
+//        vaccinationCenterService.createVaccination("Moderna", 3, insured2, vaccCenter1);
+//        vaccinationCenterService.createVaccination("Pfizer", 2, insured3, vaccCenter1);
+//        vaccinationCenterService.createVaccination("Pfizer", 2, insured4, vaccCenter1);
+//        vaccinationCenterService.createVaccination("Pfizer", 2, insured5, vaccCenter2);
+//        vaccinationCenterService.createVaccination("Pfizer", 2, insured6, vaccCenter2);
+
+
     }
 }
