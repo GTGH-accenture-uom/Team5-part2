@@ -8,7 +8,7 @@ public class Doctor {
     private String amka;
     private String name;
     private String surname;
-    private VaccinationCenter vaccinationCenter;
+    private List <VaccinationCenter> vaccinationCenters = new ArrayList<>();
     private List<Vaccination> vaccinations = new ArrayList<>();
     private List<Reservation> reservations = new ArrayList<>();
 
@@ -54,12 +54,12 @@ public class Doctor {
         vaccinations.add(vaccination);
     }
 
-    public VaccinationCenter getVaccinationCenter() {
-        return vaccinationCenter;
+    public List<VaccinationCenter> getVaccinationCenters() {
+        return vaccinationCenters;
     }
 
-    public void setVaccinationCenter(VaccinationCenter vaccinationCenter) {
-        this.vaccinationCenter = vaccinationCenter;
+    public void setVaccinationCenters(List<VaccinationCenter> vaccinationCenters) {
+        this.vaccinationCenters = vaccinationCenters;
     }
 
     public List<Reservation> getReservations() {
@@ -89,7 +89,7 @@ public class Doctor {
         sb.append("amka='").append(amka).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", surname='").append(surname).append('\'');
-        sb.append(", vaccinationCenter=").append(vaccinationCenter);
+        sb.append(", vaccinationCenter=").append(vaccinationCenters);
         sb.append(", vaccinations=").append(vaccinations);
         sb.append(", reservations=").append(reservations);
         sb.append('}');
