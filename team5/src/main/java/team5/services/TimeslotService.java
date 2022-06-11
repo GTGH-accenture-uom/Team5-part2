@@ -2,6 +2,7 @@ package team5.services;
 
 import org.springframework.stereotype.Service;
 import team5.model.Timeslot;
+import team5.utilities.Conversion;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,7 +34,8 @@ public class TimeslotService {
         return foundTimeslot;
     }
 
-    public List<Timeslot> findTimeslotsByDate(LocalDate localDate){
+    public List<Timeslot> findTimeslotsByDate(String date){
+       LocalDate localDate= Conversion.stringToLocalDate(date);
         List<Timeslot> timeslots = new ArrayList<>();
         for (Timeslot t: allTimeslots){
             if (t.isAvailable() && ((t.getStartDateTime().toLocalDate().equals(localDate)))){
