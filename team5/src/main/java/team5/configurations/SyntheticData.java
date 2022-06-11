@@ -6,18 +6,23 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import team5.services.DoctorService;
 import team5.services.InsuredService;
+import team5.services.TimeslotService;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Configuration
 public class SyntheticData implements CommandLineRunner {
 
     private final InsuredService insuredService;
     private final DoctorService doctorService;
+    private final TimeslotService timeslotService;
 
     @Autowired
-    public SyntheticData(InsuredService insuredService, DoctorService doctorService){
+    public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService){
         this.insuredService = insuredService;
         this.doctorService = doctorService;
+        this.timeslotService = timeslotService;
     }
 
     @Override
@@ -43,6 +48,39 @@ public class SyntheticData implements CommandLineRunner {
         doctorService.createDoctor("12345678919", "vasilis", "dimitriou");
         doctorService.createDoctor("12345678914", "maria", "dimitriou");
         doctorService.createDoctor("12345678915", "xristina", "deli");
+
+
+
+
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 9, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 14, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 19, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 18, 30), 30);
+
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 18, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 7, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 15, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 18, 30), 30);
+
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 14, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 10, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 17, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 15, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 20, 30), 30);
+
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 13, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 9, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 12, 30), 30);
+        timeslotService.createTimeslot(LocalDateTime.of(2022, 11, 7, 16, 30), 30);
+
+
+
+
+
+
 
 //        //Reservations for Center1
 //        vaccinationCenterService.createReservation(insured1, timeslot1center1, vaccCenter1);

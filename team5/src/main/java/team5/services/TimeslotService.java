@@ -1,5 +1,6 @@
 package team5.services;
 
+import org.springframework.stereotype.Service;
 import team5.model.Timeslot;
 
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-
+@Service
 public class TimeslotService {
     private final List<Timeslot> allTimeslots = new ArrayList<>();
 
@@ -41,5 +42,7 @@ public class TimeslotService {
         return timeslots;
     }
 
-
+    public List<Timeslot> getAllTimeslots() {
+        return allTimeslots;
+    }
 }
