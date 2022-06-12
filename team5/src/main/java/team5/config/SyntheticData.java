@@ -1,10 +1,11 @@
-package team5.configurations;
+package team5.config;
 
+import team5.exceptions.DoctorNotFoundException;
 import team5.model.Doctor;
-import team5.model.Insured;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import team5.model.Insured;
 import team5.model.Timeslot;
 import team5.model.VaccinationCenter;
 import team5.services.DoctorService;
@@ -14,17 +15,20 @@ import team5.services.VaccinationCenterService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class SyntheticData implements CommandLineRunner {
 
     private final InsuredService insuredService;
+
     private final DoctorService doctorService;
     private final TimeslotService timeslotService;
-    private  final VaccinationCenterService vaccinationCenterService;
+    private final VaccinationCenterService vaccinationCenterService;
 
     @Autowired
-    public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService, VaccinationCenterService vaccinationCenterService){
+    public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService, VaccinationCenterService vaccinationCenterService) {
         this.insuredService = insuredService;
         this.doctorService = doctorService;
         this.timeslotService = timeslotService;
@@ -34,7 +38,7 @@ public class SyntheticData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        insuredService.createInsured("111111127", "22222223333", "makis", LocalDate.of(1950, 8, 23),"papadopoulos", "mail@mail.gr");
+        insuredService.createInsured("111111127", "22222223333", "makis", LocalDate.of(1950, 8, 23), "papadopoulos", "mail@mail.gr");
         insuredService.createInsured("111611137", "22202223333", "takis", LocalDate.of(1930, 6, 20), "papas", "mail2@mail.gr");
         insuredService.createInsured("111111119", "22222223309", "sakis", LocalDate.of(1990, 8, 23), "euaggelou", "mail3@mail.gr");
         insuredService.createInsured("113111170", "22202223330", "lakis", LocalDate.of(2001, 6, 27), "nikou", "mail4@mail.gr");
@@ -54,8 +58,6 @@ public class SyntheticData implements CommandLineRunner {
         doctorService.createDoctor("12345678919", "vasilis", "dimitriou");
         doctorService.createDoctor("12345678914", "maria", "dimitriou");
         doctorService.createDoctor("12345678915", "xristina", "deli");
-
-
 
 
         long t1 = timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
@@ -85,7 +87,6 @@ public class SyntheticData implements CommandLineRunner {
         //doctorService.addTimeslotToDoctor();
 
 
-
 //        //Reservations for Center1
 //        vaccinationCenterService.createReservation(insured1, timeslot1center1, vaccCenter1);
 //        vaccinationCenterService.createReservation(insured2, timeslot2center1, vaccCenter1);
@@ -107,14 +108,34 @@ public class SyntheticData implements CommandLineRunner {
 //        vaccinationCenterService.createVaccination("Pfizer", 2, insured6, vaccCenter2);
 
 
-        Timeslot timeslot55=timeslotService.findTimeslotById(10);
-        Doctor doctor = doctorService.findDoctorByAmka("12345678912");
+        Timeslot timeslot10 = timeslotService.findTimeslotById(10);
+        Timeslot timeslot9 = timeslotService.findTimeslotById(9);
+        Timeslot timeslot13 = timeslotService.findTimeslotById(13);
+        Timeslot timeslot6 = timeslotService.findTimeslotById(6);
+        Timeslot timeslot11 = timeslotService.findTimeslotById(11);
 
-        System.out.println(timeslot55);
-        //doctorService.addTimeslotToDoctor("12345678912", timeslotService.findTimeslotById(10));
-        VaccinationCenter vaccCenter1 = vaccinationCenterService.createVaccinationCenter("5012", "Thessaloniki", "Egnatias 10");
-        vaccCenter1.addTimeSlot(timeslot55);
-        timeslot55.setVaccinationCenter(vaccCenter1);
-        timeslot55.setDoctor(doctor);
+            Doctor doctor1 = doctorService.findDoctorByAmka("12345678912");
+
+            Doctor doctor2 = doctorService.findDoctorByAmka("12345678919");
+            System.out.println(timeslot10);
+            //doctorService.addTimeslotToDoctor("12345678912", timeslotService.findTimeslotById(10));
+            VaccinationCenter vaccCenter1 = vaccinationCenterService.createVaccinationCenter("5012", "Thessaloniki", "Egnatias 10");
+            vaccCenter1.addTimeSlot(timeslot10);
+            vaccCenter1.addTimeSlot(timeslot9);
+            vaccCenter1.addTimeSlot(timeslot13);
+            vaccCenter1.addTimeSlot(timeslot6);
+            vaccCenter1.addTimeSlot(timeslot11);
+            timeslot10.setVaccinationCenter(vaccCenter1);
+            timeslot9.setVaccinationCenter(vaccCenter1);
+            timeslot13.setVaccinationCenter(vaccCenter1);
+            timeslot6.setVaccinationCenter(vaccCenter1);
+            timeslot11.setVaccinationCenter(vaccCenter1);
+            timeslot10.setDoctor(doctor1);
+            timeslot9.setDoctor(doctor2);
+            timeslot13.setDoctor(doctor1);
+            timeslot6.setDoctor(doctor1);
+            timeslot11.setDoctor(doctor2);
+
+
     }
 }

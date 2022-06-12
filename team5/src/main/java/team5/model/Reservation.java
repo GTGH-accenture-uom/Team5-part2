@@ -9,7 +9,7 @@ public class Reservation {
     private final long id;
     private Insured insured;
     private Timeslot timeslot;
-    private  int changes;
+
 
 
     public Reservation(Insured insured, Timeslot timeslot) {

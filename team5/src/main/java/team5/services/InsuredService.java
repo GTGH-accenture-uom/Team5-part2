@@ -1,5 +1,6 @@
 package team5.services;
 
+import team5.config.SyntheticData;
 import team5.model.Doctor;
 import team5.model.VaccinationCenter;
 import team5.model.Insured;

@@ -1,10 +1,7 @@
 package team5.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import team5.model.Reservation;
 import team5.model.Timeslot;
 import team5.services.ReservationService;
@@ -19,20 +16,28 @@ import java.util.List;
 public class ReservationController {
 
 
-        private final VaccinationCenterService vaccinationCenterService;
 
-        @Autowired
-        public ReservationController(VaccinationCenterService vaccinationCenterService){
-            this.vaccinationCenterService = vaccinationCenterService;
-        }
+    private final ReservationService reservationService;
 
-        @PostMapping("/reservation")
-        public long createReservation(@RequestParam(value = "amkaInsured") String amkaInsured,
-                                             @RequestParam(value = "timeslot") String date,
-                                             //timeslot in db = datetime per doctor per vaccination center
-                                             //timeslot in front = datetime only
-                                             @RequestParam(value = "amkaDoctor") String amkaDoctor){
-            return vaccinationCenterService.createReservation(amkaInsured, date, amkaDoctor);
-        }
+    @Autowired
+    public ReservationController(ReservationService reservationService) {
+
+        this.reservationService = reservationService;
+    }
+
+    @PostMapping("/reservation")
+    public long createReservation(@RequestParam(value = "amkaInsured") String amkaInsured, @RequestParam(value = "timeslot") String date,
+                                  //timeslot in db = datetime per doctor per vaccination center
+                                  //timeslot in front = datetime only
+                                  @RequestParam(value = "amkaDoctor") String amkaDoctor) {
+        return reservationService.createReservation(amkaInsured, date, amkaDoctor);
+    }
+
+    @PutMapping("/reservation/{resevationId}")
+    public String updateReservation(@PathVariable(value = "resevationId") String reservationId,
+                                    @RequestParam(value = "timeslotId") String timeslotId) {
+
+        return reservationService.updateReservation(reservationId, timeslotId);
+    }
 }
 

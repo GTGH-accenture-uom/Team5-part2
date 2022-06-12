@@ -6,12 +6,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.*;
 
 public class Doctor {
-
+    @JsonIgnore
     private String amka;
     private String name;
     private String surname;
+    @JsonIgnore
     private List <VaccinationCenter> vaccinationCenters = new ArrayList<>();
+    @JsonIgnore
     private List<Vaccination> vaccinations = new ArrayList<>();
+    @JsonIgnore
     private List<Reservation> reservations = new ArrayList<>();
 
     public Doctor(String amka, String name, String surname) {
