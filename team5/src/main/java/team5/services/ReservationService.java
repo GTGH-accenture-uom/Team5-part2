@@ -12,19 +12,18 @@ import java.util.List;
 public class ReservationService {
 
     private TimeslotService timeslotService;
+    private List<Timeslot> timeslots = timeslotService.getAllTimeslots();
 
     @Autowired
     public ReservationService(TimeslotService timeslotService) {this.timeslotService = timeslotService;}
 
     public List<Timeslot> getTimeslotsByLocalDateTimeByDoctor(String amkaInsured, LocalDateTime localDateTime, String amkaDoctor){
-        List<Timeslot> timeslots = timeslotService.getAllTimeslots();
         List<Timeslot> timeslotsByDate = getTimeslotsByLocalDateTime(timeslots, localDateTime);
         List<Timeslot> timeslotsByDoctorByDate = getTimeslotsByDoctor(timeslotsByDate, amkaDoctor);
         return timeslotsByDoctorByDate;
     }
 
     public List<Timeslot> getTimeslotsByLocalDateTime(List<Timeslot> timeslots, LocalDateTime localDateTime){
-        timeslots = timeslotService.getAllTimeslots();
         List<Timeslot> timeslotsByDate = new ArrayList<>();
         for (Timeslot t : timeslots){
             if (t.getStartDateTime().equals(localDateTime)){
@@ -35,7 +34,6 @@ public class ReservationService {
     }
 
     public List<Timeslot> getTimeslotsByDoctor(List<Timeslot> timeslots, String amka){
-        timeslots = timeslotService.getAllTimeslots();
         List<Timeslot> timeslotsByDoctor = new ArrayList<>();
         for (Timeslot t : timeslots){
             if (t.getDoctor()!=null && t.getDoctor().getAmka().equals(amka)){
