@@ -1,6 +1,8 @@
 package team5.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.*;
 
 public class Doctor {
@@ -68,6 +70,10 @@ public class Doctor {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public void addReservation(Reservation reservation) {
+        reservations.add(reservation);
     }
 
     @Override

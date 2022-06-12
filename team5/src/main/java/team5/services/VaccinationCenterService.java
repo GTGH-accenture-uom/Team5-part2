@@ -1,15 +1,31 @@
 package team5.services;
 
+import org.springframework.stereotype.Service;
 import team5.model.*;
+import team5.utilities.Conversion;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Service
 public class VaccinationCenterService {
 
 
     private final List<VaccinationCenter> allVaccinationCenters = new ArrayList<>();
+    private InsuredService insuredService;
+    private TimeslotService timeslotService;
+    private ReservationService reservationService;
+    private DoctorService doctorService;
+    private final List<Reservation> allResevations = new ArrayList<>();
 
+    public VaccinationCenterService(InsuredService insuredService, TimeslotService timeslotService, ReservationService reservationService, DoctorService doctorService ){
+        this.insuredService = insuredService;
+        this.timeslotService = timeslotService;
+        this.reservationService = reservationService;
+        this.doctorService = doctorService;
+
+    }
 
     public VaccinationCenter createVaccinationCenter(String code, String city, String address) {
         VaccinationCenter vaccinationCenter = new VaccinationCenter(code, city, address);
@@ -27,18 +43,45 @@ public class VaccinationCenterService {
     }
 
 
+    //getTimeslotsByLocalDateTimeByDoctor(String amkaInsured, LocalDateTime localDateTime, String amkaDoctor)
 
-    public void createReservation(Insured insured, Timeslot timeSlot, VaccinationCenter vaccinationCenter) {
-        if (insured!=null && timeSlot!=null && vaccinationCenter!=null
-                && timeSlot.getDoctor()!=null){
-            Reservation reservation = new Reservation(insured, timeSlot);
-            vaccinationCenter.addReservation(reservation);
-            timeSlot.setAvailable(false);
+        public long createReservation(String amkaInsured,  String date, String amkaDoctor) {
+        LocalDateTime localDateTime = Conversion.stringToLocalDateTime(date);
+        List<Timeslot> timeslots = reservationService.getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
+            System.out.println(timeslots);
+        Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);//
+        Insured insured = insuredService.findInsuredByAmka(amkaInsured);
+        if (insured!=null && timeslots.size()>0  && timeslots.get(0)!=null  && timeslots.get(0).getDoctor()!=null
+                ){//&& timeslots.get(0).getDoctor().equals(doctor)
+            Timeslot timeslot = timeslots.get(0);
+            Reservation reservation = new Reservation(insured, timeslot);
+            timeslot.getVaccinationCenter().addReservation(reservation);
+            System.out.println(reservation);
+            doctor.addReservation(reservation);
+            timeslot.setAvailable(false);
+            allResevations.add(reservation);
+
+            return reservation.getId();
         }else{
-            System.err.println("Cannot make this reservation with insured amka:" +insured.getAmka() + ", " +
-                    "timeslot" + timeSlot + ", center with code " + vaccinationCenter.getCode());
+            System.err.println("Cannot make this reservation with insured " +insured + ", " +
+                    "timeslot" + timeslots );
+            throw new RuntimeException("exception");
         }
     }
+
+
+
+//    public void createReservation(Insured insured, Timeslot timeSlot, VaccinationCenter vaccinationCenter) {
+//        if (insured!=null && timeSlot!=null && vaccinationCenter!=null
+//                && timeSlot.getDoctor()!=null){
+//            Reservation reservation = new Reservation(insured, timeSlot);
+//            vaccinationCenter.addReservation(reservation);
+//            timeSlot.setAvailable(false);
+//        }else{
+//            System.err.println("Cannot make this reservation with insured amka:" +insured.getAmka() + ", " +
+//                    "timeslot" + timeSlot + ", center with code " + vaccinationCenter.getCode());
+//        }
+//    }
 
     public void createVaccination(String brand, int yearsToExpire, Insured insured, VaccinationCenter vaccinationCenter) {
         Reservation foundReservation = findReservationByInsuredAmka(insured, vaccinationCenter);

@@ -94,6 +94,7 @@ public class Timeslot {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Timeslot{");
+        sb.append("id=").append(id);
         sb.append("localDateTime=").append(startDateTime);
         sb.append(", endLocalDateTime=").append(endDateTime);
         sb.append(", duration=").append(duration);

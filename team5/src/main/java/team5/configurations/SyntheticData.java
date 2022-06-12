@@ -1,12 +1,16 @@
 package team5.configurations;
 
+import team5.model.Doctor;
 import team5.model.Insured;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import team5.model.Timeslot;
+import team5.model.VaccinationCenter;
 import team5.services.DoctorService;
 import team5.services.InsuredService;
 import team5.services.TimeslotService;
+import team5.services.VaccinationCenterService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,12 +21,14 @@ public class SyntheticData implements CommandLineRunner {
     private final InsuredService insuredService;
     private final DoctorService doctorService;
     private final TimeslotService timeslotService;
+    private  final VaccinationCenterService vaccinationCenterService;
 
     @Autowired
-    public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService){
+    public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService, VaccinationCenterService vaccinationCenterService){
         this.insuredService = insuredService;
         this.doctorService = doctorService;
         this.timeslotService = timeslotService;
+        this.vaccinationCenterService = vaccinationCenterService;
     }
 
     @Override
@@ -101,5 +107,14 @@ public class SyntheticData implements CommandLineRunner {
 //        vaccinationCenterService.createVaccination("Pfizer", 2, insured6, vaccCenter2);
 
 
+        Timeslot timeslot55=timeslotService.findTimeslotById(10);
+        Doctor doctor = doctorService.findDoctorByAmka("12345678912");
+
+        System.out.println(timeslot55);
+        //doctorService.addTimeslotToDoctor("12345678912", timeslotService.findTimeslotById(10));
+        VaccinationCenter vaccCenter1 = vaccinationCenterService.createVaccinationCenter("5012", "Thessaloniki", "Egnatias 10");
+        vaccCenter1.addTimeSlot(timeslot55);
+        timeslot55.setVaccinationCenter(vaccCenter1);
+        timeslot55.setDoctor(doctor);
     }
 }
