@@ -19,18 +19,21 @@ public class ControllerAdvisor {
     @ExceptionHandler(value = {DoctorNotFoundException.class})
     public ResponseEntity<ErrorResponse> handleDoctorNotFoundException(DoctorNotFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {DateNotFoundException.class})
-    public ResponseEntity<ErrorResponse> handleDateNotFoundException(DateNotFoundException ex) {
+
+
+    @ExceptionHandler(value = {DateFormatException.class})
+    public ResponseEntity<ErrorResponse> handleDateNotFoundException(DateFormatException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
 
 
 }

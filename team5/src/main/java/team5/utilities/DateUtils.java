@@ -1,25 +1,24 @@
 package team5.utilities;
 
-import team5.exceptions.DateNotFoundException;
+import team5.exceptions.DateFormatException;
 import team5.model.Timeslot;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
 
 public class DateUtils {
-    public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+   public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static LocalDate stringToLocalDate(String input) {
         LocalDate localDate;
         try {
-            localDate = LocalDate.parse(input, dateFormatter);
+            localDate = LocalDate.parse(input,dateFormatter);
         } catch (DateTimeException dateTimeException) {
-            throw new DateNotFoundException(input);
+            throw new DateFormatException(input);
         }
         return localDate;
 
