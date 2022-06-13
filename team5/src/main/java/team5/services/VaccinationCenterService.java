@@ -13,17 +13,17 @@ public class VaccinationCenterService {
 
 
     private final List<VaccinationCenter> allVaccinationCenters = new ArrayList<>();
-    private InsuredService insuredService;
-    private DoctorService doctorService;
-    private VaccinationService vaccinationService;
+//    private InsuredService insuredService;
+//    private DoctorService doctorService;
+//    private VaccinationService vaccinationService;
 
-
-    @Autowired
-    public VaccinationCenterService(InsuredService insuredService, DoctorService doctorService, VaccinationService vaccinationService) {
-        this.insuredService = insuredService;
-        this.doctorService = doctorService;
-        this.vaccinationService = vaccinationService;
-    }
+//
+//    @Autowired
+//    public VaccinationCenterService(InsuredService insuredService, DoctorService doctorService, VaccinationService vaccinationService) {
+//        this.insuredService = insuredService;
+//        this.doctorService = doctorService;
+//        this.vaccinationService = vaccinationService;
+//    }
 
     public VaccinationCenter createVaccinationCenter(String code, String city, String address) {
         VaccinationCenter vaccinationCenter = new VaccinationCenter(code, city, address);
@@ -31,7 +31,7 @@ public class VaccinationCenterService {
         return vaccinationCenter;
     }
 
-
+    //we need to apply restrictions to this
     public void addTimeslotsToVaccinationCenter(List<Timeslot> timeslots, VaccinationCenter vaccinationCenter) {
         for (Timeslot t : timeslots) {
             if (!vaccinationCenter.getTimeslots().contains(t)) {
@@ -56,49 +56,17 @@ public class VaccinationCenterService {
 //        }
 //    }
 
-    public Vaccination createVaccination(String brand, int yearsToExpire, Insured insured, VaccinationCenter vaccinationCenter) {
-        Reservation foundReservation = findReservationByInsuredAmka(insured, vaccinationCenter);
-        if (foundReservation != null) {
-            Insured insuredToVaccinate = foundReservation.getInsured();
-            Doctor doctor = foundReservation.getTimeslot().getDoctor();
-            LocalDateTime startDateTime = foundReservation.getTimeslot().getStartDateTime();
-            LocalDateTime expirationDate = startDateTime.plusYears(yearsToExpire);
-            Vaccination vaccination = new Vaccination(brand, insuredToVaccinate, doctor, startDateTime, expirationDate);
-            //Add record of vaccination to vaccination center
-            vaccinationCenter.addVaccination(vaccination);
-            //Add vaccination in doctor's vaccinations list
-            doctor.addVaccination(vaccination);
-            vaccinationService.getAllVaccinations().add(vaccination);
-            return vaccination;
-        } else {
-            System.err.println("This Vaccination cannot be made because this reservation cannot be found");
-        }
-        return null;
-    }
 
-    public String getAllReservationsPerCenter() {
-        String str = "---------All RERSERVATIONS PER CENTER---------\n";
-        for (VaccinationCenter v : allVaccinationCenters) {
-            str += getReservations(v);
-        }
-        return str;
-    }
 
-    public String getReservations(VaccinationCenter vaccinationCenter) {
-        String str = "";
-        List<Reservation> reservations = vaccinationCenter.getReservations();
-        if (!reservations.isEmpty()) {
-            str += "---------Reservations of VaccinationCenter " + vaccinationCenter.getCode() + "---------\n";
-            int count = 1;
-            for (Reservation r : reservations) {
-                str += count + "-" + r + "\n";
-                count++;
-            }
-        } else {
-            str += "No Reservations are made\n";
-        }
-        return str;
-    }
+//    public String getAllReservationsPerCenter() {
+//        String str = "---------All RERSERVATIONS PER CENTER---------\n";
+//        for (VaccinationCenter v : allVaccinationCenters) {
+//            str += getReservations(v);
+//        }
+//        return str;
+//    }
+
+
 
     /*
     public String getFreeTimeslotsByVaccinationCenter() {
@@ -125,27 +93,10 @@ public class VaccinationCenterService {
         return foundVaccinationCenter;
     }
 
-
-    private Reservation findReservationByInsuredAmka(Insured insured, VaccinationCenter vaccinationCenter) {
-        Reservation reservation = null;
-        Optional<Reservation> optionalReservation = vaccinationCenter
-                .getReservations()
-                .stream()
-                .filter(reserv -> reserv.getInsured().getAmka().equals(insured.getAmka())).findFirst();
-        if (optionalReservation.isPresent()) {
-            reservation = optionalReservation.get();
-        }
-        return reservation;
-    }
-
     public List<VaccinationCenter> getAllVaccinationCenters() {
         return allVaccinationCenters;
     }
 
-    //1st requirement
-    public void displayAllReservationsPerCenter() {
-        System.out.println(getAllReservationsPerCenter());
-    }
 
     //2st requirement
     /*

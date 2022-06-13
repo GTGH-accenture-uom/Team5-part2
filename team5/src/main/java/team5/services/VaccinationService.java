@@ -2,8 +2,7 @@ package team5.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team5.model.Doctor;
-import team5.model.Vaccination;
+import team5.model.*;
 import team5.utilities.VaccinationState;
 
 import java.time.LocalDateTime;
@@ -12,26 +11,17 @@ import java.util.*;
 public class VaccinationService {
 
     private final List<Vaccination> allVaccinations = new ArrayList<>();
+    private ReservationService reservationService;
 
-    private InsuredService insuredService;
-    //private DoctorService doctorService;
 
     @Autowired
-    public VaccinationService(InsuredService insuredService, DoctorService doctorService) {
-        this.insuredService = insuredService;
-        //this.doctorService = doctorService;
+    public VaccinationService( ReservationService reservationService) {
+        this.reservationService = reservationService;
+
     }
 
     public List<Vaccination> getAllVaccinations() {
         return allVaccinations;
-    }
-
-    public InsuredService getInsuredService() {
-        return insuredService;
-    }
-
-    public void setInsuredService(InsuredService insuredService) {
-        this.insuredService = insuredService;
     }
 
     public List<Vaccination> getRecentVaccinationsByInsured(String amka){
@@ -79,4 +69,25 @@ public class VaccinationService {
             throw new RuntimeException("Cannot parse vaccination list by insured bu id");
         }
     }
+
+    public Vaccination createVaccination(String brand, int yearsToExpire, Insured insured, VaccinationCenter vaccinationCenter) {
+        Reservation foundReservation = reservationService.findReservationByInsuredAmka(insured, vaccinationCenter);
+        if (foundReservation != null) {
+            Insured insuredToVaccinate = foundReservation.getInsured();
+            Doctor doctor = foundReservation.getTimeslot().getDoctor();
+            LocalDateTime startDateTime = foundReservation.getTimeslot().getStartDateTime();
+            LocalDateTime expirationDate = startDateTime.plusYears(yearsToExpire);
+            Vaccination vaccination = new Vaccination(brand, insuredToVaccinate, doctor, startDateTime, expirationDate);
+            //Add record of vaccination to vaccination center
+            vaccinationCenter.addVaccination(vaccination);
+            //Add vaccination in doctor's vaccinations list
+            doctor.addVaccination(vaccination);
+            getAllVaccinations().add(vaccination);
+            return vaccination;
+        } else {
+            System.err.println("This Vaccination cannot be made because this reservation cannot be found");
+        }
+        return null;
+    }
+
 }

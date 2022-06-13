@@ -20,17 +20,17 @@ public class DoctorService {
     private final List<Doctor> allDoctors = new ArrayList<>();
 
 
-    public String getVaccinationsPerDoctor(Doctor doctor) {
-        List<Vaccination> vaccinations = doctor.getVaccinations();
-        String str = "---------Vaccinations of Doctor with amka " + doctor.getAmka() + "---------\n";
-        if (vaccinations.isEmpty()) {
-            str += "This Doctor has done no vaccinations yet.\n";
-        }
-        for (Vaccination vacc : vaccinations) {
-            str += "The vaccination date is:" + vacc.getVaccinationDate() + "\n" + "The insured is:" + vacc.getInsured().getName() + " " + vacc.getInsured().getSurname() + "\n";
-        }
-        return str;
-    }
+//    public String getVaccinationsPerDoctor(Doctor doctor) {
+//        List<Vaccination> vaccinations = doctor.getVaccinations();
+//        String str = "---------Vaccinations of Doctor with amka " + doctor.getAmka() + "---------\n";
+//        if (vaccinations.isEmpty()) {
+//            str += "This Doctor has done no vaccinations yet.\n";
+//        }
+//        for (Vaccination vacc : vaccinations) {
+//            str += "The vaccination date is:" + vacc.getVaccinationDate() + "\n" + "The insured is:" + vacc.getInsured().getName() + " " + vacc.getInsured().getSurname() + "\n";
+//        }
+//        return str;
+//    }
 
     public void createDoctor(String amka, String firstName, String lastName) {
         if (InputValidator.checkAmka(amka)) {
@@ -58,13 +58,13 @@ public class DoctorService {
          */
     }
 
-    public String getVaccinationsOfAllDoctors() {
-        String str = "---------VACCINATIONS OF ALL DOCTORS---------\n";
-        for (Doctor d : allDoctors) {
-            str += getVaccinationsPerDoctor(d);
-        }
-        return str;
-    }
+//    public String getVaccinationsOfAllDoctors() {
+//        String str = "---------VACCINATIONS OF ALL DOCTORS---------\n";
+//        for (Doctor d : allDoctors) {
+//            str += getVaccinationsPerDoctor(d);
+//        }
+//        return str;
+//    }
 
     public Doctor findDoctorByAmka(String amka) {
         Doctor foundDoctor = null;
@@ -104,8 +104,4 @@ public class DoctorService {
         return allDoctors;
     }
 
-    //3rd requirement
-    public void displayVaccinationsOfAllDoctorsPerCenter() {
-        System.out.println(getVaccinationsOfAllDoctors());
-    }
 }

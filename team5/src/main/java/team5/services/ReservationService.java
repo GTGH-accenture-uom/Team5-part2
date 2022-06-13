@@ -2,61 +2,30 @@ package team5.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team5.model.Doctor;
-import team5.model.Insured;
-import team5.model.Reservation;
-import team5.model.Timeslot;
+import team5.model.*;
 import team5.utilities.DateUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ReservationService {
 
+    private final List<Reservation> allReservations = new ArrayList<>();
     private TimeslotService timeslotService;
     private final DoctorService doctorService;
     private final InsuredService insuredService;
-    private final List<Reservation> allReservations = new ArrayList<>();
 
     private int reservationCounter = 0;
 
 
     @Autowired
-    public ReservationService(TimeslotService timeslotService, DoctorService doctorService, InsuredService insuredService) {
+    public ReservationService(TimeslotService timeslotService, DoctorService doctorService,
+                              InsuredService insuredService) {
         this.timeslotService = timeslotService;
         this.doctorService = doctorService;
         this.insuredService = insuredService;
     }
-
-    public List<Timeslot> getTimeslotsByLocalDateTimeByDoctor(String amkaInsured, LocalDateTime localDateTime, String amkaDoctor) {
-        List<Timeslot> timeslotsByDate = getTimeslotsByLocalDateTime(timeslotService.getAllTimeslots(), localDateTime);
-        List<Timeslot> timeslotsByDoctorByDate = getTimeslotsByDoctor(timeslotsByDate, amkaDoctor);
-        return timeslotsByDoctorByDate;
-    }
-
-    public List<Timeslot> getTimeslotsByLocalDateTime(List<Timeslot> timeslots, LocalDateTime localDateTime) {
-        List<Timeslot> timeslotsByDate = new ArrayList<>();
-        for (Timeslot t : timeslots) {
-            if (t.getStartDateTime().equals(localDateTime)) {
-                timeslotsByDate.add(t);
-            }
-        }
-        return timeslotsByDate;
-    }
-
-    public List<Timeslot> getTimeslotsByDoctor(List<Timeslot> timeslots, String amka) {
-        List<Timeslot> timeslotsByDoctor = new ArrayList<>();
-        for (Timeslot t : timeslots) {
-            if (t.getDoctor() != null && t.getDoctor().getAmka().equals(amka)) {
-                timeslotsByDoctor.add(t);
-            }
-        }
-        return timeslotsByDoctor;
-    }
-
 
     public Reservation findReservationById(String reservationId) {
         long id = Long.parseLong(reservationId);
@@ -91,10 +60,9 @@ public class ReservationService {
         return "Resevation UPDATED";
     }
 
-
     public long createReservation(String amkaInsured, String date, String amkaDoctor) {
         LocalDateTime localDateTime = DateUtils.stringToLocalDateTime(date);
-        List<Timeslot> timeslots = getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
+        List<Timeslot> timeslots = timeslotService.getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
         System.out.println(timeslots);
         Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);//
         Insured insured = insuredService.findInsuredByAmka(amkaInsured);
@@ -116,7 +84,7 @@ public class ReservationService {
 
     public long createReservation(String amkaInsured, Timeslot timeslot2, String amkaDoctor) {
         LocalDateTime localDateTime = timeslot2.getStartDateTime();
-        List<Timeslot> timeslots = getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
+        List<Timeslot> timeslots = timeslotService.getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
         System.out.println(timeslots);
         Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);//
         Insured insured = insuredService.findInsuredByAmka(amkaInsured);
@@ -134,6 +102,34 @@ public class ReservationService {
             System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots);
             throw new RuntimeException("exception");
         }
+    }
+
+    public String getReservations(VaccinationCenter vaccinationCenter) {
+        String str = "";
+        List<Reservation> reservations = vaccinationCenter.getReservations();
+        if (!reservations.isEmpty()) {
+            str += "---------Reservations of VaccinationCenter " + vaccinationCenter.getCode() + "---------\n";
+            int count = 1;
+            for (Reservation r : reservations) {
+                str += count + "-" + r + "\n";
+                count++;
+            }
+        } else {
+            str += "No Reservations are made\n";
+        }
+        return str;
+    }
+
+    public Reservation findReservationByInsuredAmka(Insured insured, VaccinationCenter vaccinationCenter) {
+        Reservation reservation = null;
+        Optional<Reservation> optionalReservation = vaccinationCenter
+                .getReservations()
+                .stream()
+                .filter(reserv -> reserv.getInsured().getAmka().equals(insured.getAmka())).findFirst();
+        if (optionalReservation.isPresent()) {
+            reservation = optionalReservation.get();
+        }
+        return reservation;
     }
 
     public List<Reservation> getAllReservations() {

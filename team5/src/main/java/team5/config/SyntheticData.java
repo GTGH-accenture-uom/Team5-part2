@@ -20,15 +20,19 @@ public class SyntheticData implements CommandLineRunner {
     private final DoctorService doctorService;
     private final TimeslotService timeslotService;
     private final VaccinationCenterService vaccinationCenterService;
+    private final VaccinationService vaccinationService;
     private final ReservationService reservationService;
 
     @Autowired
-    public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService, VaccinationCenterService vaccinationCenterService, ReservationService reservationService) {
+    public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService,
+                         VaccinationCenterService vaccinationCenterService, ReservationService reservationService,
+                         VaccinationService vaccinationService) {
         this.insuredService = insuredService;
         this.doctorService = doctorService;
         this.timeslotService = timeslotService;
         this.vaccinationCenterService = vaccinationCenterService;
         this.reservationService = reservationService;
+        this.vaccinationService = vaccinationService;
         ///test
     }
 
@@ -151,7 +155,7 @@ public class SyntheticData implements CommandLineRunner {
         System.out.println(timeslot11.getStartDateTime());
 
         reservationService.createReservation(insured.getAmka(), timeslot11, doctor20.getAmka());
-        Vaccination v = vaccinationCenterService.createVaccination("Pfizer", 2,
+        Vaccination v = vaccinationService.createVaccination("Pfizer", 2,
                 insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
 
         ////
@@ -163,7 +167,7 @@ public class SyntheticData implements CommandLineRunner {
         doctor20.addVaccinationCenter(vaccCenter1);
 
         reservationService.createReservation(insured.getAmka(), timeslot20, doctor20.getAmka());
-        Vaccination v2 = vaccinationCenterService.createVaccination("Pfizer", 1,
+        Vaccination v2 = vaccinationService.createVaccination("Pfizer", 1,
                 insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
 
 

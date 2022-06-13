@@ -100,7 +100,31 @@ public class TimeslotService {
                 .filter(timeslot -> DateUtils.areTimeslotsInSameMonth(stringToLocalDate, timeslot.getStartDateTime().toLocalDate()))
                 .collect(Collectors.toList());
     }
+    public List<Timeslot> getTimeslotsByLocalDateTimeByDoctor(String amkaInsured, LocalDateTime localDateTime, String amkaDoctor) {
+        List<Timeslot> timeslotsByDate = getTimeslotsByLocalDateTime(getAllTimeslots(), localDateTime);
+        List<Timeslot> timeslotsByDoctorByDate = getTimeslotsByDoctor(timeslotsByDate, amkaDoctor);
+        return timeslotsByDoctorByDate;
+    }
 
+    public List<Timeslot> getTimeslotsByLocalDateTime(List<Timeslot> timeslots, LocalDateTime localDateTime) {
+        List<Timeslot> timeslotsByDate = new ArrayList<>();
+        for (Timeslot t : timeslots) {
+            if (t.getStartDateTime().equals(localDateTime)) {
+                timeslotsByDate.add(t);
+            }
+        }
+        return timeslotsByDate;
+    }
+
+    public List<Timeslot> getTimeslotsByDoctor(List<Timeslot> timeslots, String amka) {
+        List<Timeslot> timeslotsByDoctor = new ArrayList<>();
+        for (Timeslot t : timeslots) {
+            if (t.getDoctor() != null && t.getDoctor().getAmka().equals(amka)) {
+                timeslotsByDoctor.add(t);
+            }
+        }
+        return timeslotsByDoctor;
+    }
 
 
 
