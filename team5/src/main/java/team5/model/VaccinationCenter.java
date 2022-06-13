@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class  VaccinationCenter {
 
@@ -87,9 +88,21 @@ public class  VaccinationCenter {
         sb.append("code='").append(code).append('\'');
         sb.append(", city='").append(city).append('\'');
         sb.append(", address='").append(address).append('\'');
-        sb.append(", freeTimeSlots=").append(timeslots);
-        sb.append(", reservations=").append(reservations);
-        sb.append(", vaccinations=").append(vaccinations);
+        if(timeslots!=null){
+            sb.append(", freeTimeSlots id's=").append(timeslots
+                    .stream()
+                    .map(timeslot -> timeslot.getId() + "").collect(Collectors.joining(",")));
+        }
+       if(reservations!=null){
+           sb.append(", reservations id's=").append(reservations
+                   .stream()
+                   .map(reservation -> reservation.getId() + "").collect(Collectors.joining(",")));
+       }
+       if(vaccinations!=null){
+           sb.append(", vaccinations id's=").append(vaccinations
+                   .stream()
+                   .map(vaccination -> vaccination.getId() + "").collect(Collectors.joining(",")));
+       }
         sb.append('}');
         return sb.toString();
     }

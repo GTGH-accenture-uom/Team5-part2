@@ -82,8 +82,12 @@ public class Vaccination {
         final StringBuilder sb = new StringBuilder("Vaccination{");
         sb.append("id='").append(id).append('\'');
         sb.append("vacc_brand='").append(vacc_brand).append('\'');
-        sb.append(", insured=").append(insured);
-        sb.append(", doctor=").append(doctor);
+        if(insured!=null){
+            sb.append(", Insured=").append(insured);
+        }
+        if(doctor!=null){
+            sb.append(", Doctor's amka=").append(doctor.getAmka());
+        }
         sb.append(", vaccinationDate=").append(vaccinationDate);
         sb.append(", expirationDate=").append(expirationDate);
         sb.append('}');

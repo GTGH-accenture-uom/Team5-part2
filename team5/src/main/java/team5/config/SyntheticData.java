@@ -150,7 +150,7 @@ public class SyntheticData implements CommandLineRunner {
         vaccCenter1.addTimeSlot(timeslot11);
         Doctor doctor20 = doctorService.findDoctorByAmka("12345678915");
         timeslot11.setDoctor(doctor20);
-        doctor20.addVaccinationCenter(vaccCenter1);
+        //doctor20.addVaccinationCenter(vaccCenter1);
         System.out.println(timeslot11);
         System.out.println(timeslot11.getStartDateTime());
 
@@ -167,12 +167,24 @@ public class SyntheticData implements CommandLineRunner {
         doctor20.addVaccinationCenter(vaccCenter1);
 
         reservationService.createReservation(insured.getAmka(), timeslot20, doctor20.getAmka());
+
         Vaccination v2 = vaccinationService.createVaccination("Pfizer", 1,
                 insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
+
+      //  Vaccination v2 = vaccinationCenterService.createVaccination("Pfizer", 1,
+           //     insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
+
 
 
         //System.out.println(doctor20);
         System.out.println(v);
+
+        System.out.println("->>>>>>>>>>");
+
+        System.out.println(doctor20);
+        System.out.println(timeslot7);
+
+        System.out.println(vaccCenter1);
 
     }
 }

@@ -12,7 +12,7 @@ public class Doctor {
     private String name;
     private String surname;
     @JsonIgnore
-    private List <VaccinationCenter> vaccinationCenters = new ArrayList<>();
+    private List<VaccinationCenter> vaccinationCenters = new ArrayList<>();
     @JsonIgnore
     private List<Vaccination> vaccinations = new ArrayList<>();
     @JsonIgnore
@@ -80,7 +80,9 @@ public class Doctor {
         reservations.add(reservation);
     }
 
-    public void addVaccinationCenter(VaccinationCenter vaccinationCenter) { vaccinationCenters.add(vaccinationCenter); }
+    public void addVaccinationCenter(VaccinationCenter vaccinationCenter) {
+        vaccinationCenters.add(vaccinationCenter);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -97,13 +99,27 @@ public class Doctor {
 
     @Override
     public String toString() {
+
         final StringBuilder sb = new StringBuilder("Doctor{");
+
         sb.append("amka='").append(amka).append('\'');
+
         sb.append(", name='").append(name).append('\'');
+
         sb.append(", surname='").append(surname).append('\'');
-        sb.append(", vaccinationCenter=").append(vaccinationCenters.stream().map(e->e.getCode()).collect(Collectors.joining()));
-        //sb.append(", vaccinations=").append(vaccinations);
-        sb.append(", reservations=").append(reservations);
+
+        if (!vaccinationCenters.isEmpty()) {
+            sb.append(", vaccinationCenter code='").append(vaccinationCenters
+                    .stream().map(VaccinationCenter::getCode).collect(Collectors.joining())).append('\'');
+        }
+        if (!vaccinations.isEmpty()) {
+            sb.append(", vaccination id's='").append(vaccinations
+                    .stream().map(vaccination -> vaccination.getId() + " ").collect(Collectors.joining(","))).append('\'');
+        }
+        if (!reservations.isEmpty()) {
+            sb.append(", reservation id's='").append(reservations
+                    .stream().map(reservation -> reservation.getId() + " ").collect(Collectors.joining(","))).append('\'');
+        }
         sb.append('}');
         return sb.toString();
     }

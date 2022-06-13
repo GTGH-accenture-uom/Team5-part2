@@ -28,6 +28,7 @@ public class VaccinationController {
         return vaccinationService.getRecentVaccinationsByInsured(amka);
     }
 
+
 //    @GetMapping ("/timeslots/date")
 //    public List<Timeslot> findTimeslotsByDate(@RequestParam(value="date") String date){
 //        return timeslotService.findTimeslotsByDate(date);

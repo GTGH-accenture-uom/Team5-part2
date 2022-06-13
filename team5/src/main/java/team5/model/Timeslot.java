@@ -108,9 +108,21 @@ public class Timeslot {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Timeslot{");
         sb.append("id=").append(id);
-        sb.append("localDateTime=").append(startDateTime);
-        sb.append(", endLocalDateTime=").append(endDateTime);
+        sb.append(", startDateTime=").append(startDateTime);
+        sb.append(", endDateTime=").append(endDateTime);
+        sb.append(", available=").append(available);
         sb.append(", duration=").append(duration);
+        if(doctor!=null){
+            sb.append(", doctor's amka=").append(doctor.getAmka());
+        }
+        if(vaccinationCenter!=null){
+            sb.append(", vaccinationCenter's code=").append(vaccinationCenter.getCode());
+        }
+        if(reservation!=null){
+            sb.append(", reservation's id =").append(reservation.getId());
+            sb.append(", with insured amka= ").append(reservation.getInsured().getAmka());
+        }
+
         sb.append('}');
         return sb.toString();
     }

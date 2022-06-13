@@ -11,14 +11,15 @@ public class Reservation {
     private Timeslot timeslot;
 
 
-
     public Reservation(Insured insured, Timeslot timeslot) {
         this.insured = insured;
         this.timeslot = timeslot;
         this.id = count.incrementAndGet();
     }
 
-    public long getId() { return id; }
+    public long getId() {
+        return id;
+    }
 
     public Insured getInsured() {
         return insured;
@@ -51,10 +52,22 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{" +
-                ", Id = " + id +
-                "insured=" + insured +
-                ", timeslot=" + timeslot +
-                '}';
+        final StringBuilder sb = new StringBuilder("Reservation{");
+        sb.append("id=").append(id);
+        if (insured != null) {
+            sb.append(", insured=").append(insured);
+        }
+        if (timeslot != null) {
+            sb.append(", timeslot's id=").append(timeslot.getId());
+            if (timeslot.getDoctor() != null) {
+                sb.append(", doctor's amka=").append(timeslot.getDoctor().getAmka());
+            }
+            if (timeslot.getVaccinationCenter() != null) {
+                sb.append(", vaccination center id=").append(timeslot.getVaccinationCenter().getCode());
+            }
+        }
+        sb.append('}');
+        return sb.toString();
     }
+
 }
