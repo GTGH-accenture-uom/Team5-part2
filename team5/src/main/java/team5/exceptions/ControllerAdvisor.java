@@ -33,13 +33,20 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(value = {ReservationNotFoundException.class})
-    public ResponseEntity<ErrorResponse> handleReservationNotFoundException(DoctorNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleReservationNotFoundException(ReservationNotFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = {ExistingRecordException.class})
+    public ResponseEntity<ErrorResponse> handleVaccinationAlreadyExists(ExistingRecordException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.CONFLICT.value());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
 
 
 }
