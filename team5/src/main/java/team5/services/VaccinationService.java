@@ -2,10 +2,7 @@ package team5.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team5.exceptions.DoctorNotFoundException;
-import team5.exceptions.ExistingRecordException;
-import team5.exceptions.InsuredNotFoundException;
-import team5.exceptions.ReservationNotFoundException;
+import team5.exceptions.*;
 import team5.model.*;
 import team5.utilities.MessagesForExistingValues;
 import team5.utilities.VaccinationState;
@@ -46,8 +43,6 @@ public class VaccinationService {
                     vaccinationsByInsured.add(v);
                     names.add(v.getVacc_brand());
                 }
-            } else {
-                throw new RuntimeException("Cannot get vaccinations by insured.");
             }
         }
         System.out.println("4*********************vaccinationsByInsured");

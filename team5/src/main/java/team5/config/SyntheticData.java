@@ -192,7 +192,7 @@ public class SyntheticData implements CommandLineRunner {
 
         System.out.println("->>>>>>>>>>");
         System.out.println("-----------Reservations--------------");
-        //reservationService.getAllReservations().forEach(System.out::println);
+        reservationService.getAllReservations().forEach(System.out::println);
         System.out.println("->>>>>>>>>>");
 
         System.out.println("->>>>>>>>>>");

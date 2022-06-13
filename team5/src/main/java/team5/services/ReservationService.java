@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 import team5.exceptions.ReservationCannotBeUpdated;
 import team5.model.*;
 import team5.utilities.DateUtils;
-import team5.utilities.Role;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -18,8 +16,6 @@ public class ReservationService {
     private TimeslotService timeslotService;
     private final DoctorService doctorService;
     private final InsuredService insuredService;
-
-    private int reservationCounter = 0;
 
 
     @Autowired
@@ -32,21 +28,32 @@ public class ReservationService {
 
     public Reservation findReservationById(String reservationId) {
         long id = Long.parseLong(reservationId);
-        Optional<Reservation> optionalReservation = allReservations.stream().filter(reservation -> reservation.getId() == id).findFirst();
+        Optional<Reservation> optionalReservation = allReservations
+                .stream()
+                .filter(reservation -> reservation.getId() == id).findFirst();
         if (optionalReservation.isEmpty()) {
             //to-do ReservationNotFoundException
             throw new RuntimeException("Reservation Not found");
         }
         return optionalReservation.get();
-
     }
 
-    public Reservation updateReservation(String reservationId, String timeslotId) {
+    public Reservation findReservationById(long id) {
+        Reservation foundReservation = null;
+        Optional<Reservation> optionalReservation = allReservations
+                .stream()
+                .filter(reservation -> reservation.getId() == id).findFirst();
+        if (optionalReservation.isPresent()) {
+            foundReservation = optionalReservation.get();
+        }
+        return foundReservation;
+    }
+
+
+    public Reservation updateReservation(long reservationId, long timeslotId) {
         Reservation reservation = findReservationById(reservationId);
-        Timeslot foundTimeslot = timeslotService.findTimeslotById(Integer.parseInt(timeslotId));
-        System.out.println("->>>> " + foundTimeslot);
-        if (foundTimeslot != null && reservationCounter < 2) {
-            reservationCounter++;
+        Timeslot foundTimeslot = timeslotService.findTimeslotById(timeslotId);
+        if (foundTimeslot != null && reservation.getReservationChanges() < 2) {
             //Set free the previous timeslot
             reservation.getTimeslot().setAvailable(true);
             //Set the reservation of this timeslot to null
@@ -56,10 +63,11 @@ public class ReservationService {
             foundTimeslot.setReservation(reservation);
             //reserve the new timeslot
             foundTimeslot.setAvailable(false);
+            reservation.increaseReservationCounter();
         } else {
-            throw new ReservationCannotBeUpdated(Long.parseLong(reservationId));
+            throw new ReservationCannotBeUpdated(reservationId);
         }
-        return null;
+        return reservation;
     }
 
     public long createReservation(String amkaInsured, String date, String amkaDoctor) {
@@ -124,6 +132,7 @@ public class ReservationService {
     }
      */
 
+
     public Reservation findReservationByTimeslotId(long id) {
         Reservation reservation = null;
         Optional<Reservation> optionalReservation = allReservations
@@ -147,6 +156,7 @@ public class ReservationService {
         return reservation;
     }
 
+
 //    public List<Reservation> getAllReservations() {
 //        return allReservations;
 //    }
@@ -160,23 +170,27 @@ public class ReservationService {
     /////////////////////////////////////////////////////////////
 
     //Filter by multiple filters
-    public List<Reservation> findReservationsByAllFilters(String amkaInsured, String amkaDoctor){
+    public List<Reservation> findReservationsByAllFilters(String amkaInsured, String amkaDoctor) {
         List<Reservation> reservations = allReservations;
         System.out.println(allReservations);
         System.out.println("amkaInsured");
         System.out.println(amkaInsured);
         System.out.println("amkaDoctor");
         System.out.println(amkaDoctor);
-        if (amkaInsured!=null){ reservations = findReservationsByInsured(amkaInsured, reservations); }
-        if (amkaDoctor!=null){ reservations = findReservationsByDoctor( amkaDoctor, reservations); }
+        if (amkaInsured != null) {
+            reservations = findReservationsByInsured(amkaInsured, reservations);
+        }
+        if (amkaDoctor != null) {
+            reservations = findReservationsByDoctor(amkaDoctor, reservations);
+        }
         return reservations;
     }
 
     //Filter By Insured
-    public List<Reservation> findReservationsByInsured(Insured insured, List<Reservation> reservations){
+    public List<Reservation> findReservationsByInsured(Insured insured, List<Reservation> reservations) {
         List<Reservation> ReservationsByInsured = new ArrayList<>();
-        for (Reservation r: reservations){
-            if (r.getInsured().getAmka().equals(insured.getAmka())){
+        for (Reservation r : reservations) {
+            if (r.getInsured().getAmka().equals(insured.getAmka())) {
                 ReservationsByInsured.add(r);
             }
         }
@@ -185,7 +199,7 @@ public class ReservationService {
         return ReservationsByInsured;
     }
 
-    public List<Reservation> findReservationsByInsured(String amkaInsured, List<Reservation> reservations){
+    public List<Reservation> findReservationsByInsured(String amkaInsured, List<Reservation> reservations) {
         Insured insured = insuredService.findInsuredByAmka(amkaInsured);
         System.out.println("findReservationsByInsured(insured, reservations)");
         System.out.println(findReservationsByInsured(insured, reservations));
@@ -193,12 +207,12 @@ public class ReservationService {
     }
 
     //filter By Doctor
-    public List<Reservation> findReservationsByDoctor(Doctor doctor, List<Reservation> reservations){
+    public List<Reservation> findReservationsByDoctor(Doctor doctor, List<Reservation> reservations) {
         List<Reservation> ReservationsByDoctor = new ArrayList<>();
-        for (Reservation r: reservations){
+        for (Reservation r : reservations) {
             System.out.println(r.getTimeslot().getDoctor().getAmka());
             System.out.println(doctor.getAmka());
-            if (r.getTimeslot().getDoctor().getAmka().equals(doctor.getAmka())){
+            if (r.getTimeslot().getDoctor().getAmka().equals(doctor.getAmka())) {
                 System.out.println(111111111);
                 ReservationsByDoctor.add(r);
             }
@@ -208,7 +222,7 @@ public class ReservationService {
         return ReservationsByDoctor;
     }
 
-    public List<Reservation> findReservationsByDoctor(String amkaDoctor, List<Reservation> reservations){
+    public List<Reservation> findReservationsByDoctor(String amkaDoctor, List<Reservation> reservations) {
         Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);
         System.out.println("findReservationsByDoctor(doctor, reservations)");
         System.out.println(findReservationsByDoctor(doctor, reservations));
@@ -217,5 +231,8 @@ public class ReservationService {
     //////////////////////////////////////////
 
 
+    public List<Reservation> getAllReservations() {
+        return allReservations;
+    }
 }
 
