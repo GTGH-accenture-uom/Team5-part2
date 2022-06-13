@@ -15,15 +15,15 @@ public class VaccinationCenterService {
 
     private final List<VaccinationCenter> allVaccinationCenters = new ArrayList<>();
     private InsuredService insuredService;
-
-    // private TimeslotService timeslotService;
     private DoctorService doctorService;
+    private VaccinationService vaccinationService;
 
 
     @Autowired
-    public VaccinationCenterService(InsuredService insuredService, DoctorService doctorService) {
+    public VaccinationCenterService(InsuredService insuredService, DoctorService doctorService, VaccinationService vaccinationService) {
         this.insuredService = insuredService;
         this.doctorService = doctorService;
+        this.vaccinationService = vaccinationService;
     }
 
     public VaccinationCenter createVaccinationCenter(String code, String city, String address) {
@@ -57,7 +57,7 @@ public class VaccinationCenterService {
 //        }
 //    }
 
-    public void createVaccination(String brand, int yearsToExpire, Insured insured, VaccinationCenter vaccinationCenter) {
+    public Vaccination createVaccination(String brand, int yearsToExpire, Insured insured, VaccinationCenter vaccinationCenter) {
         Reservation foundReservation = findReservationByInsuredAmka(insured, vaccinationCenter);
         if (foundReservation != null) {
             Insured insuredToVaccinate = foundReservation.getInsured();
@@ -69,10 +69,12 @@ public class VaccinationCenterService {
             vaccinationCenter.addVaccination(vaccination);
             //Add vaccination in doctor's vaccinations list
             doctor.addVaccination(vaccination);
+            vaccinationService.getAllVaccinations().add(vaccination);
+            return vaccination;
         } else {
             System.err.println("This Vaccination cannot be made because this reservation cannot be found");
         }
-
+        return null;
     }
 
     public String getAllReservationsPerCenter() {

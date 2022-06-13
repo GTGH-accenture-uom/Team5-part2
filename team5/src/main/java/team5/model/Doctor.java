@@ -4,6 +4,7 @@ package team5.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Doctor {
     @JsonIgnore
@@ -79,6 +80,8 @@ public class Doctor {
         reservations.add(reservation);
     }
 
+    public void addVaccinationCenter(VaccinationCenter vaccinationCenter) { vaccinationCenters.add(vaccinationCenter); }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,8 +101,8 @@ public class Doctor {
         sb.append("amka='").append(amka).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", surname='").append(surname).append('\'');
-        sb.append(", vaccinationCenter=").append(vaccinationCenters);
-        sb.append(", vaccinations=").append(vaccinations);
+        sb.append(", vaccinationCenter=").append(vaccinationCenters.stream().map(e->e.getCode()).collect(Collectors.joining()));
+        //sb.append(", vaccinations=").append(vaccinations);
         sb.append(", reservations=").append(reservations);
         sb.append('}');
         return sb.toString();

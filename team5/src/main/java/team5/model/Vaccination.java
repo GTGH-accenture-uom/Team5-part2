@@ -1,5 +1,7 @@
 package team5.model;
 
+import team5.utilities.VaccinationState;
+
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -13,6 +15,7 @@ public class Vaccination {
     private Doctor doctor;
     private LocalDateTime vaccinationDate;
     private LocalDateTime expirationDate;
+    private VaccinationState vaccinationState;
 
 
     public Vaccination(String vacc_brand,Insured insured,Doctor doctor, LocalDateTime vaccinationDate,LocalDateTime expirationDate) {
@@ -66,6 +69,13 @@ public class Vaccination {
         this.expirationDate = expirationDate;
     }
 
+    public void setVaccinationState(VaccinationState vaccinationState) {
+        this.vaccinationState = vaccinationState;
+    }
+
+    public VaccinationState getVaccinationState() {
+        return vaccinationState;
+    }
 
     @Override
     public String toString() {
@@ -78,6 +88,14 @@ public class Vaccination {
         sb.append('}');
         return sb.toString();
     }
+
+//    public VaccinationState getVaccinationStatus(){
+//        if (this.getExpirationDate().isAfter(LocalDateTime.now())){
+//            return VaccinationState.VALID;
+//        }else{
+//            return VaccinationState.EXPIRED;
+//        }
+//    }
 }
 
 

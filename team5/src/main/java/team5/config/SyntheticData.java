@@ -1,17 +1,11 @@
 package team5.config;
 
 import team5.exceptions.DoctorNotFoundException;
-import team5.model.Doctor;
+import team5.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import team5.model.Insured;
-import team5.model.Timeslot;
-import team5.model.VaccinationCenter;
-import team5.services.DoctorService;
-import team5.services.InsuredService;
-import team5.services.TimeslotService;
-import team5.services.VaccinationCenterService;
+import team5.services.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,13 +20,15 @@ public class SyntheticData implements CommandLineRunner {
     private final DoctorService doctorService;
     private final TimeslotService timeslotService;
     private final VaccinationCenterService vaccinationCenterService;
+    private final ReservationService reservationService;
 
     @Autowired
-    public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService, VaccinationCenterService vaccinationCenterService) {
+    public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService, VaccinationCenterService vaccinationCenterService, ReservationService reservationService) {
         this.insuredService = insuredService;
         this.doctorService = doctorService;
         this.timeslotService = timeslotService;
         this.vaccinationCenterService = vaccinationCenterService;
+        this.reservationService = reservationService;
     }
 
     @Override
@@ -114,7 +110,7 @@ public class SyntheticData implements CommandLineRunner {
         Timeslot timeslot6 = timeslotService.findTimeslotById(6);
         Timeslot timeslot11 = timeslotService.findTimeslotById(11);
 
-            Doctor doctor1 = doctorService.findDoctorByAmka("12345678912");
+        Doctor doctor1 = doctorService.findDoctorByAmka("12345678912");
 
             Doctor doctor2 = doctorService.findDoctorByAmka("12345678919");
             System.out.println(timeslot10);
@@ -129,13 +125,43 @@ public class SyntheticData implements CommandLineRunner {
             timeslot9.setVaccinationCenter(vaccCenter1);
             timeslot13.setVaccinationCenter(vaccCenter1);
             timeslot6.setVaccinationCenter(vaccCenter1);
-            timeslot11.setVaccinationCenter(vaccCenter1);
+
             timeslot10.setDoctor(doctor1);
             timeslot9.setDoctor(doctor2);
             timeslot13.setDoctor(doctor1);
             timeslot6.setDoctor(doctor1);
             timeslot11.setDoctor(doctor2);
 
+            ////////
+            /////// 1o vaccine
+        Insured insured = insuredService.findInsuredByAmka("22222223333");
+        System.out.println(insured);
+        timeslot11.setVaccinationCenter(vaccCenter1);
+        vaccCenter1.addTimeSlot(timeslot11);
+        Doctor doctor20 = doctorService.findDoctorByAmka("12345678915");
+        timeslot11.setDoctor(doctor20);
+        doctor20.addVaccinationCenter(vaccCenter1);
+        System.out.println(timeslot11);
+        System.out.println(timeslot11.getStartDateTime());
 
+        reservationService.createReservation(insured.getAmka(), timeslot11, doctor20.getAmka());
+        Vaccination v = vaccinationCenterService.createVaccination("Pfizer", 2,
+                insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
+
+        ////
+        ///// 2o vaccine
+        Timeslot timeslot20 =timeslotService.findTimeslotById(5);
+        timeslot20.setVaccinationCenter(vaccCenter1);
+        vaccCenter1.addTimeSlot(timeslot20);
+        timeslot20.setDoctor(doctor20);
+        doctor20.addVaccinationCenter(vaccCenter1);
+
+        reservationService.createReservation(insured.getAmka(), timeslot20, doctor20.getAmka());
+        Vaccination v2 = vaccinationCenterService.createVaccination("Pfizer", 1,
+                insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
+
+
+        //System.out.println(doctor20);
+        System.out.println(v);
     }
 }

@@ -114,6 +114,27 @@ public class ReservationService {
         }
     }
 
+    public long createReservation(String amkaInsured, Timeslot timeslot2, String amkaDoctor) {
+        LocalDateTime localDateTime = timeslot2.getStartDateTime();
+        List<Timeslot> timeslots = getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
+        System.out.println(timeslots);
+        Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);//
+        Insured insured = insuredService.findInsuredByAmka(amkaInsured);
+        if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
+            Timeslot timeslot = timeslots.get(0);
+            Reservation reservation = new Reservation(insured, timeslot);
+            timeslot.getVaccinationCenter().addReservation(reservation);
+            System.out.println(reservation);
+            doctor.addReservation(reservation);
+            timeslot.setAvailable(false);
+            allReservations.add(reservation);
+
+            return reservation.getId();
+        } else {
+            System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots);
+            throw new RuntimeException("exception");
+        }
+    }
 
     public List<Reservation> getAllReservations() {
         return allReservations;
