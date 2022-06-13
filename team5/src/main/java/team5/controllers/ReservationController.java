@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import team5.model.Reservation;
 import team5.services.ReservationService;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 public class ReservationController {
 
@@ -31,5 +34,19 @@ public class ReservationController {
         return reservationService.updateReservation(reservationId, timeslotId);
 
     }
+
+    @GetMapping("/reservations")
+    public List<Reservation> findReservationsByAllFilters(
+            @RequestParam(value = "amkaInsured", required=false) String amkaInsured,
+            @RequestParam(value = "amkaDoctor", required=false) String amkaDoctor){
+        return reservationService.findReservationsByAllFilters(amkaInsured, amkaDoctor);
+    }
+
+
+//    @RequestMapping (value = "/path", method = RequestMethod.GET)
+//    public String handleRequest(@RequestParam("paramName") Optional<String> variableName) {
+//        String paramValue = variableName.orElse("");
+//        // use the paramValue
+//    }
 }
 

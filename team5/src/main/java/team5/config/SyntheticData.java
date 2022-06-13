@@ -163,20 +163,20 @@ public class SyntheticData implements CommandLineRunner {
 
         ////
         ///// 2o vaccine
-        Timeslot timeslot20 = timeslotService.findTimeslotById(5);
-        timeslot20.setVaccinationCenter(vaccCenter1);
-        vaccCenter1.addTimeSlot(timeslot20);
-        timeslot20.setDoctor(doctor20);
-        doctor20.addVaccinationCenter(vaccCenter1);
+        Timeslot timeslot21 = timeslotService.findTimeslotById(6);
+        System.out.println("timeslot21");
+        System.out.println(timeslot21);
+        Insured insured21 = insuredService.findInsuredByAmka("32228223309");
+        System.out.println(insured);
+        timeslot21.setVaccinationCenter(vaccCenter1);
+        vaccCenter1.addTimeSlot(timeslot21);
+        Doctor doctor21 = doctorService.findDoctorByAmka("12345678915");
+        timeslot21.setDoctor(doctor21);
+        //doctor20.addVaccinationCenter(vaccCenter1);
+        System.out.println(timeslot21);
+        System.out.println(timeslot21.getStartDateTime());
 
-        reservationService.createReservation(insured.getAmka(), timeslot20, doctor20.getAmka());
-
-        Vaccination v2 = vaccinationService.createVaccination("Pfizer", 1,
-                insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
-        v2.setTimeslot(timeslot20);
-
-        // 3o vaccine
-         reservationService.createReservation(insuredNew.getAmka(),timeslot9,doctor2.getAmka());
+        reservationService.createReservation(insured.getAmka(), timeslot11, doctor20.getAmka());
 
 
 
@@ -192,7 +192,7 @@ public class SyntheticData implements CommandLineRunner {
 
         System.out.println("->>>>>>>>>>");
         System.out.println("-----------Reservations--------------");
-        reservationService.getAllReservations().forEach(System.out::println);
+        //reservationService.getAllReservations().forEach(System.out::println);
         System.out.println("->>>>>>>>>>");
 
         System.out.println("->>>>>>>>>>");

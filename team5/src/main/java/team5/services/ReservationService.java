@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import team5.exceptions.ReservationCannotBeUpdated;
 import team5.model.*;
 import team5.utilities.DateUtils;
+import team5.utilities.Role;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class ReservationService {
 
     public Reservation findReservationById(String reservationId) {
         long id = Long.parseLong(reservationId);
-        Optional<Reservation> optionalReservation = getAllReservations().stream().filter(reservation -> reservation.getId() == id).findFirst();
+        Optional<Reservation> optionalReservation = allReservations.stream().filter(reservation -> reservation.getId() == id).findFirst();
         if (optionalReservation.isEmpty()) {
             //to-do ReservationNotFoundException
             throw new RuntimeException("Reservation Not found");
@@ -144,14 +145,77 @@ public class ReservationService {
             reservation = optionalReservation.get();
         }
         return reservation;
-
-
     }
 
+//    public List<Reservation> getAllReservations() {
+//        return allReservations;
+//    }
+//
+//    public void findUserObject(Role role, String uniqueId){
+//        if ()
+//    }
 
-    public List<Reservation> getAllReservations() {
-        return allReservations;
+    /////////////////////////////////////////////////////////////
+    ////////    FILTERS
+    /////////////////////////////////////////////////////////////
+
+    //Filter by multiple filters
+    public List<Reservation> findReservationsByAllFilters(String amkaInsured, String amkaDoctor){
+        List<Reservation> reservations = allReservations;
+        System.out.println(allReservations);
+        System.out.println("amkaInsured");
+        System.out.println(amkaInsured);
+        System.out.println("amkaDoctor");
+        System.out.println(amkaDoctor);
+        if (amkaInsured!=null){ reservations = findReservationsByInsured(amkaInsured, reservations); }
+        if (amkaDoctor!=null){ reservations = findReservationsByDoctor( amkaDoctor, reservations); }
+        return reservations;
     }
+
+    //Filter By Insured
+    public List<Reservation> findReservationsByInsured(Insured insured, List<Reservation> reservations){
+        List<Reservation> ReservationsByInsured = new ArrayList<>();
+        for (Reservation r: reservations){
+            if (r.getInsured().getAmka().equals(insured.getAmka())){
+                ReservationsByInsured.add(r);
+            }
+        }
+        System.out.println("ReservationsByInsured");
+        System.out.println(ReservationsByInsured);
+        return ReservationsByInsured;
+    }
+
+    public List<Reservation> findReservationsByInsured(String amkaInsured, List<Reservation> reservations){
+        Insured insured = insuredService.findInsuredByAmka(amkaInsured);
+        System.out.println("findReservationsByInsured(insured, reservations)");
+        System.out.println(findReservationsByInsured(insured, reservations));
+        return findReservationsByInsured(insured, reservations);
+    }
+
+    //filter By Doctor
+    public List<Reservation> findReservationsByDoctor(Doctor doctor, List<Reservation> reservations){
+        List<Reservation> ReservationsByDoctor = new ArrayList<>();
+        for (Reservation r: reservations){
+            System.out.println(r.getTimeslot().getDoctor().getAmka());
+            System.out.println(doctor.getAmka());
+            if (r.getTimeslot().getDoctor().getAmka().equals(doctor.getAmka())){
+                System.out.println(111111111);
+                ReservationsByDoctor.add(r);
+            }
+        }
+        System.out.println("ReservationsByDoctor");
+        System.out.println(ReservationsByDoctor);
+        return ReservationsByDoctor;
+    }
+
+    public List<Reservation> findReservationsByDoctor(String amkaDoctor, List<Reservation> reservations){
+        Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);
+        System.out.println("findReservationsByDoctor(doctor, reservations)");
+        System.out.println(findReservationsByDoctor(doctor, reservations));
+        return findReservationsByDoctor(doctor, reservations);
+    }
+    //////////////////////////////////////////
+
 
 }
 
