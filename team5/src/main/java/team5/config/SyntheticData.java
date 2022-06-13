@@ -163,5 +163,7 @@ public class SyntheticData implements CommandLineRunner {
 
         //System.out.println(doctor20);
         System.out.println(v);
+
+        System.out.println("test");
     }
 }
