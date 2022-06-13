@@ -10,21 +10,27 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Timeslot {
 
     private static final AtomicLong count = new AtomicLong(0);
-    @JsonIgnore
-    private final long id;
+
+    private long id;
+
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    @JsonIgnore
+
     private boolean available;
     @JsonIgnore
     private int duration;
-
     private Doctor doctor;
     @JsonIgnore
     private VaccinationCenter vaccinationCenter;
     @JsonIgnore
     private Reservation reservation;
+    @JsonIgnore
+    private Vaccination vaccination;
 
+    public Timeslot(){
+
+
+    }
     public Timeslot(LocalDateTime startDateTime, int duration) {
         this.startDateTime = startDateTime;
         this.available = true;
@@ -89,6 +95,14 @@ public class Timeslot {
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
+    }
+
+    public Vaccination getVaccination() {
+        return vaccination;
+    }
+
+    public void setVaccination(Vaccination vaccination) {
+        this.vaccination = vaccination;
     }
 
     @Override

@@ -12,6 +12,11 @@ public class Insured {
     private String surname;
     private String email;
 
+
+    public Insured() {
+
+    }
+
     public Insured(String afm, String amka, String name, LocalDate birthdate, String surname, String email) {
         this.afm = afm;
         this.amka = amka;
@@ -20,6 +25,7 @@ public class Insured {
         this.surname = surname;
         this.email = email;
     }
+
     public String getAfm() {
         return afm;
     }

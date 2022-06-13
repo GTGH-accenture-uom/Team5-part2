@@ -2,9 +2,11 @@ package team5.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team5.exceptions.ReservationCannotBeUpdated;
 import team5.model.*;
 import team5.utilities.DateUtils;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -38,7 +40,7 @@ public class ReservationService {
 
     }
 
-    public String updateReservation(String reservationId, String timeslotId) {
+    public Reservation updateReservation(String reservationId, String timeslotId) {
         Reservation reservation = findReservationById(reservationId);
         Timeslot foundTimeslot = timeslotService.findTimeslotById(Integer.parseInt(timeslotId));
         System.out.println("->>>> " + foundTimeslot);
@@ -54,10 +56,9 @@ public class ReservationService {
             //reserve the new timeslot
             foundTimeslot.setAvailable(false);
         } else {
-            //to-do Reservation cannot be updated Exception
-            throw new RuntimeException("Reservation cannot be updated");
+            throw new ReservationCannotBeUpdated(Long.parseLong(reservationId));
         }
-        return "Resevation UPDATED";
+        return null;
     }
 
     public long createReservation(String amkaInsured, String date, String amkaDoctor) {
@@ -104,6 +105,7 @@ public class ReservationService {
         }
     }
 
+    /*
     public String getReservations(VaccinationCenter vaccinationCenter) {
         String str = "";
         List<Reservation> reservations = vaccinationCenter.getReservations();
@@ -119,6 +121,18 @@ public class ReservationService {
         }
         return str;
     }
+     */
+
+    public Reservation findReservationByTimeslotId(long id) {
+        Reservation reservation = null;
+        Optional<Reservation> optionalReservation = allReservations
+                .stream()
+                .filter(reserv -> reserv.getTimeslot().getId() == id).findFirst();
+        if (optionalReservation.isPresent()) {
+            reservation = optionalReservation.get();
+        }
+        return reservation;
+    }
 
     public Reservation findReservationByInsuredAmka(Insured insured, VaccinationCenter vaccinationCenter) {
         Reservation reservation = null;
@@ -130,7 +144,10 @@ public class ReservationService {
             reservation = optionalReservation.get();
         }
         return reservation;
+
+
     }
+
 
     public List<Reservation> getAllReservations() {
         return allReservations;

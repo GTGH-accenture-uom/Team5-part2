@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import team5.model.Timeslot;
 import team5.model.VaccinationCenter;
 import team5.utilities.DateUtils;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class TimeslotService {
         return timeslot.getId();
     }
 
-    public Timeslot findTimeslotById(int id) {
+    public Timeslot findTimeslotById(long id) {
         Timeslot foundTimeslot = null;
         Optional<Timeslot> timeslot;
         for (Timeslot t : allTimeslots) {

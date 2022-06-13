@@ -68,20 +68,17 @@ public class DoctorService {
 
     public Doctor findDoctorByAmka(String amka) {
         Doctor foundDoctor = null;
-        try {
-            Optional<Doctor> optionalDoctor = allDoctors
-                    .stream()
-                    .filter(doc -> doc.getAmka().equals(amka)).findFirst();
-            if (optionalDoctor.isPresent()) {
-                foundDoctor = optionalDoctor.get();
-            } else {
-                throw new DoctorNotFoundException(amka);
-            }
-        } catch (DoctorNotFoundException doctorNotFoundException) {
-            System.err.println("Cannot find doctor with amka " + amka);
+        Optional<Doctor> optionalDoctor = allDoctors
+                .stream()
+                .filter(doc -> doc.getAmka().equals(amka)).findFirst();
+        if (optionalDoctor.isPresent()) {
+            foundDoctor = optionalDoctor.get();
+        } else {
+            throw new DoctorNotFoundException(amka);
         }
         return foundDoctor;
     }
+
 
     public void addTimeslotToDoctor(String amka, Timeslot timeslot) {
         try {

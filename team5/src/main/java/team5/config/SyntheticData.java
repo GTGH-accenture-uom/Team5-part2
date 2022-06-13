@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import team5.services.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -145,6 +146,7 @@ public class SyntheticData implements CommandLineRunner {
         ////////
         /////// 1o vaccine
         Insured insured = insuredService.findInsuredByAmka("22222223333");
+        Insured insuredNew = insuredService.findInsuredByAmka("32205223333");
         System.out.println(insured);
         timeslot11.setVaccinationCenter(vaccCenter1);
         vaccCenter1.addTimeSlot(timeslot11);
@@ -157,6 +159,7 @@ public class SyntheticData implements CommandLineRunner {
         reservationService.createReservation(insured.getAmka(), timeslot11, doctor20.getAmka());
         Vaccination v = vaccinationService.createVaccination("Pfizer", 2,
                 insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
+        v.setTimeslot(timeslot11);
 
         ////
         ///// 2o vaccine
@@ -170,9 +173,10 @@ public class SyntheticData implements CommandLineRunner {
 
         Vaccination v2 = vaccinationService.createVaccination("Pfizer", 1,
                 insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
+        v2.setTimeslot(timeslot20);
 
-      //  Vaccination v2 = vaccinationCenterService.createVaccination("Pfizer", 1,
-           //     insuredService.findInsuredByAmka("22222223333"), vaccCenter1);
+        // 3o vaccine
+         reservationService.createReservation(insuredNew.getAmka(),timeslot9,doctor2.getAmka());
 
 
 
@@ -183,8 +187,17 @@ public class SyntheticData implements CommandLineRunner {
 
         System.out.println(doctor20);
         System.out.println(timeslot7);
-
         System.out.println(vaccCenter1);
 
+
+        System.out.println("->>>>>>>>>>");
+        System.out.println("-----------Reservations--------------");
+        reservationService.getAllReservations().forEach(System.out::println);
+        System.out.println("->>>>>>>>>>");
+
+        System.out.println("->>>>>>>>>>");
+        System.out.println("-----------Vaccinations---------------");
+        vaccinationService.getAllVaccinations().forEach(System.out::println);
+        System.out.println("->>>>>>>>>>");
     }
 }

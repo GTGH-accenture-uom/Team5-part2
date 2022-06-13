@@ -2,12 +2,11 @@ package team5.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import team5.model.Reservation;
 import team5.services.ReservationService;
 
 @RestController
 public class ReservationController {
-
-
 
     private final ReservationService reservationService;
 
@@ -26,10 +25,11 @@ public class ReservationController {
     }
 
     @PutMapping("/reservation/{resevationId}")
-    public String updateReservation(@PathVariable(value = "resevationId") String reservationId,
-                                    @RequestParam(value = "timeslotId") String timeslotId) {
+    public Reservation updateReservation(@PathVariable(value = "resevationId") String reservationId,
+                                         @RequestParam(value = "timeslotId") String timeslotId) {
 
         return reservationService.updateReservation(reservationId, timeslotId);
+
     }
 }
 
