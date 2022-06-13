@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team5.exceptions.VaccinationCenterNotFoundException;
 import team5.model.*;
-import team5.utilities.Conversion;
 
 import java.time.LocalDateTime;
 import java.util.*;

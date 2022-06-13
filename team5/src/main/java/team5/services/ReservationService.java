@@ -6,7 +6,7 @@ import team5.model.Doctor;
 import team5.model.Insured;
 import team5.model.Reservation;
 import team5.model.Timeslot;
-import team5.utilities.Conversion;
+import team5.utilities.DateUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -93,7 +93,7 @@ public class ReservationService {
 
 
     public long createReservation(String amkaInsured, String date, String amkaDoctor) {
-        LocalDateTime localDateTime = Conversion.stringToLocalDateTime(date);
+        LocalDateTime localDateTime = DateUtils.stringToLocalDateTime(date);
         List<Timeslot> timeslots = getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
         System.out.println(timeslots);
         Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);//

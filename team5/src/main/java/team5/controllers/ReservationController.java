@@ -2,15 +2,7 @@ package team5.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import team5.model.Reservation;
-import team5.model.Timeslot;
 import team5.services.ReservationService;
-import team5.services.TimeslotService;
-import team5.services.VaccinationCenterService;
-import team5.utilities.Conversion;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 public class ReservationController {

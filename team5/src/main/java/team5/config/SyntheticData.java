@@ -63,13 +63,13 @@ public class SyntheticData implements CommandLineRunner {
         long t4 = timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 19, 30), 30);
         long t5 = timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 18, 30), 30);
 
-        long t6 = timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 18, 30), 30);
+        long t6 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 21, 18, 30), 30);
         long t7 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 7, 30), 30);
         long t8 = timeslotService.createTimeslot(LocalDateTime.of(2022, 6, 24, 18, 30), 30);
         long t9 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 15, 30), 30);
         long t10 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 18, 30), 30);
 
-        long t11 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 20, 14, 30), 30);
+        long t11 = timeslotService.createTimeslot(LocalDateTime.of(2022, 8, 21, 14, 30), 30);
         long t12 = timeslotService.createTimeslot(LocalDateTime.of(2022, 9, 25, 10, 30), 30);
         long t13 = timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 17, 30), 30);
         long t14 = timeslotService.createTimeslot(LocalDateTime.of(2022, 12, 10, 15, 30), 30);
@@ -110,31 +110,36 @@ public class SyntheticData implements CommandLineRunner {
         Timeslot timeslot13 = timeslotService.findTimeslotById(13);
         Timeslot timeslot6 = timeslotService.findTimeslotById(6);
         Timeslot timeslot11 = timeslotService.findTimeslotById(11);
+        Timeslot timeslot7 = timeslotService.findTimeslotById(7);
 
         Doctor doctor1 = doctorService.findDoctorByAmka("12345678912");
 
-            Doctor doctor2 = doctorService.findDoctorByAmka("12345678919");
-            System.out.println(timeslot10);
-            //doctorService.addTimeslotToDoctor("12345678912", timeslotService.findTimeslotById(10));
-            VaccinationCenter vaccCenter1 = vaccinationCenterService.createVaccinationCenter("5012", "Thessaloniki", "Egnatias 10");
-            vaccCenter1.addTimeSlot(timeslot10);
-            vaccCenter1.addTimeSlot(timeslot9);
-            vaccCenter1.addTimeSlot(timeslot13);
-            vaccCenter1.addTimeSlot(timeslot6);
-            vaccCenter1.addTimeSlot(timeslot11);
-            timeslot10.setVaccinationCenter(vaccCenter1);
-            timeslot9.setVaccinationCenter(vaccCenter1);
-            timeslot13.setVaccinationCenter(vaccCenter1);
-            timeslot6.setVaccinationCenter(vaccCenter1);
+        Doctor doctor2 = doctorService.findDoctorByAmka("12345678919");
+        System.out.println(timeslot10);
+        //doctorService.addTimeslotToDoctor("12345678912", timeslotService.findTimeslotById(10));
+        VaccinationCenter vaccCenter1 = vaccinationCenterService.createVaccinationCenter("5012", "Thessaloniki", "Egnatias 10");
 
-            timeslot10.setDoctor(doctor1);
-            timeslot9.setDoctor(doctor2);
-            timeslot13.setDoctor(doctor1);
-            timeslot6.setDoctor(doctor1);
-            timeslot11.setDoctor(doctor2);
+        vaccCenter1.addTimeSlot(timeslot10);
+        vaccCenter1.addTimeSlot(timeslot9);
+        vaccCenter1.addTimeSlot(timeslot13);
+        vaccCenter1.addTimeSlot(timeslot6);
+        vaccCenter1.addTimeSlot(timeslot11);
+        vaccCenter1.addTimeSlot(timeslot7);
 
-            ////////
-            /////// 1o vaccine
+        timeslot10.setVaccinationCenter(vaccCenter1);
+        timeslot9.setVaccinationCenter(vaccCenter1);
+        timeslot13.setVaccinationCenter(vaccCenter1);
+        timeslot6.setVaccinationCenter(vaccCenter1);
+        timeslot11.setVaccinationCenter(vaccCenter1);
+
+        timeslot10.setDoctor(doctor1);
+        timeslot9.setDoctor(doctor2);
+        timeslot13.setDoctor(doctor1);
+        timeslot6.setDoctor(doctor1);
+        timeslot11.setDoctor(doctor2);
+
+        ////////
+        /////// 1o vaccine
         Insured insured = insuredService.findInsuredByAmka("22222223333");
         System.out.println(insured);
         timeslot11.setVaccinationCenter(vaccCenter1);
@@ -151,7 +156,7 @@ public class SyntheticData implements CommandLineRunner {
 
         ////
         ///// 2o vaccine
-        Timeslot timeslot20 =timeslotService.findTimeslotById(5);
+        Timeslot timeslot20 = timeslotService.findTimeslotById(5);
         timeslot20.setVaccinationCenter(vaccCenter1);
         vaccCenter1.addTimeSlot(timeslot20);
         timeslot20.setDoctor(doctor20);
@@ -165,6 +170,5 @@ public class SyntheticData implements CommandLineRunner {
         //System.out.println(doctor20);
         System.out.println(v);
 
-        System.out.println("test");
     }
 }
