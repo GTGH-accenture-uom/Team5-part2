@@ -80,6 +80,7 @@ public class Vaccination {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Vaccination{");
+        sb.append("id='").append(id).append('\'');
         sb.append("vacc_brand='").append(vacc_brand).append('\'');
         sb.append(", insured=").append(insured);
         sb.append(", doctor=").append(doctor);

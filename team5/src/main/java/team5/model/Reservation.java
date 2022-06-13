@@ -52,6 +52,7 @@ public class Reservation {
     @Override
     public String toString() {
         return "Reservation{" +
+                ", Id = " + id +
                 "insured=" + insured +
                 ", timeslot=" + timeslot +
                 '}';
