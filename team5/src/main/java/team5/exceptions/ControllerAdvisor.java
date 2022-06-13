@@ -59,9 +59,9 @@ public class ControllerAdvisor {
     @ExceptionHandler(value = {ReservationCannotBeUpdated.class})
     public ResponseEntity<ErrorResponse> handleReservationCannotBeUpdated(ReservationCannotBeUpdated ex) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setErrorCode(HttpStatus.NO_CONTENT.value());
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 
