@@ -13,8 +13,8 @@ public class Doctor {
     private String surname;
     @JsonIgnore
     private List<VaccinationCenter> vaccinationCenters = new ArrayList<>();
-    @JsonIgnore
-    private List<Vaccination> vaccinations = new ArrayList<>();
+    //@JsonIgnore
+    //private List<Vaccination> vaccinations = new ArrayList<>();
     @JsonIgnore
     private List<Reservation> reservations = new ArrayList<>();
 
@@ -48,17 +48,17 @@ public class Doctor {
         this.surname = surname;
     }
 
-    public List<Vaccination> getVaccinations() {
-        return vaccinations;
-    }
-
-    public void setVaccinations(List<Vaccination> vaccinations) {
-        this.vaccinations = vaccinations;
-    }
-
-    public void addVaccination(Vaccination vaccination) {
-        vaccinations.add(vaccination);
-    }
+//    public List<Vaccination> getVaccinations() {
+//        return vaccinations;
+//    }
+//
+//    public void setVaccinations(List<Vaccination> vaccinations) {
+//        this.vaccinations = vaccinations;
+//    }
+//
+//    public void addVaccination(Vaccination vaccination) {
+//        vaccinations.add(vaccination);
+//    }
 
     public List<VaccinationCenter> getVaccinationCenters() {
         return vaccinationCenters;
@@ -112,10 +112,10 @@ public class Doctor {
             sb.append(", vaccinationCenter code='").append(vaccinationCenters
                     .stream().map(VaccinationCenter::getCode).collect(Collectors.joining())).append('\'');
         }
-        if (!vaccinations.isEmpty()) {
-            sb.append(", vaccination id's='").append(vaccinations
-                    .stream().map(vaccination -> vaccination.getId() + " ").collect(Collectors.joining(","))).append('\'');
-        }
+//        if (!vaccinations.isEmpty()) {
+//            sb.append(", vaccination id's='").append(vaccinations
+//                    .stream().map(vaccination -> vaccination.getId() + " ").collect(Collectors.joining(","))).append('\'');
+//        }
         if (!reservations.isEmpty()) {
             sb.append(", reservation id's='").append(reservations
                     .stream().map(reservation -> reservation.getId() + " ").collect(Collectors.joining(","))).append('\'');

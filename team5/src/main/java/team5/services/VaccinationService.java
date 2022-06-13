@@ -116,7 +116,7 @@ public class VaccinationService {
             VaccinationCenter vaccinationCenter = vaccination.getTimeslot().getVaccinationCenter();
             vaccinationCenter.addVaccination(vaccination);
             //Add vaccination in doctor's vaccinations list
-            doctor.addVaccination(vaccination);
+            //doctor.addVaccination(vaccination);
             allVaccinations.add(vaccination);
             return vaccination;
         } else {
@@ -137,7 +137,7 @@ public class VaccinationService {
             //Add record of vaccination to vaccination center
             vaccinationCenter.addVaccination(vaccination);
             //Add vaccination in doctor's vaccinations list
-            doctor.addVaccination(vaccination);
+            //doctor.addVaccination(vaccination);
             getAllVaccinations().add(vaccination);
             return vaccination;
         } else {

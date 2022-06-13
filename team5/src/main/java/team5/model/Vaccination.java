@@ -20,10 +20,7 @@ public class Vaccination {
 
     private Timeslot timeslot;
 
-    public Vaccination() {
-
-
-    }
+    public Vaccination() {}
 
     public Vaccination(Insured insured, Doctor doctor, LocalDateTime vaccinationDate, LocalDateTime expirationDate) {
         this.insured = insured;
