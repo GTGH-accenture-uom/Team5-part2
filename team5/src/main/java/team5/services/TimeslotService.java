@@ -4,16 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team5.model.Timeslot;
 import team5.model.VaccinationCenter;
-import team5.utilities.Conversion;
+import team5.utilities.DateUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,7 +45,7 @@ public class TimeslotService {
     }
 
     public List<Timeslot> findTimeslotsByDate(String date) {
-        LocalDate localDate = Conversion.stringToLocalDate(date);
+        LocalDate localDate = DateUtils.stringToLocalDate(date);
         List<Timeslot> timeslots = new ArrayList<>();
         for (Timeslot t : allTimeslots) {
             if (t.isAvailable() && ((t.getStartDateTime().toLocalDate().equals(localDate)))) {
@@ -80,36 +76,32 @@ public class TimeslotService {
 
     public List<Timeslot> getFreeTimeSlotsByDateByVaccinationCenter(String code, String date) {
 
-        LocalDate localDate = Conversion.stringToLocalDate(date);
+        LocalDate stringToLocalDate = DateUtils.stringToLocalDate(date);
+
         VaccinationCenter foundVaccinationCenter = vaccinationCenterService.findVaccinationCenterByCode(code);
         return foundVaccinationCenter.getTimeslots()
                 .stream()
                 .filter(Timeslot::isAvailable)
                 .filter(timeslot -> timeslot.getStartDateTime()
                         .toLocalDate()
-                        .format(Conversion.pattern)
-                        .equals(localDate.format(Conversion.pattern))).collect(Collectors.toList());
+                        .equals(stringToLocalDate)).collect(Collectors.toList());
     }
 
     public List<Timeslot> getFreeTimeSlotsInSameMonthByVaccinationCenter(String code, String date) {
-        LocalDate localDate = Conversion.stringToLocalDate(date);
+
+        LocalDate stringToLocalDate = DateUtils.stringToLocalDate(date);
+
         VaccinationCenter foundVaccinationCenter = vaccinationCenterService.findVaccinationCenterByCode(code);
+
         return foundVaccinationCenter.getTimeslots()
                 .stream()
                 .filter(Timeslot::isAvailable)
-                .filter(timeslot -> isInSameMonth(localDate, timeslot.getStartDateTime().toLocalDate()))
+                .filter(timeslot -> (DateUtils.isTimeSlotAfterOrEqualsTheGivenDate(stringToLocalDate,timeslot)))
+                .filter(timeslot -> DateUtils.areTimeslotsInSameMonth(stringToLocalDate, timeslot.getStartDateTime().toLocalDate()))
                 .collect(Collectors.toList());
     }
 
-    private boolean isInSameMonth(LocalDate date, LocalDate timeslotDate) {
-        boolean isInSameMonth = false;
-        int givenMonthOfYear = date.get(ChronoField.MONTH_OF_YEAR);
-        int givenMonthOfTimeslot = timeslotDate.get(ChronoField.MONTH_OF_YEAR);
-        if (date.getYear() == timeslotDate.getYear()) {
-            isInSameMonth = givenMonthOfYear == givenMonthOfTimeslot;
-        }
-        return isInSameMonth;
-    }
+
 
 
     public List<Timeslot> getAllTimeslots() {
