@@ -29,6 +29,7 @@ public class SyntheticData implements CommandLineRunner {
         this.timeslotService = timeslotService;
         this.vaccinationCenterService = vaccinationCenterService;
         this.reservationService = reservationService;
+        ///test
     }
 
     @Override
