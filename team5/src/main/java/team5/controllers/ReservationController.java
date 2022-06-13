@@ -28,8 +28,8 @@ public class ReservationController {
     }
 
     @PutMapping("/reservation/{resevationId}")
-    public Reservation updateReservation(@PathVariable(value = "resevationId") String reservationId,
-                                         @RequestParam(value = "timeslotId") String timeslotId) {
+    public Reservation updateReservation(@PathVariable(value = "resevationId") long reservationId,
+                                         @RequestParam(value = "timeslotId") long timeslotId) {
 
         return reservationService.updateReservation(reservationId, timeslotId);
 

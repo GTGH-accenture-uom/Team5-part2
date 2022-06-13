@@ -1,7 +1,8 @@
 package team5.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Reservation {
@@ -9,7 +10,8 @@ public class Reservation {
     private final long id;
     private Insured insured;
     private Timeslot timeslot;
-
+    @JsonIgnore
+    private int reservationChanges;
 
     public Reservation(Insured insured, Timeslot timeslot) {
         this.insured = insured;
@@ -35,6 +37,15 @@ public class Reservation {
 
     public void setTimeslot(Timeslot timeslot) {
         this.timeslot = timeslot;
+    }
+
+
+    public int getReservationChanges() {
+        return reservationChanges;
+    }
+
+    public void increaseReservationCounter() {
+        reservationChanges++;
     }
 
     @Override
