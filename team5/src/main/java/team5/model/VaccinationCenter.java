@@ -11,9 +11,9 @@ public class  VaccinationCenter {
     private String code;
     private String city;
     private String address;
-    private List<Timeslot> timeslots = new ArrayList<>();
+    private List<Timeslot> timeslots = new ArrayList<>(); //nedeed
     private List<Reservation> reservations = new ArrayList<>();
-    private List<Vaccination> vaccinations = new ArrayList<>();
+    //private List<Vaccination> vaccinations = new ArrayList<>();
 
     public VaccinationCenter(String code, String city, String address) {
         this.code = code;
@@ -61,13 +61,13 @@ public class  VaccinationCenter {
         this.reservations = reservations;
     }
 
-    public List<Vaccination> getVaccinations() {
-        return vaccinations;
-    }
-
-    public void setVaccinations(List<Vaccination> vaccinations) {
-        this.vaccinations = vaccinations;
-    }
+//    public List<Vaccination> getVaccinations() {
+//        return vaccinations;
+//    }
+//
+//    public void setVaccinations(List<Vaccination> vaccinations) {
+//        this.vaccinations = vaccinations;
+//    }
 
     public void addTimeSlot(Timeslot timeslot) {
         timeslots.add(timeslot);
@@ -78,9 +78,7 @@ public class  VaccinationCenter {
         reservations.add(reservation);
     }
 
-    public void addVaccination(Vaccination vaccination) {
-        vaccinations.add(vaccination);
-    }
+    //public void addVaccination(Vaccination vaccination) { vaccinations.add(vaccination);}
 
     @Override
     public String toString() {
@@ -98,11 +96,11 @@ public class  VaccinationCenter {
                    .stream()
                    .map(reservation -> reservation.getId() + "").collect(Collectors.joining(",")));
        }
-       if(vaccinations!=null){
-           sb.append(", vaccinations id's=").append(vaccinations
-                   .stream()
-                   .map(vaccination -> vaccination.getId() + "").collect(Collectors.joining(",")));
-       }
+//       if(vaccinations!=null){
+//           sb.append(", vaccinations id's=").append(vaccinations
+//                   .stream()
+//                   .map(vaccination -> vaccination.getId() + "").collect(Collectors.joining(",")));
+//       }
         sb.append('}');
         return sb.toString();
     }

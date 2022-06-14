@@ -1,13 +1,13 @@
 package team5.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Doctor {
-    @JsonIgnore
+    //@JsonIgnore
     private String amka;
     private String name;
     private String surname;

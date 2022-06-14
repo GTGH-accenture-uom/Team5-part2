@@ -114,7 +114,7 @@ public class VaccinationService {
             timeslot.setVaccination(vaccination);
             //Add record of vaccination to vaccination center
             VaccinationCenter vaccinationCenter = vaccination.getTimeslot().getVaccinationCenter();
-            vaccinationCenter.addVaccination(vaccination);
+            //vaccinationCenter.addVaccination(vaccination);
             //Add vaccination in doctor's vaccinations list
             //doctor.addVaccination(vaccination);
             allVaccinations.add(vaccination);
@@ -135,7 +135,7 @@ public class VaccinationService {
             LocalDateTime expirationDate = startDateTime.plusYears(yearsToExpire);
             Vaccination vaccination = new Vaccination(brand, insuredToVaccinate, doctor, startDateTime, expirationDate);
             //Add record of vaccination to vaccination center
-            vaccinationCenter.addVaccination(vaccination);
+            //vaccinationCenter.addVaccination(vaccination);
             //Add vaccination in doctor's vaccinations list
             //doctor.addVaccination(vaccination);
             getAllVaccinations().add(vaccination);
