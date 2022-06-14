@@ -26,10 +26,10 @@ public class DateUtils {
 
     public static boolean areTimeslotsInSameMonth(LocalDate givenDate, LocalDate timeslotDate) {
         boolean isInSameMonth = false;
-        int givenMonthOfYear = givenDate.getMonthValue();
+        int givenMonthOfDate = givenDate.getMonthValue();
         int givenMonthOfTimeslot = timeslotDate.getMonthValue();
         if (givenDate.getYear() == timeslotDate.getYear()) {
-            isInSameMonth = givenMonthOfYear == givenMonthOfTimeslot;
+            isInSameMonth = givenMonthOfDate == givenMonthOfTimeslot;
         }
         return isInSameMonth;
     }
