@@ -10,6 +10,9 @@ public class Reservation {
     private final long id;
     private Insured insured;
     private Timeslot timeslot;
+
+    private Vaccination vaccination;
+
     @JsonIgnore
     private int reservationChanges;
 
@@ -54,6 +57,14 @@ public class Reservation {
         if (o == null || getClass() != o.getClass()) return false;
         Reservation that = (Reservation) o;
         return insured.equals(that.insured) && timeslot.equals(that.timeslot);
+    }
+
+    public Vaccination getVaccination() {
+        return vaccination;
+    }
+
+    public void setVaccination(Vaccination vaccination) {
+        this.vaccination = vaccination;
     }
 
     @Override

@@ -18,7 +18,8 @@ public class Vaccination {
     private LocalDateTime expirationDate;
     private VaccinationState vaccinationState;
 
-    private Timeslot timeslot;
+    @JsonIgnore
+    private Reservation reservation;
 
     public Vaccination() {}
 
@@ -89,12 +90,12 @@ public class Vaccination {
         return vaccinationState;
     }
 
-    public Timeslot getTimeslot() {
-        return timeslot;
+    public Reservation getReservation() {
+        return reservation;
     }
 
-    public void setTimeslot(Timeslot timeslot) {
-        this.timeslot = timeslot;
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
     }
 
     @Override
@@ -112,8 +113,8 @@ public class Vaccination {
         }
         sb.append(", vaccinationDate=").append(vaccinationDate);
         sb.append(", expirationDate=").append(expirationDate);
-        if(timeslot!=null){
-            sb.append(", timeslot=").append(timeslot.getId());
+        if(reservation!=null){
+            sb.append(", reservation=").append(reservation.getId());
         }
         sb.append('}');
         return sb.toString();

@@ -2,6 +2,7 @@ package team5.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import team5.dto.VaccinationDTO;
 import team5.model.Timeslot;
 import team5.model.Vaccination;
 import team5.services.TimeslotService;
@@ -27,10 +28,10 @@ public class VaccinationController {
 
 
     @PostMapping("/doctors/vaccinations/vaccination/doctors/{doctorAmka}")
-    public Vaccination createVaccination(@RequestBody Vaccination vaccination,
+    public Vaccination createVaccination(@RequestBody VaccinationDTO vaccinationDTO,
                                          @PathVariable(value = "doctorAmka")String doctorAmka){
 
-        return vaccinationService.createVaccination(vaccination,doctorAmka);
+        return vaccinationService.createVaccination(vaccinationDTO,doctorAmka);
     }
 
 

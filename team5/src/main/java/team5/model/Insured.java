@@ -2,27 +2,28 @@ package team5.model;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Insured {
-
+    private static final AtomicLong count = new AtomicLong(0);
+    private final long id;
     private String afm;
     private String amka;
     private String name;
-    private LocalDate birthdate;
+
     private String surname;
+    private LocalDate birthdate;
+
     private String email;
 
 
-    public Insured() {
-
-    }
-
-    public Insured(String afm, String amka, String name, LocalDate birthdate, String surname, String email) {
+    public Insured(String afm, String amka, String name, String surname, LocalDate birthdate, String email) {
+        this.id = count.incrementAndGet();
         this.afm = afm;
         this.amka = amka;
         this.name = name;
-        this.birthdate = birthdate;
         this.surname = surname;
+        this.birthdate = birthdate;
         this.email = email;
     }
 

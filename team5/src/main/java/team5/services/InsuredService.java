@@ -1,6 +1,7 @@
 package team5.services;
 
 import team5.config.SyntheticData;
+import team5.dto.InsuredDTO;
 import team5.model.Doctor;
 import team5.model.VaccinationCenter;
 import team5.model.Insured;
@@ -23,12 +24,28 @@ public class InsuredService {
     public void createInsured(String afm, String amka, String name, LocalDate birthdate, String surname, String email) {
         if (findInsuredByAmka(amka) == null) {
             if (InputValidator.checkAfm(afm) && InputValidator.checkAmka(amka)) {
-                Insured insured = new Insured(afm, amka, name, birthdate, surname, email);
+                Insured insured = new Insured(afm, amka, name, surname, birthdate, email);
                 allInsured.add(insured);
                 System.out.println("created insured: " + insured);
             }
         }
     }
+
+
+    //Second method create Insured to be used from the api
+
+    public Insured createInsured(InsuredDTO insuredDTO) {
+        if (findInsuredByAmka(insuredDTO.getAmka()) != null) {
+            if (InputValidator.checkAfm(insuredDTO.getAfm()) && InputValidator.checkAmka(insuredDTO.getAmka())) {
+                Insured insured = new Insured(insuredDTO.getAfm(), insuredDTO.getAmka(), insuredDTO.getName()
+                        , insuredDTO.getSurname(), insuredDTO.getBirthdate(), insuredDTO.getEmail());
+                return insured;
+            }
+        }
+        throw new RuntimeException(" Insured allready exists");
+
+    }
+
 
     public List<Insured> getAllInsured() {
         return allInsured;
