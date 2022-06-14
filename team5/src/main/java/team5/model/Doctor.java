@@ -11,8 +11,8 @@ public class Doctor {
     private String amka;
     private String name;
     private String surname;
-    @JsonIgnore
-    private List<VaccinationCenter> vaccinationCenters = new ArrayList<>();
+    //@JsonIgnore
+    //private List<VaccinationCenter> vaccinationCenters = new ArrayList<>();
     //@JsonIgnore
     //private List<Vaccination> vaccinations = new ArrayList<>();
     //@JsonIgnore
@@ -59,14 +59,14 @@ public class Doctor {
 //    public void addVaccination(Vaccination vaccination) {
 //        vaccinations.add(vaccination);
 //    }
-
-    public List<VaccinationCenter> getVaccinationCenters() {
-        return vaccinationCenters;
-    }
-
-    public void setVaccinationCenters(List<VaccinationCenter> vaccinationCenters) {
-        this.vaccinationCenters = vaccinationCenters;
-    }
+//
+//    public List<VaccinationCenter> getVaccinationCenters() {
+//        return vaccinationCenters;
+//    }
+//
+//    public void setVaccinationCenters(List<VaccinationCenter> vaccinationCenters) {
+//        this.vaccinationCenters = vaccinationCenters;
+//    }
 
 //    public List<Reservation> getReservations() {
 //        return reservations;
@@ -80,9 +80,9 @@ public class Doctor {
 //        reservations.add(reservation);
 //    }
 
-    public void addVaccinationCenter(VaccinationCenter vaccinationCenter) {
-        vaccinationCenters.add(vaccinationCenter);
-    }
+//    public void addVaccinationCenter(VaccinationCenter vaccinationCenter) {
+//        vaccinationCenters.add(vaccinationCenter);
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -108,10 +108,10 @@ public class Doctor {
 
         sb.append(", surname='").append(surname).append('\'');
 
-        if (!vaccinationCenters.isEmpty()) {
-            sb.append(", vaccinationCenter code='").append(vaccinationCenters
-                    .stream().map(VaccinationCenter::getCode).collect(Collectors.joining())).append('\'');
-        }
+//        if (!vaccinationCenters.isEmpty()) {
+//            sb.append(", vaccinationCenter code='").append(vaccinationCenters
+//                    .stream().map(VaccinationCenter::getCode).collect(Collectors.joining())).append('\'');
+//        }
 //        if (!vaccinations.isEmpty()) {
 //            sb.append(", vaccination id's='").append(vaccinations
 //                    .stream().map(vaccination -> vaccination.getId() + " ").collect(Collectors.joining(","))).append('\'');
