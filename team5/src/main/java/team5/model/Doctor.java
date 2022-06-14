@@ -16,7 +16,7 @@ public class Doctor {
     //@JsonIgnore
     //private List<Vaccination> vaccinations = new ArrayList<>();
     @JsonIgnore
-    private List<Reservation> reservations = new ArrayList<>();
+    //private List<Reservation> reservations = new ArrayList<>();
 
     public Doctor(String amka, String name, String surname) {
         this.amka = amka;
@@ -68,17 +68,17 @@ public class Doctor {
         this.vaccinationCenters = vaccinationCenters;
     }
 
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-
-    public void addReservation(Reservation reservation) {
-        reservations.add(reservation);
-    }
+//    public List<Reservation> getReservations() {
+//        return reservations;
+//    }
+//
+//    public void setReservations(List<Reservation> reservations) {
+//        this.reservations = reservations;
+//    }
+//
+//    public void addReservation(Reservation reservation) {
+//        reservations.add(reservation);
+//    }
 
     public void addVaccinationCenter(VaccinationCenter vaccinationCenter) {
         vaccinationCenters.add(vaccinationCenter);
@@ -116,10 +116,10 @@ public class Doctor {
 //            sb.append(", vaccination id's='").append(vaccinations
 //                    .stream().map(vaccination -> vaccination.getId() + " ").collect(Collectors.joining(","))).append('\'');
 //        }
-        if (!reservations.isEmpty()) {
-            sb.append(", reservation id's='").append(reservations
-                    .stream().map(reservation -> reservation.getId() + " ").collect(Collectors.joining(","))).append('\'');
-        }
+//        if (!reservations.isEmpty()) {
+//            sb.append(", reservation id's='").append(reservations
+//                    .stream().map(reservation -> reservation.getId() + " ").collect(Collectors.joining(","))).append('\'');
+//        }
         sb.append('}');
         return sb.toString();
     }

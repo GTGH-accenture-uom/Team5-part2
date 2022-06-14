@@ -81,7 +81,7 @@ public class ReservationService {
             Reservation reservation = new Reservation(insured, timeslot);
             timeslot.getVaccinationCenter().addReservation(reservation);
             System.out.println(reservation);
-            doctor.addReservation(reservation);
+            //doctor.addReservation(reservation);
             timeslot.setAvailable(false);
             allReservations.add(reservation);
 
@@ -103,7 +103,7 @@ public class ReservationService {
             Reservation reservation = new Reservation(insured, timeslot);
             timeslot.getVaccinationCenter().addReservation(reservation);
             System.out.println(reservation);
-            doctor.addReservation(reservation);
+            //doctor.addReservation(reservation);
             timeslot.setAvailable(false);
             allReservations.add(reservation);
 
