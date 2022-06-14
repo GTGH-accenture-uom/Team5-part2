@@ -17,7 +17,7 @@ public class Vaccination {
     private Doctor doctor;
     private LocalDateTime vaccinationDate;
     private LocalDateTime expirationDate;
-    private VaccinationState vaccinationState;
+    //private VaccinationState vaccinationState;
     @JsonIgnore
     private Reservation reservation;
 
@@ -80,14 +80,6 @@ public class Vaccination {
 
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
-    }
-
-    public void setVaccinationState(VaccinationState vaccinationState) {
-        this.vaccinationState = vaccinationState;
-    }
-
-    public VaccinationState getVaccinationState() {
-        return vaccinationState;
     }
 
     public Reservation getReservation() {
