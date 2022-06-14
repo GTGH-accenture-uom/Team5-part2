@@ -124,26 +124,26 @@ public class VaccinationService {
         }
     }
 
-    //Second method for Create Vaccination not to be used from the api
-    public Vaccination createVaccination(String brand, int yearsToExpire, Insured insured, VaccinationCenter vaccinationCenter) {
-        Reservation foundReservation = reservationService.findReservationByInsuredAmka(insured, vaccinationCenter);
-
-        if (foundReservation != null) {
-            Insured insuredToVaccinate = foundReservation.getInsured();
-            Doctor doctor = foundReservation.getTimeslot().getDoctor();
-            LocalDateTime startDateTime = foundReservation.getTimeslot().getStartDateTime();
-            LocalDateTime expirationDate = startDateTime.plusYears(yearsToExpire);
-            Vaccination vaccination = new Vaccination(brand, insuredToVaccinate, doctor, startDateTime, expirationDate);
-            //Add record of vaccination to vaccination center
-            //vaccinationCenter.addVaccination(vaccination);
-            //Add vaccination in doctor's vaccinations list
-            //doctor.addVaccination(vaccination);
-            getAllVaccinations().add(vaccination);
-            return vaccination;
-        } else {
-            System.err.println("This Vaccination cannot be made because this reservation cannot be found");
-        }
-        return null;
-    }
+//    //Second method for Create Vaccination not to be used from the api
+//    public Vaccination createVaccination(String brand, int yearsToExpire, Insured insured, VaccinationCenter vaccinationCenter) {
+//        Reservation foundReservation = reservationService.findReservationsByInsured(insured, List<Reservation> reservations);
+//
+//        if (foundReservation != null) {
+//            Insured insuredToVaccinate = foundReservation.getInsured();
+//            Doctor doctor = foundReservation.getTimeslot().getDoctor();
+//            LocalDateTime startDateTime = foundReservation.getTimeslot().getStartDateTime();
+//            LocalDateTime expirationDate = startDateTime.plusYears(yearsToExpire);
+//            Vaccination vaccination = new Vaccination(brand, insuredToVaccinate, doctor, startDateTime, expirationDate);
+//            //Add record of vaccination to vaccination center
+//            //vaccinationCenter.addVaccination(vaccination);
+//            //Add vaccination in doctor's vaccinations list
+//            //doctor.addVaccination(vaccination);
+//            getAllVaccinations().add(vaccination);
+//            return vaccination;
+//        } else {
+//            System.err.println("This Vaccination cannot be made because this reservation cannot be found");
+//        }
+//        return null;
+//    }
 
 }

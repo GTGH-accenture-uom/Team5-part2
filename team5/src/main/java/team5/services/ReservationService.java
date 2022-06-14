@@ -79,7 +79,7 @@ public class ReservationService {
         if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
             Timeslot timeslot = timeslots.get(0);
             Reservation reservation = new Reservation(insured, timeslot);
-            timeslot.getVaccinationCenter().addReservation(reservation);
+            //timeslot.getVaccinationCenter().addReservation(reservation);
             System.out.println(reservation);
             //doctor.addReservation(reservation);
             timeslot.setAvailable(false);
@@ -101,7 +101,7 @@ public class ReservationService {
         if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
             Timeslot timeslot = timeslots.get(0);
             Reservation reservation = new Reservation(insured, timeslot);
-            timeslot.getVaccinationCenter().addReservation(reservation);
+            //timeslot.getVaccinationCenter().addReservation(reservation);
             System.out.println(reservation);
             //doctor.addReservation(reservation);
             timeslot.setAvailable(false);
@@ -144,17 +144,17 @@ public class ReservationService {
         return reservation;
     }
 
-    public Reservation findReservationByInsuredAmka(Insured insured, VaccinationCenter vaccinationCenter) {
-        Reservation reservation = null;
-        Optional<Reservation> optionalReservation = vaccinationCenter
-                .getReservations()
-                .stream()
-                .filter(reserv -> reserv.getInsured().getAmka().equals(insured.getAmka())).findFirst();
-        if (optionalReservation.isPresent()) {
-            reservation = optionalReservation.get();
-        }
-        return reservation;
-    }
+//    public Reservation findReservationByInsuredAmka(Insured insured, VaccinationCenter vaccinationCenter) {
+//        Reservation reservation = null;
+//        Optional<Reservation> optionalReservation = vaccinationCenter
+//                .getReservations()
+//                .stream()
+//                .filter(reserv -> reserv.getInsured().getAmka().equals(insured.getAmka())).findFirst();
+//        if (optionalReservation.isPresent()) {
+//            reservation = optionalReservation.get();
+//        }
+//        return reservation;
+//    }
 
 
 //    public List<Reservation> getAllReservations() {

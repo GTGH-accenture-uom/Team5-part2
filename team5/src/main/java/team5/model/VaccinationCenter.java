@@ -12,7 +12,7 @@ public class  VaccinationCenter {
     private String city;
     private String address;
     private List<Timeslot> timeslots = new ArrayList<>(); //nedeed
-    private List<Reservation> reservations = new ArrayList<>();
+    //private List<Reservation> reservations = new ArrayList<>();
     //private List<Vaccination> vaccinations = new ArrayList<>();
 
     public VaccinationCenter(String code, String city, String address) {
@@ -53,13 +53,13 @@ public class  VaccinationCenter {
         this.timeslots = timeslots;
     }
 
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
+//    public List<Reservation> getReservations() {
+//        return reservations;
+//    }
+//
+//    public void setReservations(List<Reservation> reservations) {
+//        this.reservations = reservations;
+//    }
 
 //    public List<Vaccination> getVaccinations() {
 //        return vaccinations;
@@ -74,9 +74,9 @@ public class  VaccinationCenter {
         timeslot.setVaccinationCenter(this);
     }
 
-    public void addReservation(Reservation reservation) {
-        reservations.add(reservation);
-    }
+//    public void addReservation(Reservation reservation) {
+//        reservations.add(reservation);
+//    }
 
     //public void addVaccination(Vaccination vaccination) { vaccinations.add(vaccination);}
 
@@ -91,11 +91,11 @@ public class  VaccinationCenter {
                     .stream()
                     .map(timeslot -> timeslot.getId() + "").collect(Collectors.joining(",")));
         }
-       if(reservations!=null){
-           sb.append(", reservations id's=").append(reservations
-                   .stream()
-                   .map(reservation -> reservation.getId() + "").collect(Collectors.joining(",")));
-       }
+//       if(reservations!=null){
+//           sb.append(", reservations id's=").append(reservations
+//                   .stream()
+//                   .map(reservation -> reservation.getId() + "").collect(Collectors.joining(",")));
+//       }
 //       if(vaccinations!=null){
 //           sb.append(", vaccinations id's=").append(vaccinations
 //                   .stream()
