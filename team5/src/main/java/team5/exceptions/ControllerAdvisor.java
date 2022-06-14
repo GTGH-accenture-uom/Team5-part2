@@ -65,4 +65,13 @@ public class ControllerAdvisor {
     }
 
 
+    @ExceptionHandler(value = {TimeslotNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleTimeslotNotFoundException(TimeslotNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+
 }
