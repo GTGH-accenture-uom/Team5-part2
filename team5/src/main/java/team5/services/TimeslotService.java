@@ -2,6 +2,8 @@ package team5.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team5.dto.TimeslotDTO;
+import team5.exceptions.TimeslotNotFoundException;
 import team5.model.Timeslot;
 import team5.model.VaccinationCenter;
 import team5.utilities.DateUtils;
@@ -9,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -25,22 +26,30 @@ public class TimeslotService {
     }
 
 
-    public long createTimeslot(LocalDateTime startDateTime, int duration) {
+    public Timeslot createTimeslot(LocalDateTime startDateTime, int duration) {
         Timeslot timeslot = new Timeslot(startDateTime, duration);
         System.out.println("Timeslot with id: " + timeslot.getId() + " created: " + timeslot);
         allTimeslots.add(timeslot);
-        return timeslot.getId();
+        return timeslot;
+    }
+
+    public Timeslot createTimeslot(TimeslotDTO timeslotDTO) {
+        Timeslot timeslot = new Timeslot(timeslotDTO.getStartDateTime(), timeslotDTO.getDuration());
+        allTimeslots.add(timeslot);
+        return timeslot;
     }
 
     public Timeslot findTimeslotById(long id) {
         Timeslot foundTimeslot = null;
-        Optional<Timeslot> timeslot;
         for (Timeslot t : allTimeslots) {
             if (t.getId() == id) {
                 foundTimeslot = t;
             }
         }
-        return foundTimeslot;
+        if (foundTimeslot != null) {
+            return foundTimeslot;
+        }
+        throw new TimeslotNotFoundException(id);
     }
 
     public List<Timeslot> findTimeslotsByDate(String date) {
@@ -54,29 +63,36 @@ public class TimeslotService {
         return timeslots;
     }
 
-    public List<Timeslot> getFreeTimeslotsByVaccinationCenter(String code) {
+    public Timeslot updateTimeslot(long id, TimeslotDTO timeslotDTO) {
+        Timeslot timeslot = findTimeslotById(id);
+        if (timeslot != null) {
+            timeslot.setStartDateTime(timeslotDTO.getStartDateTime());
+            calcEndDateTime(timeslot, timeslotDTO.getStartDateTime(), timeslot.getDuration());
+        } else {
+            throw new TimeslotNotFoundException(id);
+        }
 
+        return timeslot;
+    }
+
+    public void deleteTimeslot(long id) {
+        if (allTimeslots.removeIf(e -> e.getId() == id)) {
+            System.out.println("removed");
+        } else {
+            throw new TimeslotNotFoundException(id);
+        }
+    }
+
+    public List<Timeslot> getFreeTimeslotsByVaccinationCenter(String code) {
         VaccinationCenter foundVaccinationCenter = vaccinationCenterService.findVaccinationCenterByCode(code);
         return foundVaccinationCenter.getTimeslots()
                 .stream()
                 .filter(Timeslot::isAvailable)
                 .collect(Collectors.toList());
-        /*
-        List<Timeslot> freeTimeslots = new ArrayList<>();
-        for (Timeslot ts : vaccinationCenter.getTimeslots()) {
-            if (ts.isAvailable()) {
-                freeTimeslots.add(ts);
-            }
-        }
-        return freeTimeslots;
-
-         */
     }
 
     public List<Timeslot> getFreeTimeSlotsByDateByVaccinationCenter(String code, String date) {
-
         LocalDate stringToLocalDate = DateUtils.stringToLocalDate(date);
-
         VaccinationCenter foundVaccinationCenter = vaccinationCenterService.findVaccinationCenterByCode(code);
         return foundVaccinationCenter.getTimeslots()
                 .stream()
@@ -87,18 +103,16 @@ public class TimeslotService {
     }
 
     public List<Timeslot> getFreeTimeSlotsInSameMonthByVaccinationCenter(String code, String date) {
-
         LocalDate stringToLocalDate = DateUtils.stringToLocalDate(date);
-
         VaccinationCenter foundVaccinationCenter = vaccinationCenterService.findVaccinationCenterByCode(code);
-
         return foundVaccinationCenter.getTimeslots()
                 .stream()
                 .filter(Timeslot::isAvailable)
-                .filter(timeslot -> (DateUtils.isTimeSlotAfterOrEqualsTheGivenDate(stringToLocalDate,timeslot)))
+                .filter(timeslot -> (DateUtils.isTimeSlotAfterOrEqualsTheGivenDate(stringToLocalDate, timeslot)))
                 .filter(timeslot -> DateUtils.areTimeslotsInSameMonth(stringToLocalDate, timeslot.getStartDateTime().toLocalDate()))
                 .collect(Collectors.toList());
     }
+
     public List<Timeslot> getTimeslotsByLocalDateTimeByDoctor(String amkaInsured, LocalDateTime localDateTime, String amkaDoctor) {
         List<Timeslot> timeslotsByDate = getTimeslotsByLocalDateTime(getAllTimeslots(), localDateTime);
         List<Timeslot> timeslotsByDoctorByDate = getTimeslotsByDoctor(timeslotsByDate, amkaDoctor);
@@ -126,8 +140,11 @@ public class TimeslotService {
     }
 
 
-
     public List<Timeslot> getAllTimeslots() {
         return allTimeslots;
+    }
+
+    public void calcEndDateTime(Timeslot timeslot, LocalDateTime startDateTime, int duration) {
+        timeslot.setEndDateTime(startDateTime.plusMinutes(duration));
     }
 }
