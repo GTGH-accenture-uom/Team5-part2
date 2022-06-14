@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public class  VaccinationCenter {
 
     private String code;
+
     private String city;
     private String address;
     private List<Timeslot> timeslots = new ArrayList<>(); //nedeed

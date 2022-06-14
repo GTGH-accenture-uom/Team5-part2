@@ -11,7 +11,8 @@ public class Vaccination {
 
     private static final AtomicLong count = new AtomicLong(0);
     private long id;
-    private String vacc_brand;
+
+    private String vacc_Name;
     private Insured insured;
     private Doctor doctor;
     private LocalDateTime vaccinationDate;
@@ -20,7 +21,8 @@ public class Vaccination {
     @JsonIgnore
     private Reservation reservation;
 
-    public Vaccination() {}
+    public Vaccination() {
+    }
 
     public Vaccination(Insured insured, Doctor doctor, LocalDateTime vaccinationDate, LocalDateTime expirationDate) {
         this.insured = insured;
@@ -33,20 +35,19 @@ public class Vaccination {
 
     public Vaccination(String vacc_brand, Insured insured, Doctor doctor, LocalDateTime vaccinationDate, LocalDateTime expirationDate) {
         this(insured, doctor, vaccinationDate, expirationDate);
-        this.vacc_brand = vacc_brand;
+        this.vacc_Name = vacc_brand;
     }
-
 
     public long getId() {
         return id;
     }
 
-    public String getVacc_brand() {
-        return vacc_brand;
+    public String getVacc_Name() {
+        return vacc_Name;
     }
 
-    public void setVacc_brand(String vacc_brand) {
-        this.vacc_brand = vacc_brand;
+    public void setVacc_Name(String vacc_Name) {
+        this.vacc_Name = vacc_Name;
     }
 
     public Insured getInsured() {
@@ -101,8 +102,8 @@ public class Vaccination {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Vaccination{");
         sb.append("id='").append(id).append('\'');
-        if (vacc_brand != null) {
-            sb.append("vacc_brand='").append(vacc_brand).append('\'');
+        if (vacc_Name != null) {
+            sb.append("vacc_brand='").append(vacc_Name).append('\'');
         }
         if (insured != null) {
             sb.append(", Insured=").append(insured);
@@ -112,7 +113,7 @@ public class Vaccination {
         }
         sb.append(", vaccinationDate=").append(vaccinationDate);
         sb.append(", expirationDate=").append(expirationDate);
-        if(reservation!=null){
+        if (reservation != null) {
             sb.append(", reservation=").append(reservation.getId());
         }
         sb.append('}');

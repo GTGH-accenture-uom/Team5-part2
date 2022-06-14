@@ -6,6 +6,8 @@ public class VaccinationDTO {
 
     private long timeslotId;
     private String insuredAmka;
+
+    private String vacc_Name;
     private LocalDateTime expirationDate;
 
     public long getTimeslotId() {
@@ -22,6 +24,14 @@ public class VaccinationDTO {
 
     public void setInsuredAmka(String insuredAmka) {
         this.insuredAmka = insuredAmka;
+    }
+
+    public String getVacc_Name() {
+        return vacc_Name;
+    }
+
+    public void setVacc_Name(String vacc_Name) {
+        this.vacc_Name = vacc_Name;
     }
 
     public LocalDateTime getExpirationDate() {

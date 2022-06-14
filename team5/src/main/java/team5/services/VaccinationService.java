@@ -6,6 +6,7 @@ import team5.dto.VaccinationDTO;
 import team5.exceptions.*;
 import team5.model.*;
 import team5.utilities.MessagesForExistingValues;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class VaccinationService {
             if (v != null && v.getInsured() != null) {
                 if (v.getInsured().getAmka().equals(amka)) {
                     vaccinationsByInsured.add(v);
-                    names.add(v.getVacc_brand());
+                    names.add(v.getVacc_Name());
                 }
             }
         }
@@ -64,7 +65,7 @@ public class VaccinationService {
             LocalDateTime expirationDateTime = vaccinationsByInsured.get(0).getExpirationDate();
             Vaccination vaccination = vaccinationsByInsured.get(0);
             for (Vaccination v : vaccinationsByInsured) {
-                if (v.getVacc_brand().equals(vaccine) && v.getExpirationDate().isAfter(expirationDateTime)) {
+                if (v.getVacc_Name().equals(vaccine) && v.getExpirationDate().isAfter(expirationDateTime)) {
                     expirationDateTime = v.getExpirationDate();
                     vaccination = v;
                 }
@@ -109,15 +110,16 @@ public class VaccinationService {
             throw new InsuredNotFoundException(insuredAmka);
         }
         Doctor foundDoctor = doctorService.findDoctorByAmka(doctorAmka);
-        if(foundDoctor == null){
+        if (foundDoctor == null) {
             throw new DoctorNotFoundException(doctorAmka);
         }
         LocalDateTime vaccinationDate = LocalDateTime.now();
         LocalDateTime expirationDate = vaccinationDTO.getExpirationDate();
-        if(expirationDate.isBefore(vaccinationDate)){
+        if (expirationDate.isBefore(vaccinationDate)) {
             throw new InvalidExpirationDateException(vaccinationDate);
         }
-        Vaccination vaccination = new Vaccination(foundInsured, foundDoctor, vaccinationDate, expirationDate);
+        String vacc_Name = vaccinationDTO.getVacc_Name();
+        Vaccination vaccination = new Vaccination(vacc_Name, foundInsured, foundDoctor, vaccinationDate, expirationDate);
         vaccination.setReservation(foundReservation);
         foundReservation.setVaccination(vaccination);
         // timeslot.setVaccination(vaccination);
