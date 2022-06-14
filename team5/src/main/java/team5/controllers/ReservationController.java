@@ -2,6 +2,7 @@ package team5.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import team5.dto.ReservationDTO;
 import team5.model.Reservation;
 import team5.services.ReservationService;
 
@@ -20,11 +21,10 @@ public class ReservationController {
     }
 
     @PostMapping("/reservation")
-    public long createReservation(@RequestParam(value = "amkaInsured") String amkaInsured, @RequestParam(value = "timeslot") String date,
-                                  //timeslot in db = datetime per doctor per vaccination center
-                                  //timeslot in front = datetime only
-                                  @RequestParam(value = "amkaDoctor") String amkaDoctor) {
-        return reservationService.createReservation(amkaInsured, date, amkaDoctor);
+    public long createReservationBody(@RequestParam(value = "body") ReservationDTO body) {
+        return reservationService.createReservationBody(body);
+        //timeslot in db = datetime per doctor per vaccination center
+        //timeslot in front = datetime only
     }
 
     @PutMapping("/reservation/{resevationId}")
@@ -42,11 +42,5 @@ public class ReservationController {
         return reservationService.findReservationsByAllFilters(amkaInsured, amkaDoctor);
     }
 
-
-//    @RequestMapping (value = "/path", method = RequestMethod.GET)
-//    public String handleRequest(@RequestParam("paramName") Optional<String> variableName) {
-//        String paramValue = variableName.orElse("");
-//        // use the paramValue
-//    }
 }
 

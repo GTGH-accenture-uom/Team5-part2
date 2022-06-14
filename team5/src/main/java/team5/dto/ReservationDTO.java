@@ -6,9 +6,9 @@ public class ReservationDTO {
 
     private String amkaInsured;
     private String amkaDoctor;
-    private LocalDateTime timeslot;
+    private String timeslot;
 
-    public ReservationDTO(String amkaInsured, String amkaDoctor, LocalDateTime timeslot) {
+    public ReservationDTO(String amkaInsured, String timeslot, String amkaDoctor) {
         this.amkaInsured = amkaInsured;
         this.amkaDoctor = amkaDoctor;
         this.timeslot = timeslot;
@@ -20,5 +20,21 @@ public class ReservationDTO {
 
     public void setAmkaInsured(String amkaInsured) {
         this.amkaInsured = amkaInsured;
+    }
+
+    public String getAmkaDoctor() {
+        return amkaDoctor;
+    }
+
+    public void setAmkaDoctor(String amkaDoctor) {
+        this.amkaDoctor = amkaDoctor;
+    }
+
+    public String getTimeslot() {
+        return timeslot;
+    }
+
+    public void setTimeslot(String timeslot) {
+        this.timeslot = timeslot;
     }
 }
