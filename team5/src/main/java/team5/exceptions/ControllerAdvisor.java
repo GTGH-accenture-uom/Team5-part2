@@ -73,5 +73,12 @@ public class ControllerAdvisor {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = {CheckYourDataException.class})
+    public ResponseEntity<ErrorResponse> handleReservationCannotBeUpdated(CheckYourDataException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 
 }
