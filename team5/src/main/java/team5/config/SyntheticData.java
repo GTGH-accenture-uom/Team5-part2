@@ -18,12 +18,13 @@ import java.util.List;
 public class SyntheticData implements CommandLineRunner {
 
     private final InsuredService insuredService;
-
     private final DoctorService doctorService;
     private final TimeslotService timeslotService;
     private final VaccinationCenterService vaccinationCenterService;
     private final VaccinationService vaccinationService;
     private final ReservationService reservationService;
+
+
 
     @Autowired
     public SyntheticData(InsuredService insuredService, DoctorService doctorService, TimeslotService timeslotService,

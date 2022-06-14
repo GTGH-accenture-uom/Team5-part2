@@ -1,30 +1,21 @@
 package team5.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import team5.dto.TimeslotDTO;
 import team5.exceptions.TimeslotNotFoundException;
 import team5.model.Timeslot;
-import team5.model.VaccinationCenter;
 import team5.utilities.DateUtils;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
 public class TimeslotService {
     private final List<Timeslot> allTimeslots = new ArrayList<>();
-
-    private VaccinationCenterService vaccinationCenterService;
-
-    @Autowired
-    public TimeslotService(VaccinationCenterService vaccinationCenterService) {
-        this.vaccinationCenterService = vaccinationCenterService;
-    }
-
 
     public Timeslot createTimeslot(LocalDateTime startDateTime, int duration) {
         Timeslot timeslot = new Timeslot(startDateTime, duration);
@@ -46,10 +37,7 @@ public class TimeslotService {
                 foundTimeslot = t;
             }
         }
-        if (foundTimeslot != null) {
-            return foundTimeslot;
-        }
-        throw new TimeslotNotFoundException(id);
+        return foundTimeslot;
     }
 
     public List<Timeslot> findTimeslotsByDate(String date) {
@@ -83,35 +71,6 @@ public class TimeslotService {
         }
     }
 
-    public List<Timeslot> getFreeTimeslotsByVaccinationCenter(String code) {
-        VaccinationCenter foundVaccinationCenter = vaccinationCenterService.findVaccinationCenterByCode(code);
-        return foundVaccinationCenter.getTimeslots()
-                .stream()
-                .filter(Timeslot::isAvailable)
-                .collect(Collectors.toList());
-    }
-
-    public List<Timeslot> getFreeTimeSlotsByDateByVaccinationCenter(String code, String date) {
-        LocalDate stringToLocalDate = DateUtils.stringToLocalDate(date);
-        VaccinationCenter foundVaccinationCenter = vaccinationCenterService.findVaccinationCenterByCode(code);
-        return foundVaccinationCenter.getTimeslots()
-                .stream()
-                .filter(Timeslot::isAvailable)
-                .filter(timeslot -> timeslot.getStartDateTime()
-                        .toLocalDate()
-                        .equals(stringToLocalDate)).collect(Collectors.toList());
-    }
-
-    public List<Timeslot> getFreeTimeSlotsInSameMonthByVaccinationCenter(String code, String date) {
-        LocalDate stringToLocalDate = DateUtils.stringToLocalDate(date);
-        VaccinationCenter foundVaccinationCenter = vaccinationCenterService.findVaccinationCenterByCode(code);
-        return foundVaccinationCenter.getTimeslots()
-                .stream()
-                .filter(Timeslot::isAvailable)
-                .filter(timeslot -> (DateUtils.isTimeSlotAfterOrEqualsTheGivenDate(stringToLocalDate, timeslot)))
-                .filter(timeslot -> DateUtils.areTimeslotsInSameMonth(stringToLocalDate, timeslot.getStartDateTime().toLocalDate()))
-                .collect(Collectors.toList());
-    }
 
     public List<Timeslot> getTimeslotsByLocalDateTimeByDoctor(String amkaInsured, LocalDateTime localDateTime, String amkaDoctor) {
         List<Timeslot> timeslotsByDate = getTimeslotsByLocalDateTime(getAllTimeslots(), localDateTime);

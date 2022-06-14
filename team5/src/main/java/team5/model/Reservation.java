@@ -1,7 +1,6 @@
 package team5.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 

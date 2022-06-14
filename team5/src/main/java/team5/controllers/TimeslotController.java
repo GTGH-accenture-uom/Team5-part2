@@ -51,19 +51,5 @@ public class TimeslotController {
 
     }
 
-    @GetMapping("/vaccinationCenters/{vaccCode}/timeslots/{date}")
-    public List<Timeslot> getFreeTimeSlotsByDateByVaccinationCenter(@PathVariable(value = "vaccCode") String vaccCode,
-                                                                    @PathVariable(value = "date") String date) {
-        return timeslotService.getFreeTimeSlotsByDateByVaccinationCenter(vaccCode, date);
-    }
-
-
-    @GetMapping("/vaccinationCenters/{vaccCode}/timeslots/month/{date}")
-    public List<Timeslot> getFreeTimeSlotsInSameMonthByVaccinationCenter(@PathVariable(value = "vaccCode") String vaccCode,
-                                                                         @PathVariable(value = "date") String date) {
-
-        return timeslotService.getFreeTimeSlotsInSameMonthByVaccinationCenter(vaccCode, date);
-    }
-
 
 }

@@ -2,8 +2,9 @@ package team5.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team5.dto.ReservationDTO;
 import team5.exceptions.ReservationCannotBeUpdated;
+import team5.exceptions.ReservationNotFoundException;
+import team5.exceptions.TimeslotNotFoundException;
 import team5.model.*;
 import team5.utilities.DateUtils;
 
@@ -17,61 +18,17 @@ public class ReservationService {
     private TimeslotService timeslotService;
     private final DoctorService doctorService;
     private final InsuredService insuredService;
-    private final VaccinationCenterService vaccinationCenterService;
 
 
     @Autowired
     public ReservationService(TimeslotService timeslotService, DoctorService doctorService,
-                              InsuredService insuredService, VaccinationCenterService vaccinationCenterService) {
+                              InsuredService insuredService) {
         this.timeslotService = timeslotService;
         this.doctorService = doctorService;
         this.insuredService = insuredService;
-        this.vaccinationCenterService = vaccinationCenterService;
-    }
-
-    public Reservation findReservationById(String reservationId) {
-        long id = Long.parseLong(reservationId);
-        Optional<Reservation> optionalReservation = allReservations
-                .stream()
-                .filter(reservation -> reservation.getId() == id).findFirst();
-        if (optionalReservation.isEmpty()) {
-            //to-do ReservationNotFoundException
-            throw new RuntimeException("Reservation Not found");
-        }
-        return optionalReservation.get();
-    }
-
-    public Reservation findReservationById(long id) {
-        Reservation foundReservation = null;
-        Optional<Reservation> optionalReservation = allReservations
-                .stream()
-                .filter(reservation -> reservation.getId() == id).findFirst();
-        if (optionalReservation.isPresent()) {
-            foundReservation = optionalReservation.get();
-        }
-        return foundReservation;
     }
 
 
-    public Reservation updateReservation(long reservationId, long timeslotId) {
-        Reservation reservation = findReservationById(reservationId);
-        Timeslot foundTimeslot = timeslotService.findTimeslotById(timeslotId);
-        if (foundTimeslot != null && reservation.getReservationChanges() < 2) {
-            //Set free the previous timeslot
-            reservation.getTimeslot().setAvailable(true);
-            //Set the reservation of this timeslot to null
-            reservation.getTimeslot().setReservation(null);
-            //add the new timeslot
-            reservation.setTimeslot(foundTimeslot);
-            foundTimeslot.setReservation(reservation);
-            //reserve the new timeslot
-            foundTimeslot.setAvailable(false);
-            reservation.increaseReservationCounter();
-        } else {
-            throw new ReservationCannotBeUpdated(reservationId);
-        }
-        return reservation;
-    }
 
     public long createReservation(String amkaInsured, String date, String amkaDoctor) {
         LocalDateTime localDateTime = DateUtils.stringToLocalDateTime(date);
@@ -95,15 +52,6 @@ public class ReservationService {
         }
     }
 
-    public long createReservationBody(ReservationDTO body){
-        if (body!=null && body.getAmkaInsured()!=null && body.getAmkaDoctor()!=null
-            && body.getTimeslot()!=null && body.getTimeslot()!=null){
-           return createReservation(body.getAmkaInsured(), body.getTimeslot(), body.getAmkaDoctor());
-        }else{
-            throw new RuntimeException("Reservation data provided are not correct.");
-        }
-    }
-
     public long createReservation(String amkaInsured, Timeslot timeslot2, String amkaDoctor) {
         LocalDateTime localDateTime = timeslot2.getStartDateTime();
         List<Timeslot> timeslots = timeslotService.getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
@@ -113,34 +61,18 @@ public class ReservationService {
         if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
             Timeslot timeslot = timeslots.get(0);
             Reservation reservation = new Reservation(insured, timeslot);
+            //timeslot.getVaccinationCenter().addReservation(reservation);
             System.out.println(reservation);
+            //doctor.addReservation(reservation);
             timeslot.setAvailable(false);
             allReservations.add(reservation);
+
             return reservation.getId();
         } else {
             System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots);
             throw new RuntimeException("exception");
         }
     }
-
-    /*
-    public String getReservations(VaccinationCenter vaccinationCenter) {
-        String str = "";
-        List<Reservation> reservations = vaccinationCenter.getReservations();
-        if (!reservations.isEmpty()) {
-            str += "---------Reservations of VaccinationCenter " + vaccinationCenter.getCode() + "---------\n";
-            int count = 1;
-            for (Reservation r : reservations) {
-                str += count + "-" + r + "\n";
-                count++;
-            }
-        } else {
-            str += "No Reservations are made\n";
-        }
-        return str;
-    }
-     */
-
 
     public Reservation findReservationByTimeslotId(long id) {
         Reservation reservation = null;
@@ -153,26 +85,18 @@ public class ReservationService {
         return reservation;
     }
 
-//    public Reservation findReservationByInsuredAmka(Insured insured, VaccinationCenter vaccinationCenter) {
-//        Reservation reservation = null;
-//        Optional<Reservation> optionalReservation = vaccinationCenter
-//                .getReservations()
-//                .stream()
-//                .filter(reserv -> reserv.getInsured().getAmka().equals(insured.getAmka())).findFirst();
-//        if (optionalReservation.isPresent()) {
-//            reservation = optionalReservation.get();
-//        }
-//        return reservation;
-//    }
+    public Reservation findReservationById(long id) {
+        Reservation foundReservation = null;
+        Optional<Reservation> optionalReservation = allReservations
+                .stream()
+                .filter(reservation -> reservation.getId() == id).findFirst();
+        if (optionalReservation.isPresent()) {
+            foundReservation = optionalReservation.get();
+        }
+        return foundReservation;
+    }
 
 
-//    public List<Reservation> getAllReservations() {
-//        return allReservations;
-//    }
-//
-//    public void findUserObject(Role role, String uniqueId){
-//        if ()
-//    }
 
     /////////////////////////////////////////////////////////////
     ////////    FILTERS
@@ -239,6 +163,33 @@ public class ReservationService {
     }
     //////////////////////////////////////////
 
+    public Reservation updateReservation(long reservationId, long timeslotId) {
+        Reservation reservation = findReservationById(reservationId);
+        Timeslot foundTimeslot = timeslotService.findTimeslotById(timeslotId);
+        if (foundTimeslot != null && reservation.getReservationChanges() < 2) {
+            //Set free the previous timeslot
+            reservation.getTimeslot().setAvailable(true);
+            //Set the reservation of this timeslot to null
+            reservation.getTimeslot().setReservation(null);
+            //add the new timeslot
+            reservation.setTimeslot(foundTimeslot);
+            foundTimeslot.setReservation(reservation);
+            //reserve the new timeslot
+            foundTimeslot.setAvailable(false);
+            reservation.increaseReservationCounter();
+        } else {
+            throw new ReservationCannotBeUpdated(reservationId);
+        }
+        return reservation;
+    }
+
+    public void deleteReservation(long id) {
+        if (allReservations.removeIf(e -> e.getId() == id)) {
+            System.out.println("removed");
+        } else {
+            throw new ReservationNotFoundException(id);
+        }
+    }
 
     public List<Reservation> getAllReservations() {
         return allReservations;
