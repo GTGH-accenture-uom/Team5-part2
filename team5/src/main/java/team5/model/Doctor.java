@@ -15,7 +15,7 @@ public class Doctor {
     private List<VaccinationCenter> vaccinationCenters = new ArrayList<>();
     //@JsonIgnore
     //private List<Vaccination> vaccinations = new ArrayList<>();
-    @JsonIgnore
+    //@JsonIgnore
     //private List<Reservation> reservations = new ArrayList<>();
 
     public Doctor(String amka, String name, String surname) {
