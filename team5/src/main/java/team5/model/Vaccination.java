@@ -33,9 +33,9 @@ public class Vaccination {
     }
 
 
-    public Vaccination(String vacc_brand, Insured insured, Doctor doctor, LocalDateTime vaccinationDate, LocalDateTime expirationDate) {
+    public Vaccination(String vacc_Name, Insured insured, Doctor doctor, LocalDateTime vaccinationDate, LocalDateTime expirationDate) {
         this(insured, doctor, vaccinationDate, expirationDate);
-        this.vacc_Name = vacc_brand;
+        this.vacc_Name = vacc_Name;
     }
 
     public long getId() {
