@@ -17,7 +17,6 @@ public class Vaccination {
     private LocalDateTime vaccinationDate;
     private LocalDateTime expirationDate;
     private VaccinationState vaccinationState;
-
     @JsonIgnore
     private Reservation reservation;
 

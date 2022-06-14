@@ -6,8 +6,8 @@ public class InsuredDTO {
     private String afm;
     private String amka;
     private String name;
-    private LocalDate birthdate;
     private String surname;
+    private LocalDate birthdate;
     private String email;
 
     public String getAfm() {
@@ -34,6 +34,14 @@ public class InsuredDTO {
         this.name = name;
     }
 
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
     public LocalDate getBirthdate() {
         return birthdate;
     }
@@ -42,13 +50,6 @@ public class InsuredDTO {
         this.birthdate = birthdate;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
 
     public String getEmail() {
         return email;

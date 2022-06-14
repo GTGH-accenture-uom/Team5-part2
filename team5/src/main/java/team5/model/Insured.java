@@ -10,12 +10,9 @@ public class Insured {
     private String afm;
     private String amka;
     private String name;
-
     private String surname;
     private LocalDate birthdate;
-
     private String email;
-
 
     public Insured(String afm, String amka, String name, String surname, LocalDate birthdate, String email) {
         this.id = count.incrementAndGet();
