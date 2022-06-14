@@ -1,25 +1,21 @@
 package team5.dto;
 
 import team5.model.Vaccination;
+import team5.services.VaccinationService;
 import team5.utilities.VaccinationState;
 
-public class VaccinationWithState {
+import java.time.LocalDateTime;
 
-    private static VaccinationState totalVaccinationState;
+public class VaccinationWithStateDTO {
+
     private Vaccination vaccination;
     private VaccinationState vaccinationState;
+    private LocalDateTime lastUpdated;
 
-    public VaccinationWithState(Vaccination vaccination, VaccinationState vaccinationState) {
+    public VaccinationWithStateDTO(Vaccination vaccination) {
         this.vaccination = vaccination;
-        this.vaccinationState = vaccinationState;
-    }
-
-    public static VaccinationState getTotalVaccinationState() {
-        return totalVaccinationState;
-    }
-
-    public static void setTotalVaccinationState(VaccinationState totalVaccinationState) {
-        VaccinationWithState.totalVaccinationState = totalVaccinationState;
+        this.vaccinationState = getVaccinationStatus(vaccination);
+        this.lastUpdated = LocalDateTime.now();
     }
 
     public Vaccination getVaccination() {
@@ -45,5 +41,13 @@ public class VaccinationWithState {
         sb.append(", vaccinationState=").append(vaccinationState);
         sb.append('}');
         return sb.toString();
+    }
+
+    public VaccinationState getVaccinationStatus(Vaccination vaccination){
+        if (vaccination.getExpirationDate().isAfter(LocalDateTime.now())){
+            return VaccinationState.VALID;
+        }else{
+            return VaccinationState.EXPIRED;
+        }
     }
 }

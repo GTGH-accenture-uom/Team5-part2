@@ -120,13 +120,6 @@ public class Vaccination {
         return sb.toString();
     }
 
-//    public VaccinationState getVaccinationStatus(){
-//        if (this.getExpirationDate().isAfter(LocalDateTime.now())){
-//            return VaccinationState.VALID;
-//        }else{
-//            return VaccinationState.EXPIRED;
-//        }
-//    }
 }
 
 

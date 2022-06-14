@@ -3,9 +3,11 @@ package team5.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team5.dto.VaccinationDTO;
+import team5.dto.VaccinationWithStateDTO;
 import team5.exceptions.*;
 import team5.model.*;
 import team5.utilities.MessagesForExistingValues;
+import team5.utilities.VaccinationState;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -57,6 +59,16 @@ public class VaccinationService {
         System.out.println("1.*************************RecentVaccinationsByName");
         System.out.println(RecentVaccinationsByName);
         return RecentVaccinationsByName;
+    }
+
+    public List<VaccinationWithStateDTO> getAllRecentVaccinationsWithStatus(String amka){
+        List<Vaccination> recentVaccinations = getRecentVaccinationsByInsured(amka);
+        List<VaccinationWithStateDTO>  listDTO = new ArrayList<>();
+        for (Vaccination v: recentVaccinations){
+            VaccinationWithStateDTO vaccinationWithStateDTO = new VaccinationWithStateDTO(v);
+            listDTO.add(vaccinationWithStateDTO);
+        }
+        return listDTO;
     }
 
 
