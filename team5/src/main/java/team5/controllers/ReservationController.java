@@ -2,6 +2,9 @@ package team5.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import team5.dto.InsuredDTO;
+import team5.dto.ReservationDTO;
+import team5.model.Insured;
 import team5.model.Reservation;
 import team5.services.ReservationService;
 
@@ -20,12 +23,12 @@ public class ReservationController {
     }
 
     @PostMapping("/reservation")
-    public long createReservation(@RequestParam(value = "amkaInsured") String amkaInsured, @RequestParam(value = "timeslot") String date,
-                                  //timeslot in db = datetime per doctor per vaccination center
-                                  //timeslot in front = datetime only
-                                  @RequestParam(value = "amkaDoctor") String amkaDoctor) {
-        return reservationService.createReservation(amkaInsured, date, amkaDoctor);
+    public long createReservationBody(@RequestBody ReservationDTO body) {
+        return reservationService.createReservationBody(body);
+        //timeslot in db = datetime per doctor per vaccination center
+        //timeslot in front = datetime only
     }
+
     @GetMapping("/reservations/{id}")
     public Reservation findReservationById(@PathVariable long id){
         return  reservationService.findReservationById(id);

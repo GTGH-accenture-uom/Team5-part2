@@ -2,14 +2,13 @@ package team5.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import team5.dto.ReservationDTO;
 import team5.exceptions.ReservationCannotBeUpdated;
 import team5.exceptions.ReservationNotFoundException;
-import team5.exceptions.TimeslotNotFoundException;
 import team5.model.*;
 import team5.utilities.DateUtils;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -17,9 +16,10 @@ import java.util.*;
 public class ReservationService {
 
     private final List<Reservation> allReservations = new ArrayList<>();
-    private TimeslotService timeslotService;
+    private final TimeslotService timeslotService;
     private final DoctorService doctorService;
     private final InsuredService insuredService;
+
 
 
     @Autowired
@@ -31,6 +31,14 @@ public class ReservationService {
     }
 
 
+    public long createReservationBody(ReservationDTO body){
+        if (body!=null && body.getAmkaInsured()!=null && body.getAmkaDoctor()!=null
+                && body.getTimeslot()!=null && body.getTimeslot()!=null){ //timeslot = date //
+            return createReservation(body.getAmkaInsured(), body.getTimeslot(), body.getAmkaDoctor());
+        }else{
+            throw new RuntimeException("Reservation data provided are not correct.");
+        }
+    }
 
     public long createReservation(String amkaInsured, String date, String amkaDoctor) {
         LocalDateTime localDateTime = DateUtils.stringToLocalDateTime(date);
