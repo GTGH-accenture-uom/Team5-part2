@@ -52,7 +52,7 @@ public class ReservationService {
             Reservation reservation = new Reservation(insured, timeslot);
             System.out.println(reservation);
             timeslot.setAvailable(false);
-            timeslot.setReservation(reservation);
+            timeslot.setReservation(reservation);//
             allReservations.add(reservation);
 
             return reservation.getId();
