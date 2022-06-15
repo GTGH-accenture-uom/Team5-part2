@@ -80,10 +80,6 @@ public class VaccinationCenterService {
                 .orElse(null);
     }
 
-    public List<Timeslot> getFreeTimeslotsByVaccinationCenter(String code) {
-        VaccinationCenter foundVaccinationCenter = findVaccinationCenterByCode(code);
-        return foundVaccinationCenter.getTimeslots().stream().filter(Timeslot::isAvailable).collect(Collectors.toList());
-    }
 
     public List<Timeslot> getFreeTimeSlotsByDateByVaccinationCenter(String code, String date) {
         LocalDate stringToLocalDate = DateUtils.stringToLocalDate(date);
@@ -103,7 +99,16 @@ public class VaccinationCenterService {
                 .stream()
                 .filter(Timeslot::isAvailable)
                 .filter(timeslot -> (DateUtils.isTimeSlotAfterOrEqualsTheGivenDate(stringToLocalDate, timeslot)))
-                .filter(timeslot -> DateUtils.areTimeslotsInSameMonth(stringToLocalDate, timeslot.getStartDateTime().toLocalDate())).collect(Collectors.toList());
+                .filter(timeslot -> DateUtils.areTimeslotsInSameMonth(stringToLocalDate, timeslot.getStartDateTime().toLocalDate()))
+                .collect(Collectors.toList());
+    }
+
+    public void printFreeTimeslotsByVaccinationCenter(String code) {
+        System.out.println("------------------Vaccination center with code--------------" + code);
+        findVaccinationCenterByCode(code).getTimeslots()
+                .stream()
+                .filter(Timeslot::isAvailable)
+                .forEach(System.out::println);
     }
 
 

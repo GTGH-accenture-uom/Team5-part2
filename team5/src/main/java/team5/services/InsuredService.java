@@ -26,58 +26,52 @@ public class InsuredService {
 
     private final List<Insured> allInsured = new ArrayList<>();
 
+    //First method create insured not to be used from the controller
     public void createInsured(String afm, String amka, String name, LocalDate birthdate, String surname, String email) {
-        if (findInsuredByAmka(amka) == null) {
+        if (allInsured.stream().noneMatch(insured -> insured.getAmka().equals(amka))) {
             if (InputValidator.checkAfm(afm) && InputValidator.checkAmka(amka)) {
                 Insured insured = new Insured(afm, amka, name, surname, birthdate, email);
+                System.out.println("Insured " + insured);
                 allInsured.add(insured);
-                System.out.println("created insured: " + insured);
             }
         } else {
-            System.err.println("This insured with amka " + amka + " already exists");
+            System.err.println(MessagesForExistingValues.INSURED_ALREADY_EXISTS);
         }
     }
 
-
-    //Second method create Insured to be used from the api
+    //Second method create Insured to be used from the controller
     public Insured createInsured(InsuredDTO insuredDTO) {
         if (findInsuredByAmka(insuredDTO.getAmka()) == null) {
             if (InputValidator.checkAfm(insuredDTO.getAfm()) && InputValidator.checkAmka(insuredDTO.getAmka())) {
-                Insured insured = new Insured(insuredDTO.getAfm(), insuredDTO.getAmka(), insuredDTO.getName(), insuredDTO.getSurname(), insuredDTO.getBirthdate(), insuredDTO.getEmail());
+                Insured insured = new Insured(insuredDTO.getAfm(), insuredDTO.getAmka(), insuredDTO.getName(),
+                        insuredDTO.getSurname(), insuredDTO.getBirthdate(), insuredDTO.getEmail());
                 allInsured.add(insured);
-                System.out.println("Created");
                 return insured;
             } else {
-                System.out.println("Check your data");
                 throw new CheckYourDataException();
             }
         }
-        System.out.println("Existing record exception");
         throw new ExistingRecordException(MessagesForExistingValues.INSURED_ALREADY_EXISTS.getErrorMessage());
     }
 
-
-    public List<Insured> getAllInsured() {
-        return allInsured;
-    }
-
-
-    public Insured findInsByAmka(String amka) {
+    //First find Insured method to be used from the controller
+    public Insured findInsuredByAmka(String amka) {
         return allInsured.stream().filter(e -> e.getAmka().equals(amka))
                 .findFirst()
                 .orElseThrow(() -> new InsuredNotFoundException(amka));
     }
 
-    //Second method of find insured not to be used from the api
-    public Insured findInsuredByAmka(String amka) {
-        Insured foundInsured = null;
-        Optional<Insured> insured = allInsured
-                .stream()
-                .filter(e -> e.getAmka().equals(amka)).findFirst();
-        if (insured.isPresent()) {
-            foundInsured = insured.get();
+    //Second method of find insured not to be used from the controllers
+    public Insured findInsByAmka(String amka) {
+        try {
+            return allInsured
+                    .stream()
+                    .filter(insured -> insured.getAmka().equals(amka)).findFirst()
+                    .orElseThrow(() -> new InsuredNotFoundException(amka));
+        } catch (InsuredNotFoundException insuredNotFoundException) {
+            System.err.println(insuredNotFoundException.getMessage());
         }
-        return foundInsured;
+        return null;
     }
 
     public Insured updateInsured(String amka, InsuredDTO insuredDTO) {
@@ -97,6 +91,10 @@ public class InsuredService {
         } else {
             throw new InsuredNotFoundException(amka);
         }
+    }
+
+    public List<Insured> getAllInsured() {
+        return allInsured;
     }
 
 

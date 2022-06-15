@@ -180,7 +180,7 @@ public class SyntheticData implements CommandLineRunner {
 
         reservationService.createReservation(insured.getAmka(), timeslot11, doctor20.getAmka());
 
-
+        System.out.println(reservationService.getAllReservations());
         //System.out.println(doctor20);
         //System.out.println(v);
 

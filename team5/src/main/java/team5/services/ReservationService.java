@@ -3,6 +3,7 @@ package team5.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team5.dto.ReservationDTO;
+import team5.exceptions.CheckYourDataException;
 import team5.exceptions.ReservationCannotBeUpdated;
 import team5.exceptions.ReservationNotFoundException;
 import team5.model.*;
@@ -36,7 +37,7 @@ public class ReservationService {
                 && body.getTimeslot()!=null && body.getTimeslot()!=null){ //timeslot = date //
             return createReservation(body.getAmkaInsured(), body.getTimeslot(), body.getAmkaDoctor());
         }else{
-            throw new RuntimeException("Reservation data provided are not correct.");
+            throw new CheckYourDataException();
         }
     }
 
@@ -55,7 +56,7 @@ public class ReservationService {
 
             return reservation.getId();
         } else {
-            System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots);
+            System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots.get(0));
             throw new RuntimeException("exception");
         }
     }

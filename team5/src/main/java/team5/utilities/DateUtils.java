@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class DateUtils {
    public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public static LocalDate stringToLocalDate(String input) {
         LocalDate localDate;

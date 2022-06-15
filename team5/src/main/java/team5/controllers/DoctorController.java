@@ -1,8 +1,8 @@
 package team5.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import team5.dto.DoctorDTO;
 import team5.model.Doctor;
 import team5.model.Insured;
 import team5.services.DoctorService;
@@ -16,15 +16,34 @@ public class DoctorController {
 
     private final DoctorService doctorService;
 
-
     @Autowired
     public DoctorController(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
 
-    @GetMapping(path="/doctors")
-    public List<Doctor> getAllDoctors() {
+    @GetMapping(path = "/doctors")
+    public List<Doctor> findAllDoctors() {
         return doctorService.getAllDoctors();
+    }
+
+    @PostMapping("/doctors")
+    public Doctor createDoctor(@RequestBody DoctorDTO doctorDTO) {
+        return doctorService.createDoctor(doctorDTO);
+    }
+
+    @GetMapping("/doctors/{amka}")
+    public Doctor findDoctor(@PathVariable String amka) {
+        return doctorService.findDoctorByAmka(amka);
+    }
+
+    @PutMapping("/doctors/{amka}")
+    public Doctor updateDoctor(@PathVariable String amka, DoctorDTO doctorDTO) {
+        return doctorService.updateDoctor(amka, doctorDTO);
+    }
+
+    @DeleteMapping("/doctors/{amka}")
+    public void deleteDoctor(@PathVariable String amka) {
+        doctorService.deleteDoctor(amka);
     }
 
 

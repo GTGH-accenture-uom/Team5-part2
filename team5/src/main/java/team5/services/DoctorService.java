@@ -1,14 +1,13 @@
 package team5.services;
 
 import org.springframework.stereotype.Service;
-import team5.exceptions.DoctorNotFoundException;
-import team5.exceptions.VaccinationCenterNotFoundException;
-import team5.model.Doctor;
-import team5.model.Timeslot;
-import team5.model.Vaccination;
-import team5.model.VaccinationCenter;
+import team5.dto.DoctorDTO;
+import team5.exceptions.*;
+import team5.model.*;
 import team5.utilities.InputValidator;
+import team5.utilities.MessagesForExistingValues;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,75 +18,74 @@ public class DoctorService {
 
     private final List<Doctor> allDoctors = new ArrayList<>();
 
-
-//    public String getVaccinationsPerDoctor(Doctor doctor) {
-//        List<Vaccination> vaccinations = doctor.getVaccinations();
-//        String str = "---------Vaccinations of Doctor with amka " + doctor.getAmka() + "---------\n";
-//        if (vaccinations.isEmpty()) {
-//            str += "This Doctor has done no vaccinations yet.\n";
-//        }
-//        for (Vaccination vacc : vaccinations) {
-//            str += "The vaccination date is:" + vacc.getVaccinationDate() + "\n" + "The insured is:" + vacc.getInsured().getName() + " " + vacc.getInsured().getSurname() + "\n";
-//        }
-//        return str;
-//    }
-
     public void createDoctor(String amka, String firstName, String lastName) {
-        if (InputValidator.checkAmka(amka)) {
-            if (allDoctors.stream().noneMatch(e -> e.getAmka().equals(amka))) {
-                Doctor doctor = new Doctor(amka, firstName, lastName);
-                allDoctors.add(doctor);
-                System.out.println("Created doctor: " + doctor);
-            } else {
-                System.err.println("Please provide a right amka for " + firstName + " " + lastName);
-            }
-        }
-        /*
-          if (findDoctorByAmka(amka) == null) {
-            System.out.println("Doctor to add for first time");
+        if (allDoctors.stream().noneMatch(doctor -> doctor.getAmka().equals(amka))) {
             if (InputValidator.checkAmka(amka)) {
                 Doctor doctor = new Doctor(amka, firstName, lastName);
+                System.out.println(doctor);
                 allDoctors.add(doctor);
-                System.out.println("Created doctor: " + doctor);
-            } else {
-                System.err.println("Please provide a right amka.");
             }
         } else {
-            System.err.println("This doctor with amka " + amka + " already exists");
+            System.err.println(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS);
         }
-         */
     }
 
-//    public String getVaccinationsOfAllDoctors() {
-//        String str = "---------VACCINATIONS OF ALL DOCTORS---------\n";
-//        for (Doctor d : allDoctors) {
-//            str += getVaccinationsPerDoctor(d);
-//        }
-//        return str;
-//    }
+
+    //First method create Doctor to be used from the controller
+    public Doctor createDoctor(DoctorDTO doctorDTO) {
+        if (findDocByAmka(doctorDTO.getAmka()) == null) {
+            if (InputValidator.checkAfm(doctorDTO.getAmka())) {
+                Doctor doctor = new Doctor(doctorDTO.getAmka(), doctorDTO.getName(), doctorDTO.getSurname());
+                allDoctors.add(doctor);
+                return doctor;
+            } else {
+                throw new CheckYourDataException();
+            }
+        }
+        throw new ExistingRecordException(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS.getErrorMessage());
+    }
 
     public Doctor findDoctorByAmka(String amka) {
-        Doctor foundDoctor = null;
-        Optional<Doctor> optionalDoctor = allDoctors
-                .stream()
-                .filter(doc -> doc.getAmka().equals(amka)).findFirst();
-        if (optionalDoctor.isPresent()) {
-            foundDoctor = optionalDoctor.get();
+        return allDoctors.stream().filter(e -> e.getAmka().equals(amka))
+                .findFirst()
+                .orElseThrow(() -> new DoctorNotFoundException(amka));
+    }
+
+    //Second method of find doctor not to be used from the controllers
+    public Doctor findDocByAmka(String amka) {
+        try {
+            return allDoctors
+                    .stream()
+                    .filter(e -> e.getAmka().equals(amka)).findFirst()
+                    .orElseThrow(() -> new DoctorNotFoundException(amka));
+        } catch (DoctorNotFoundException doctorNotFoundException) {
+            System.err.println(doctorNotFoundException.getMessage());
+        }
+        return null;
+    }
+
+
+    public Doctor updateDoctor(String amka, DoctorDTO doctorDTO) {
+        Doctor doctor = findDoctorByAmka(amka);
+        doctor.setName(doctorDTO.getName());
+        doctor.setAmka(doctorDTO.getAmka());
+        doctor.setSurname(doctorDTO.getSurname());
+        return doctor;
+    }
+
+    public void deleteDoctor(String amka) {
+        if (allDoctors.removeIf(doctor -> doctor.getAmka().equals(amka))) {
+            System.out.println("Insured with amka " + amka + " deleted");
         } else {
             throw new DoctorNotFoundException(amka);
         }
-        return foundDoctor;
     }
-
 
     public void addTimeslotToDoctor(String amka, Timeslot timeslot) {
         try {
-            Doctor doctor = findDoctorByAmka(amka);
-
-            if (doctor != null && timeslot != null && timeslot.isAvailable()//&& !doctor.getVaccinations().getTimeslots().contains(timeslot)
-            ) {
-                //bidirectional relationship doctor.addtimeslot timeslots are added to doctor list and timeslots is added to doctor
-                //doctor.getVaccinationCenter().addTimeslot(timeslot);
+            Doctor doctor = findDocByAmka(amka);
+            if (doctor != null && timeslot != null && timeslot.isAvailable()) {
+               // doctor.addTimeslot(timeslot);
                 timeslot.setDoctor(doctor);
             } else {
                 System.err.println("Timeslot can not be added");
@@ -96,6 +94,7 @@ public class DoctorService {
             System.out.println(doctorNotFoundException.getMessage());
         }
     }
+
 
     public List<Doctor> getAllDoctors() {
         return allDoctors;

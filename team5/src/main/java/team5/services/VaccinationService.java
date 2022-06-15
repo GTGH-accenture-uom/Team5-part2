@@ -132,14 +132,7 @@ public class VaccinationService {
         }
         String vacc_Name = vaccinationDTO.getVacc_Name();
         Vaccination vaccination = new Vaccination(vacc_Name, foundInsured, foundDoctor, vaccinationDate, expirationDate);
-        vaccination.setReservation(foundReservation);
         foundReservation.setVaccination(vaccination);
-        // timeslot.setVaccination(vaccination);
-        //Add record of vaccination to vaccination center
-        //  VaccinationCenter vaccinationCenter = vaccination.getTimeslot().getVaccinationCenter();
-        //vaccinationCenter.addVaccination(vaccination);
-        //Add vaccination in doctor's vaccinations list
-        //doctor.addVaccination(vaccination);
         allVaccinations.add(vaccination);
         return vaccination;
     }

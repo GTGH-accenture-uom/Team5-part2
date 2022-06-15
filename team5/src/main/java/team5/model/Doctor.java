@@ -12,7 +12,7 @@ public class Doctor {
     private String name;
     private String surname;
     //@JsonIgnore
-    //private List<VaccinationCenter> vaccinationCenters = new ArrayList<>();
+    private List<Timeslot> timeslots = new ArrayList<>();
     //@JsonIgnore
     //private List<Vaccination> vaccinations = new ArrayList<>();
     //@JsonIgnore
@@ -84,6 +84,19 @@ public class Doctor {
 //        vaccinationCenters.add(vaccinationCenter);
 //    }
 
+    public List<Timeslot> getTimeslots() {
+        return timeslots;
+    }
+
+
+    public void setTimeslots(List<Timeslot> timeslots) {
+        this.timeslots = timeslots;
+    }
+
+
+    public void addTimeslot(Timeslot timeslot){
+        timeslots.add(timeslot);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

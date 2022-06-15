@@ -32,9 +32,9 @@ public class InsuredController {
         return insuredService.getAllInsured();
     }
 
-    @GetMapping("/insureds/{amka}")
+    @GetMapping("/insureds/{id}")
     public Insured getInsured(@PathVariable String amka) {
-        return insuredService.findInsByAmka(amka);
+        return insuredService.findInsuredByAmka(amka);
     }
 
     @PutMapping("/insureds/{amka}")
