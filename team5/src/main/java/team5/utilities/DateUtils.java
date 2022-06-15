@@ -21,7 +21,6 @@ public class DateUtils {
             throw new DateFormatException(input);
         }
         return localDate;
-
     }
 
     public static boolean areTimeslotsInSameMonth(LocalDate givenDate, LocalDate timeslotDate) {
@@ -40,9 +39,15 @@ public class DateUtils {
     }
 
     public static LocalDateTime stringToLocalDateTime(String input) {
-
-        return LocalDateTime.parse(input, dateTimeFormatter);
+        LocalDateTime localDateTime;
+        try {
+            localDateTime = LocalDateTime.parse(input, dateTimeFormatter);
+        } catch (DateTimeException dateTimeException) {
+            throw new DateFormatException(input);
+        }
+        return localDateTime;
 
     }
+
 
 }

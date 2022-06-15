@@ -3,6 +3,8 @@ package team5.model;
 
 //import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,7 +13,7 @@ public class Doctor {
     private String amka;
     private String name;
     private String surname;
-    //@JsonIgnore
+    @JsonIgnore
     private List<Timeslot> timeslots = new ArrayList<>();
     //@JsonIgnore
     //private List<Vaccination> vaccinations = new ArrayList<>();
@@ -94,9 +96,13 @@ public class Doctor {
     }
 
 
-    public void addTimeslot(Timeslot timeslot){
-        timeslots.add(timeslot);
+    public void addTimeslot(Timeslot timeslot) {
+        if (!timeslots.contains(timeslot)) {
+            timeslots.add(timeslot);
+            timeslot.setDoctor(this);
+        }
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -112,27 +118,10 @@ public class Doctor {
 
     @Override
     public String toString() {
-
         final StringBuilder sb = new StringBuilder("Doctor{");
-
         sb.append("amka='").append(amka).append('\'');
-
         sb.append(", name='").append(name).append('\'');
-
         sb.append(", surname='").append(surname).append('\'');
-
-//        if (!vaccinationCenters.isEmpty()) {
-//            sb.append(", vaccinationCenter code='").append(vaccinationCenters
-//                    .stream().map(VaccinationCenter::getCode).collect(Collectors.joining())).append('\'');
-//        }
-//        if (!vaccinations.isEmpty()) {
-//            sb.append(", vaccination id's='").append(vaccinations
-//                    .stream().map(vaccination -> vaccination.getId() + " ").collect(Collectors.joining(","))).append('\'');
-//        }
-//        if (!reservations.isEmpty()) {
-//            sb.append(", reservation id's='").append(reservations
-//                    .stream().map(reservation -> reservation.getId() + " ").collect(Collectors.joining(","))).append('\'');
-//        }
         sb.append('}');
         return sb.toString();
     }

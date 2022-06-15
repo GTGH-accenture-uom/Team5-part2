@@ -1,17 +1,14 @@
 package team5.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team5.dto.VaccinationCenterDTO;
 import team5.exceptions.ExistingRecordException;
-import team5.exceptions.TimeslotNotFoundException;
 import team5.exceptions.VaccinationCenterNotFoundException;
 import team5.model.*;
 import team5.utilities.DateUtils;
 import team5.utilities.MessagesForExistingValues;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,19 +23,6 @@ public class VaccinationCenterService {
     public VaccinationCenterService(TimeslotService timeslotService) {
         this.timeslotService = timeslotService;
     }
-
-//    private InsuredService insuredService;
-//    private DoctorService doctorService;
-//    private VaccinationService vaccinationService;
-
-//
-//    @Autowired
-//    public VaccinationCenterService(InsuredService insuredService, DoctorService doctorService, VaccinationService vaccinationService) {
-//        this.insuredService = insuredService;
-//        this.doctorService = doctorService;
-//        this.vaccinationService = vaccinationService;
-//    }
-
 
     public VaccinationCenter createVaccinationCenter(VaccinationCenterDTO vaccinationCenterDTO) {
         VaccinationCenter vaccinationCenter = new VaccinationCenter(vaccinationCenterDTO.getCode()
@@ -81,7 +65,7 @@ public class VaccinationCenterService {
     }
 
 
-    public List<Timeslot> getFreeTimeSlotsByDateByVaccinationCenter(String code, String date) {
+    public List<Timeslot> findFreeTimeSlotsByDateByVaccinationCenter(String code, String date) {
         LocalDate stringToLocalDate = DateUtils.stringToLocalDate(date);
         VaccinationCenter foundVaccinationCenter = findVaccinationCenterByCode(code);
         return foundVaccinationCenter
@@ -92,7 +76,7 @@ public class VaccinationCenterService {
                         .equals(stringToLocalDate)).collect(Collectors.toList());
     }
 
-    public List<Timeslot> getFreeTimeSlotsInSameMonthByVaccinationCenter(String code, String date) {
+    public List<Timeslot> findFreeTimeSlotsInSameMonthByVaccinationCenter(String code, String date) {
         LocalDate stringToLocalDate = DateUtils.stringToLocalDate(date);
         VaccinationCenter foundVaccinationCenter = findVaccinationCenterByCode(code);
         return foundVaccinationCenter.getTimeslots()
@@ -101,14 +85,6 @@ public class VaccinationCenterService {
                 .filter(timeslot -> (DateUtils.isTimeSlotAfterOrEqualsTheGivenDate(stringToLocalDate, timeslot)))
                 .filter(timeslot -> DateUtils.areTimeslotsInSameMonth(stringToLocalDate, timeslot.getStartDateTime().toLocalDate()))
                 .collect(Collectors.toList());
-    }
-
-    public void printFreeTimeslotsByVaccinationCenter(String code) {
-        System.out.println("------------------Vaccination center with code--------------" + code);
-        findVaccinationCenterByCode(code).getTimeslots()
-                .stream()
-                .filter(Timeslot::isAvailable)
-                .forEach(System.out::println);
     }
 
 
@@ -129,42 +105,6 @@ public class VaccinationCenterService {
         }
 
     }
-    //getTimeslotsByLocalDateTimeByDoctor(String amkaInsured, LocalDateTime localDateTime, String amkaDoctor)
-
-
-//    public void createReservation(Insured insured, Timeslot timeSlot, VaccinationCenter vaccinationCenter) {
-//        if (insured!=null && timeSlot!=null && vaccinationCenter!=null
-//                && timeSlot.getDoctor()!=null){
-//            Reservation reservation = new Reservation(insured, timeSlot);
-//            vaccinationCenter.addReservation(reservation);
-//            timeSlot.setAvailable(false);
-//        }else{
-//            System.err.println("Cannot make this reservation with insured amka:" +insured.getAmka() + ", " +
-//                    "timeslot" + timeSlot + ", center with code " + vaccinationCenter.getCode());
-//        }
-//    }
-
-
-//    public String getAllReservationsPerCenter() {
-//        String str = "---------All RERSERVATIONS PER CENTER---------\n";
-//        for (VaccinationCenter v : allVaccinationCenters) {
-//            str += getReservations(v);
-//        }
-//        return str;
-//    }
-
-
-
-    /*
-    public String getFreeTimeslotsByVaccinationCenter() {
-        String str = "---------LIST OF FREE TIMESLOTS PER VACCINATION CENTER---------\n";
-        for (VaccinationCenter vc : allVaccinationCenters) {
-            str += "Vaccination center no." + vc.getCode() + " has free timeslots: " + getFreeTimeslotsByVaccinationCenter(vc) + "\n";
-        }
-        return str;
-    }
-
-     */
 
     public VaccinationCenter findVaccinationCenterByCode(String code) {
         VaccinationCenter foundVaccinationCenter;
@@ -177,19 +117,18 @@ public class VaccinationCenterService {
         }
         return foundVaccinationCenter;
     }
+    public void printFreeTimeslotsByVaccinationCenter(String code) {
+        System.out.println("------------------Vaccination center with code--------------" + code);
+        findVaccinationCenterByCode(code).getTimeslots()
+                .stream()
+                .filter(Timeslot::isAvailable)
+                .forEach(System.out::println);
+    }
 
     public List<VaccinationCenter> getAllVaccinationCenters() {
         return allVaccinationCenters;
     }
 
 
-    //2st requirement
-    /*
-    public void displayFreeTimeslotsByVaccinationCenter() {
-        System.out.println(getFreeTimeslotsByVaccinationCenter());
-
-    }
-
-     */
 
 }

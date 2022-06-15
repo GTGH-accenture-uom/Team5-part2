@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import team5.dto.VaccinationCenterDTO;
 import team5.model.Timeslot;
-import team5.model.Vaccination;
 import team5.model.VaccinationCenter;
 import team5.services.VaccinationCenterService;
 
@@ -44,14 +43,14 @@ public class VaccinationCenterController {
     @GetMapping("/vaccinationCenters/{vaccCode}/timeslots/{date}")
     public List<Timeslot> getFreeTimeSlotsByDateByVaccinationCenter(@PathVariable(value = "vaccCode") String vaccCode,
                                                                     @PathVariable(value = "date") String date) {
-        return vaccinationCenterService.getFreeTimeSlotsByDateByVaccinationCenter(vaccCode, date);
+        return vaccinationCenterService.findFreeTimeSlotsByDateByVaccinationCenter(vaccCode, date);
     }
 
     @GetMapping("/vaccinationCenters/{vaccCode}/timeslots/month/{date}")
     public List<Timeslot> getFreeTimeSlotsInSameMonthByVaccinationCenter(@PathVariable(value = "vaccCode") String vaccCode,
                                                                          @PathVariable(value = "date") String date) {
 
-        return vaccinationCenterService.getFreeTimeSlotsInSameMonthByVaccinationCenter(vaccCode, date);
+        return vaccinationCenterService.findFreeTimeSlotsInSameMonthByVaccinationCenter(vaccCode, date);
     }
 
 
