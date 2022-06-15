@@ -8,6 +8,8 @@ import team5.model.Insured;
 import team5.model.Timeslot;
 import team5.services.InsuredService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -46,5 +48,7 @@ public class InsuredController {
     public void deleteInsured(@PathVariable String amka) {
         insuredService.deleteInsured(amka);
     }
+
+
 
 }

@@ -40,15 +40,13 @@ public class VaccinationCenterController {
     public void deleteVaccinationCenter(@PathVariable String vaccCode) {
         vaccinationCenterService.deleteVaccinationCenter(vaccCode);
     }
-
-    //Changed the url here
+    //ola ta timeslot twn emvoliastikwn me ta restriction ta dika mou
     @GetMapping("/vaccinationCenters/{vaccCode}/timeslots/{date}")
     public List<Timeslot> getFreeTimeSlotsByDateByVaccinationCenter(@PathVariable(value = "vaccCode") String vaccCode,
                                                                     @PathVariable(value = "date") String date) {
         return vaccinationCenterService.getFreeTimeSlotsByDateByVaccinationCenter(vaccCode, date);
     }
 
-    //Changed the url here
     @GetMapping("/vaccinationCenters/{vaccCode}/timeslots/month/{date}")
     public List<Timeslot> getFreeTimeSlotsInSameMonthByVaccinationCenter(@PathVariable(value = "vaccCode") String vaccCode,
                                                                          @PathVariable(value = "date") String date) {

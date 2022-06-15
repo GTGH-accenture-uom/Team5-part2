@@ -48,7 +48,6 @@ public class TimeslotController {
     @GetMapping("/timeslots/date")
     public List<Timeslot> findTimeslotsByDate(@RequestParam(value = "date") String date) {
         return timeslotService.findTimeslotsByDate(date);
-
     }
 
 

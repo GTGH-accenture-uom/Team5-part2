@@ -81,4 +81,11 @@ public class ControllerAdvisor {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = {VaccinationStateNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleDoctorNotFoundException(VaccinationStateNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 }

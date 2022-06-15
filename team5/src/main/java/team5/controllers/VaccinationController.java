@@ -9,6 +9,8 @@ import team5.model.Vaccination;
 import team5.services.TimeslotService;
 import team5.services.VaccinationService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,6 +33,12 @@ public class VaccinationController {
     public Vaccination createVaccination(@RequestBody VaccinationDTO vaccinationDTO,
                                          @PathVariable(value = "doctorAmka")String doctorAmka){
         return vaccinationService.createVaccination(vaccinationDTO,doctorAmka);
+    }
+
+    @PostMapping("/vaccination/state/generateQRCode/brand/{vacc_brand}/{insuredAmka}")
+    public byte [] generateQRCode(@PathVariable String insuredAmka
+            ,@PathVariable String vacc_brand, HttpServletResponse response) throws IOException {
+       return vaccinationService.generateQRCode(vacc_brand,insuredAmka,response);
     }
 
 
