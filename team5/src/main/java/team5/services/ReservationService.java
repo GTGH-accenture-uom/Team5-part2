@@ -8,6 +8,8 @@ import team5.exceptions.TimeslotNotFoundException;
 import team5.model.*;
 import team5.utilities.DateUtils;
 
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -103,20 +105,42 @@ public class ReservationService {
     /////////////////////////////////////////////////////////////
 
     //Filter by multiple filters
-    public List<Reservation> findReservationsByAllFilters(String amkaInsured, String amkaDoctor) {
+    public List<Reservation> findReservationsByAllFilters(
+            String amkaInsured, String amkaDoctor, String code, String date) {
         List<Reservation> reservations = allReservations;
         System.out.println(allReservations);
         System.out.println("amkaInsured");
         System.out.println(amkaInsured);
         System.out.println("amkaDoctor");
         System.out.println(amkaDoctor);
-        if (amkaInsured != null) {
-            reservations = findReservationsByInsured(amkaInsured, reservations);
-        }
-        if (amkaDoctor != null) {
+
+        if (amkaDoctor != null && amkaDoctor !="") {
             reservations = findReservationsByDoctor(amkaDoctor, reservations);
+            if (amkaInsured != null && amkaInsured !="") {
+                reservations = findReservationsByInsured(amkaInsured, reservations);
+            }
+            if (code != null && code !="") {
+                reservations = findReservationsByCenter(code, reservations);
+            }
+            if (date != null && date !="") {
+                reservations = findReservationsByDate(date, reservations);
+            }
+            return reservations;
+        } else {
+            throw new RuntimeException("The doctor's AMKA provided is not correct.");
         }
-        return reservations;
+
+    }
+
+    //Filter By date
+    public List<Reservation> findReservationsByDate(String date, List<Reservation> reservations) {
+        List<Reservation> findReservationsByDate = new ArrayList<>();
+        for (Reservation r : reservations) {
+            if (r.getTimeslot().getStartDateTime().toString().equals(date)) {
+                findReservationsByDate.add(r);
+            }
+        }
+        return findReservationsByDate;
     }
 
     //Filter By Insured
@@ -137,6 +161,19 @@ public class ReservationService {
         System.out.println("findReservationsByInsured(insured, reservations)");
         System.out.println(findReservationsByInsured(insured, reservations));
         return findReservationsByInsured(insured, reservations);
+    }
+
+    //Filter By Vaccination Center
+    public List<Reservation> findReservationsByCenter(String code, List<Reservation> reservations) {
+        List<Reservation> ReservationsByCenter = new ArrayList<>();
+        for (Reservation r : reservations) {
+            if (r.getTimeslot().getVaccinationCenter().getCode().equals(code)) {
+                ReservationsByCenter.add(r);
+            }
+        }
+        System.out.println("ReservationsByCenter");
+        System.out.println(ReservationsByCenter);
+        return ReservationsByCenter;
     }
 
     //filter By Doctor

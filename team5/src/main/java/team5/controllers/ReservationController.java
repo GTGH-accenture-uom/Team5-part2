@@ -31,11 +31,13 @@ public class ReservationController {
         return  reservationService.findReservationById(id);
     }
 
-    @GetMapping("/reservations")
+    @GetMapping("/reservations/doctor/{amkaDoctor}")
     public List<Reservation> findReservationsByAllFilters(
+            @PathVariable(value = "amkaDoctor") String amkaDoctor,
             @RequestParam(value = "amkaInsured", required=false) String amkaInsured,
-            @RequestParam(value = "amkaDoctor", required=false) String amkaDoctor){
-        return reservationService.findReservationsByAllFilters(amkaInsured, amkaDoctor);
+            @RequestParam(value = "code", required=false) String code,
+            @RequestParam(value = "date", required=false) String date){
+        return reservationService.findReservationsByAllFilters(amkaInsured, amkaDoctor, code, date);
     }
 
 
