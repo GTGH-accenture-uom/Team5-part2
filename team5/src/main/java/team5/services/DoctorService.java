@@ -18,24 +18,10 @@ public class DoctorService {
 
     private final List<Doctor> allDoctors = new ArrayList<>();
 
-    public void createDoctor(String amka, String firstName, String lastName) {
-        if (allDoctors.stream().noneMatch(doctor -> doctor.getAmka().equals(amka))) {
-            if (InputValidator.checkAmka(amka)) {
-                Doctor doctor = new Doctor(amka, firstName, lastName);
-                System.out.println(doctor);
-                allDoctors.add(doctor);
-            }
-        } else {
-            System.err.println(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS);
-        }
-    }
-
-
-    //First method create Doctor to be used from the controller
     public Doctor createDoctor(DoctorDTO doctorDTO) {
         if (findDocByAmka(doctorDTO.getAmka()) == null) {
             if (InputValidator.checkAfm(doctorDTO.getAmka())) {
-                Doctor doctor = new Doctor(doctorDTO.getAmka(), doctorDTO.getName(), doctorDTO.getSurname());
+                Doctor doctor = createDoctor(doctorDTO.getAmka(), doctorDTO.getName(), doctorDTO.getSurname());
                 allDoctors.add(doctor);
                 return doctor;
             } else {
@@ -43,6 +29,20 @@ public class DoctorService {
             }
         }
         throw new ExistingRecordException(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS.getErrorMessage());
+    }
+    //Second method of create doctor not to be used by the controller
+    public Doctor createDoctor(String amka, String firstName, String lastName) {
+        Doctor doc = null;
+        if (allDoctors.stream().noneMatch(doctor -> doctor.getAmka().equals(amka))) {
+            if (InputValidator.checkAmka(amka)) {
+                doc = new Doctor(amka, firstName, lastName);
+                System.out.println(doc);
+                allDoctors.add(doc);
+            }
+        } else {
+            System.err.println(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS);
+        }
+        return doc;
     }
 
     public Doctor findDoctorByAmka(String amka) {
@@ -64,7 +64,6 @@ public class DoctorService {
         return null;
     }
 
-
     public Doctor updateDoctor(String amka, DoctorDTO doctorDTO) {
         Doctor doctor = findDoctorByAmka(amka);
         doctor.setName(doctorDTO.getName());
@@ -85,7 +84,7 @@ public class DoctorService {
         try {
             Doctor doctor = findDocByAmka(amka);
             if (doctor != null && timeslot != null && timeslot.isAvailable()) {
-               // doctor.addTimeslot(timeslot);
+                // doctor.addTimeslot(timeslot);
                 timeslot.setDoctor(doctor);
             } else {
                 System.err.println("Timeslot can not be added");

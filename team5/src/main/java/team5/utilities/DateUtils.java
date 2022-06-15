@@ -9,14 +9,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateUtils {
-   public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    public static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public static LocalDate stringToLocalDate(String input) {
         LocalDate localDate;
         try {
-            localDate = LocalDate.parse(input,dateFormatter);
+            localDate = LocalDate.parse(input, dateFormatter);
         } catch (DateTimeException dateTimeException) {
             throw new DateFormatException(input);
         }

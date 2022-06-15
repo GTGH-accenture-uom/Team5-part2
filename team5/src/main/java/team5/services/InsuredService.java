@@ -1,19 +1,22 @@
 package team5.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import team5.config.SyntheticData;
 import team5.dto.InsuredDTO;
+import team5.dto.VaccinationWithStateDTO;
 import team5.exceptions.CheckYourDataException;
 import team5.exceptions.ExistingRecordException;
 import team5.exceptions.InsuredNotFoundException;
 import team5.exceptions.TimeslotNotFoundException;
-import team5.model.Doctor;
-import team5.model.VaccinationCenter;
-import team5.model.Insured;
-import team5.model.Reservation;
+import team5.model.*;
 import org.springframework.stereotype.Service;
 import team5.utilities.InputValidator;
 import team5.utilities.MessagesForExistingValues;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,9 @@ import java.util.stream.Collectors;
 public class InsuredService {
 
     private final List<Insured> allInsured = new ArrayList<>();
+
+
+
 
     //First method create insured not to be used from the controller
     public void createInsured(String afm, String amka, String name, LocalDate birthdate, String surname, String email) {
@@ -92,6 +98,8 @@ public class InsuredService {
             throw new InsuredNotFoundException(amka);
         }
     }
+
+
 
     public List<Insured> getAllInsured() {
         return allInsured;

@@ -9,6 +9,8 @@ import team5.model.*;
 import team5.utilities.MessagesForExistingValues;
 import team5.utilities.VaccinationState;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -16,7 +18,7 @@ import java.util.*;
 public class VaccinationService {
 
     private final List<Vaccination> allVaccinations = new ArrayList<>();
-
+    private final QRCodeService qrCodeService;
     private ReservationService reservationService;
     private DoctorService doctorService;
 
@@ -25,11 +27,12 @@ public class VaccinationService {
     private TimeslotService timeslotService;
 
     @Autowired
-    public VaccinationService(ReservationService reservationService, DoctorService doctorService, InsuredService insuredService, TimeslotService timeslotService) {
+    public VaccinationService(ReservationService reservationService, DoctorService doctorService, InsuredService insuredService, TimeslotService timeslotService, QRCodeService qrCodeService) {
         this.reservationService = reservationService;
         this.doctorService = doctorService;
         this.insuredService = insuredService;
         this.timeslotService = timeslotService;
+        this.qrCodeService = qrCodeService;
     }
 
     public List<Vaccination> getAllVaccinations() {
@@ -61,10 +64,10 @@ public class VaccinationService {
         return RecentVaccinationsByName;
     }
 
-    public List<VaccinationWithStateDTO> getAllRecentVaccinationsWithStatus(String amka){
+    public List<VaccinationWithStateDTO> getAllRecentVaccinationsWithStatus(String amka) {
         List<Vaccination> recentVaccinations = getRecentVaccinationsByInsured(amka);
-        List<VaccinationWithStateDTO>  listDTO = new ArrayList<>();
-        for (Vaccination v: recentVaccinations){
+        List<VaccinationWithStateDTO> listDTO = new ArrayList<>();
+        for (Vaccination v : recentVaccinations) {
             VaccinationWithStateDTO vaccinationWithStateDTO = new VaccinationWithStateDTO(v);
             listDTO.add(vaccinationWithStateDTO);
         }
@@ -100,6 +103,28 @@ public class VaccinationService {
             foundVaccination = optionalVaccination.get();
         }
         return foundVaccination;
+    }
+
+    public String findRecentVaccinationStateInBrand(String brand, String insuredAmka) {
+
+        List<VaccinationWithStateDTO> listOfVaccinationState = getAllRecentVaccinationsWithStatus(insuredAmka);
+
+        VaccinationWithStateDTO vaccinationWithStateDTO = listOfVaccinationState
+                .stream().filter(e -> e.getVaccination().getVacc_Name()
+                        .equals(brand)).reduce((first, second) -> second)
+                .orElse(null);
+
+        if (vaccinationWithStateDTO != null) {
+            return vaccinationWithStateDTO.getVaccinationState().name();
+        }
+        throw new VaccinationStateNotFoundException(brand);
+    }
+
+    public byte[] generateQRCode(String vacc_brand, String insuredAmka, HttpServletResponse response) throws IOException {
+        String lastVaccStateInBrand = findRecentVaccinationStateInBrand(vacc_brand, insuredAmka);
+        System.out.println("->>>>>>> " + lastVaccStateInBrand);
+        response.setContentType("image/png");
+        return qrCodeService.generateQRCode(lastVaccStateInBrand, 500, 500);
     }
 
 
