@@ -1,5 +1,7 @@
 package team5.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import team5.dto.DoctorDTO;
 import team5.exceptions.*;
@@ -18,11 +20,14 @@ public class DoctorService {
 
     private final List<Doctor> allDoctors = new ArrayList<>();
 
+    private final Logger logger = LoggerFactory.getLogger(DoctorService.class);
+
     public Doctor createDoctor(DoctorDTO doctorDTO) {
         if (findDocByAmka(doctorDTO.getAmka()) == null) {
             if (InputValidator.checkAfm(doctorDTO.getAmka())) {
                 Doctor doctor = createDoctor(doctorDTO.getAmka(), doctorDTO.getName(), doctorDTO.getSurname());
                 allDoctors.add(doctor);
+                logger.info("Doctor Created " + doctor);
                 return doctor;
             } else {
                 throw new CheckYourDataException();
@@ -30,13 +35,14 @@ public class DoctorService {
         }
         throw new ExistingRecordException(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS.getErrorMessage());
     }
+
     //Second method of create doctor not to be used by the controller
     public Doctor createDoctor(String amka, String firstName, String lastName) {
         Doctor doc = null;
         if (allDoctors.stream().noneMatch(doctor -> doctor.getAmka().equals(amka))) {
             if (InputValidator.checkAmka(amka)) {
                 doc = new Doctor(amka, firstName, lastName);
-                System.out.println(doc);
+                logger.info("Doctor Created " + doc);
                 allDoctors.add(doc);
             }
         } else {
@@ -59,7 +65,7 @@ public class DoctorService {
                     .filter(e -> e.getAmka().equals(amka)).findFirst()
                     .orElseThrow(() -> new DoctorNotFoundException(amka));
         } catch (DoctorNotFoundException doctorNotFoundException) {
-            System.err.println(doctorNotFoundException.getMessage());
+            logger.warn(doctorNotFoundException.getMessage());
         }
         return null;
     }
@@ -81,18 +87,17 @@ public class DoctorService {
     }
 
     public void addTimeslotToDoctor(String amka, Timeslot timeslot) {
-        try {
-            Doctor doctor = findDocByAmka(amka);
-            if (doctor != null && timeslot != null && timeslot.isAvailable()) {
-                // doctor.addTimeslot(timeslot);
-                timeslot.setDoctor(doctor);
-            } else {
-                System.err.println("Timeslot can not be added");
-            }
-        } catch (DoctorNotFoundException doctorNotFoundException) {
-            System.out.println(doctorNotFoundException.getMessage());
+        Doctor doctor = findDocByAmka(amka);
+        if (doctor != null && timeslot != null && timeslot.isAvailable()
+                && !doctor.getTimeslots().contains(timeslot)) {
+            doctor.addTimeslot(timeslot);
+            timeslot.setDoctor(doctor);
+        } else {
+            logger.warn("Timeslot with id " + timeslot.getId() + " cannot be added");
         }
     }
+
+
 
 
     public List<Doctor> getAllDoctors() {

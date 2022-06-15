@@ -11,7 +11,6 @@ public class Vaccination {
 
     private static final AtomicLong count = new AtomicLong(0);
     private long id;
-
     private String vacc_Name;
     private Insured insured;
     private Doctor doctor;

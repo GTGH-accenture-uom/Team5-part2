@@ -110,6 +110,8 @@ public class Timeslot {
         return Objects.hash(startDateTime, endDateTime, duration, doctor);
     }
 
+
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Timeslot{");
@@ -132,4 +134,6 @@ public class Timeslot {
         sb.append('}');
         return sb.toString();
     }
+
+
 }
