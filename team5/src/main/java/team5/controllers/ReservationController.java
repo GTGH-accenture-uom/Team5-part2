@@ -23,7 +23,7 @@ public class ReservationController {
     }
 
     @PostMapping("/reservation")
-    public long createReservationBody(@RequestBody ReservationDTO body) {
+    public Reservation createReservationBody(@RequestBody ReservationDTO body) {
         return reservationService.createReservationBody(body);
         //timeslot in db = datetime per doctor per vaccination center
         //timeslot in front = datetime only

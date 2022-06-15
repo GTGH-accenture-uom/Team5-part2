@@ -32,7 +32,7 @@ public class ReservationService {
     }
 
 
-    public long createReservationBody(ReservationDTO body){
+    public Reservation createReservationBody(ReservationDTO body){
         if (body!=null && body.getAmkaInsured()!=null && body.getAmkaDoctor()!=null
                 && body.getTimeslot()!=null && body.getTimeslot()!=null){ //timeslot = date //
             return createReservation(body.getAmkaInsured(), body.getTimeslot(), body.getAmkaDoctor());
@@ -41,7 +41,7 @@ public class ReservationService {
         }
     }
 
-    public long createReservation(String amkaInsured, String date, String amkaDoctor) {
+    public Reservation createReservation(String amkaInsured, String date, String amkaDoctor) {
         LocalDateTime localDateTime = DateUtils.stringToLocalDateTime(date);
         List<Timeslot> timeslots = timeslotService.getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
         System.out.println(timeslots);
@@ -55,14 +55,14 @@ public class ReservationService {
             timeslot.setReservation(reservation);//
             allReservations.add(reservation);
 
-            return reservation.getId();
+            return reservation;
         } else {
             System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots.get(0));
             throw new RuntimeException("exception");
         }
     }
 
-    public long createReservation(String amkaInsured, Timeslot timeslot2, String amkaDoctor) {
+    public Reservation createReservation(String amkaInsured, Timeslot timeslot2, String amkaDoctor) {
         LocalDateTime localDateTime = timeslot2.getStartDateTime();
         List<Timeslot> timeslots = timeslotService.getTimeslotsByLocalDateTimeByDoctor(amkaInsured, localDateTime, amkaDoctor);
         System.out.println(timeslots);
@@ -76,7 +76,7 @@ public class ReservationService {
             timeslot.setReservation(reservation);
             allReservations.add(reservation);
 
-            return reservation.getId();
+            return reservation;
         } else {
             System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots);
             throw new RuntimeException("exception");
