@@ -41,9 +41,7 @@ public class ReservationService {
         if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
             Timeslot timeslot = timeslots.get(0);
             Reservation reservation = new Reservation(insured, timeslot);
-            //timeslot.getVaccinationCenter().addReservation(reservation);
             System.out.println(reservation);
-            //doctor.addReservation(reservation);
             timeslot.setAvailable(false);
             allReservations.add(reservation);
 
@@ -63,9 +61,7 @@ public class ReservationService {
         if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
             Timeslot timeslot = timeslots.get(0);
             Reservation reservation = new Reservation(insured, timeslot);
-            //timeslot.getVaccinationCenter().addReservation(reservation);
             System.out.println(reservation);
-            //doctor.addReservation(reservation);
             timeslot.setAvailable(false);
             allReservations.add(reservation);
 
