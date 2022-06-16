@@ -9,9 +9,8 @@ public class Reservation {
     private final long id;
     private Insured insured;
     private Timeslot timeslot;
-
+    @JsonIgnore
     private Vaccination vaccination;
-
     @JsonIgnore
     private int reservationChanges;
 

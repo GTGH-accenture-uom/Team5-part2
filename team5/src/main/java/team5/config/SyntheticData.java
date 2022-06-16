@@ -121,7 +121,6 @@ public class SyntheticData implements CommandLineRunner {
 
 
 
-
         //doctorService.addTimeslotToDoctor();
 
 
@@ -242,9 +241,10 @@ public class SyntheticData implements CommandLineRunner {
         vaccCenter2.addTimeSlot(t19);
         vaccCenter2.addTimeSlot(t20);
 
-        logger.info("----------------VACCINACION CENTER 1 TIMESLOTS----------------");
-        vaccCenter1.getTimeslots().forEach(e -> logger.info("-" + e));
-        logger.info("----------------VACCINACION CENTER 2 TIMESLOTS----------------");
-        vaccCenter2.getTimeslots().forEach(e -> logger.info("-" + e));
+        logger.info("----------------VACCINATION CENTER 1 TIMESLOTS----------------");
+        vaccCenter1.getTimeslots().forEach(e -> logger.info(""+e));
+        logger.info("----------------VACCINATION CENTER 2 TIMESLOTS----------------");
+        vaccCenter2.getTimeslots().forEach(e -> logger.info(""+ e));
+        logger.info("--------------------------------------------------------------");
     }
 }

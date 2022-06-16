@@ -96,4 +96,12 @@ public class ControllerAdvisor {
         errorResponse.setMessage(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = {DoctorNotAuthorizedException.class})
+    public ResponseEntity<ErrorResponse> handleDoctorNotAuthorizedException(DoctorNotAuthorizedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
 }

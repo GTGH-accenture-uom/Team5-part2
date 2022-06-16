@@ -8,7 +8,6 @@ import team5.model.Vaccination;
 import team5.services.VaccinationService;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,7 +22,7 @@ public class VaccinationController {
 
     @GetMapping("/vaccinations/state/{amka}")
     public List<VaccinationWithStateDTO> getAllRecentVaccinationsWithStatus(@PathVariable(value = "amka") String amka) {
-        return vaccinationService.findAllRecentVaccinationsWithStatus(amka);
+        return vaccinationService.findAllRecentVaccinationsWithState(amka);
     }
 
     @PostMapping("/doctors/vaccinations/vaccination/doctors/{doctorAmka}")

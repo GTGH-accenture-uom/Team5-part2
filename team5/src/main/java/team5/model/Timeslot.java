@@ -114,7 +114,7 @@ public class Timeslot {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Timeslot{");
+        final StringBuilder sb = new StringBuilder(id+"-Timeslot{");
         sb.append("id=").append(id);
         sb.append(", startDateTime=").append(startDateTime);
         sb.append(", endDateTime=").append(endDateTime);
@@ -122,6 +122,8 @@ public class Timeslot {
         sb.append(", duration=").append(duration);
         if (doctor != null) {
             sb.append(", doctor's amka=").append(doctor.getAmka());
+            sb.append(", doctor's FirstName=").append(doctor.getName());
+            sb.append(", doctor's LastName=").append(doctor.getSurname());
         }
         if (vaccinationCenter != null) {
             sb.append(", vaccinationCenter's code=").append(vaccinationCenter.getCode());

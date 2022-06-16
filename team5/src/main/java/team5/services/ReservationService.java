@@ -30,11 +30,11 @@ public class ReservationService {
         this.insuredService = insuredService;
     }
 
-    public Reservation createReservationBody(ReservationDTO body){
-        if (body!=null && body.getAmkaInsured()!=null && body.getAmkaDoctor()!=null
-                && body.getTimeslot()!=null && body.getTimeslot()!=null){ //timeslot = date //
+    public Reservation createReservationBody(ReservationDTO body) {
+        if (body != null && body.getAmkaInsured() != null && body.getAmkaDoctor() != null
+                && body.getTimeslot() != null && body.getTimeslot() != null) { //timeslot = date //
             return createReservation(body.getAmkaInsured(), body.getTimeslot(), body.getAmkaDoctor());
-        }else{
+        } else {
             throw new CheckYourDataException();
         }
     }
@@ -84,7 +84,7 @@ public class ReservationService {
     public Reservation findReservationByTimeslotId(long id) {
         return allReservations.stream().filter(reservation -> reservation.getTimeslot().getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new TimeslotNotFoundException(id));
+                .orElseThrow(() -> new ReservationNotFoundException(id));
     }
 
     public Reservation findReservationById(long id) {
@@ -195,14 +195,24 @@ public class ReservationService {
         System.out.println(findReservationsByDoctor(doctor, reservations));
         return findReservationsByDoctor(doctor, reservations);
     }
+
+    public Doctor isReservationAssignedToDoctor(String doctorAmka, long timeslotId) {
+        Doctor foundDoctor = doctorService.findDoctorByAmka(doctorAmka);
+        boolean assigned = foundDoctor.getTimeslots().stream().anyMatch(e -> e.getId() == timeslotId);
+        return assigned?foundDoctor:null;
+    }
     //////////////////////////////////////////
 
     public Reservation updateReservation(long reservationId, long timeslotId) {
         Reservation reservation = findReservationById(reservationId);
-        logger.info("resevation in update is " + reservation);
+        if (reservation == null) {
+            throw new ReservationNotFoundException(timeslotId);
+        }
         Timeslot foundTimeslot = timeslotService.findTimeslotById(timeslotId);
-        logger.info("Timeslot is " + foundTimeslot);
-        if (foundTimeslot != null && reservation.getReservationChanges() < 2) {
+        if (foundTimeslot == null) {
+            throw new TimeslotNotFoundException(timeslotId);
+        }
+        if (reservation.getReservationChanges() < 2) {
             //Set free the previous timeslot
             reservation.getTimeslot().setAvailable(true);
             //Set the reservation of this timeslot to null
