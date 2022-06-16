@@ -1,12 +1,13 @@
 package team5.services;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import team5.dto.TimeslotDTO;
 import team5.exceptions.TimeslotNotFoundException;
 import team5.model.Timeslot;
 import team5.utilities.DateUtils;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,10 +17,11 @@ import java.util.List;
 @Service
 public class TimeslotService {
     private final List<Timeslot> allTimeslots = new ArrayList<>();
+    private final Logger logger = LoggerFactory.getLogger(TimeslotService.class);
 
     public Timeslot createTimeslot(LocalDateTime startDateTime, int duration) {
         Timeslot timeslot = new Timeslot(startDateTime, duration);
-        System.out.println("Timeslot with id: " + timeslot.getId() + " created: " + timeslot);
+        logger.info("Timeslot with id: " + timeslot.getId() + " created: " + timeslot);
         allTimeslots.add(timeslot);
         return timeslot;
     }

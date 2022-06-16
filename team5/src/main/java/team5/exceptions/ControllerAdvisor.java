@@ -74,7 +74,7 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(value = {CheckYourDataException.class})
-    public ResponseEntity<ErrorResponse> handleReservationCannotBeUpdated(CheckYourDataException ex) {
+    public ResponseEntity<ErrorResponse> handleCheckYourDataException(CheckYourDataException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(ex.getMessage());
@@ -82,7 +82,15 @@ public class ControllerAdvisor {
     }
 
     @ExceptionHandler(value = {VaccinationStateNotFoundException.class})
-    public ResponseEntity<ErrorResponse> handleDoctorNotFoundException(VaccinationStateNotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleVaccinationStateNotFoundException(VaccinationStateNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {TimeslotOwnerException.class})
+    public ResponseEntity<ErrorResponse> handleTimeslotOwnerException(TimeslotOwnerException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(ex.getMessage());

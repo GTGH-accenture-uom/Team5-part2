@@ -1,5 +1,7 @@
 package team5.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import team5.dto.VaccinationCenterDTO;
 import team5.exceptions.ExistingRecordException;
@@ -15,9 +17,8 @@ import java.util.stream.Collectors;
 @Service
 public class VaccinationCenterService {
 
-
     private final List<VaccinationCenter> allVaccinationCenters = new ArrayList<>();
-
+    private final Logger logger = LoggerFactory.getLogger(VaccinationCenterService.class);
     private final TimeslotService timeslotService;
 
     public VaccinationCenterService(TimeslotService timeslotService) {
@@ -30,7 +31,7 @@ public class VaccinationCenterService {
         if (!allVaccinationCenters.contains(vaccinationCenter)) {
             allVaccinationCenters.add(vaccinationCenter);
         } else {
-            throw new ExistingRecordException(MessagesForExistingValues.VACCINATION_CENTER_EXISTS.getErrorMessage());
+            throw new ExistingRecordException(MessagesForExistingValues.VACCINATION_CENTER_EXISTS.name());
         }
         return vaccinationCenter;
     }
@@ -41,7 +42,7 @@ public class VaccinationCenterService {
         if (!allVaccinationCenters.contains(vaccinationCenter)) {
             allVaccinationCenters.add(vaccinationCenter);
         } else {
-            System.err.println("This vaccination center with code " + code + " already exists");
+            logger.warn("This vaccination center with code " + code + " already exists");
         }
         return vaccinationCenter;
     }
@@ -97,14 +98,6 @@ public class VaccinationCenterService {
         System.out.println("Timeslot added to vaccination center with code " + vacc_code);
     }
 
-    public void deleteVaccinationCenter(String vacc_code) {
-        if (allVaccinationCenters.removeIf(vaccinationCenter -> vaccinationCenter.getCode().equals(vacc_code))) {
-            System.out.println("VaccinationCenter removed");
-        } else {
-            throw new VaccinationCenterNotFoundException(vacc_code);
-        }
-
-    }
 
     public VaccinationCenter findVaccinationCenterByCode(String code) {
         VaccinationCenter foundVaccinationCenter;
@@ -117,6 +110,16 @@ public class VaccinationCenterService {
         }
         return foundVaccinationCenter;
     }
+
+    public void deleteVaccinationCenter(String vacc_code) {
+        if (allVaccinationCenters.removeIf(vaccinationCenter -> vaccinationCenter.getCode().equals(vacc_code))) {
+            System.out.println("VaccinationCenter removed");
+        } else {
+            throw new VaccinationCenterNotFoundException(vacc_code);
+        }
+
+    }
+
     public void printFreeTimeslotsByVaccinationCenter(String code) {
         System.out.println("------------------Vaccination center with code--------------" + code);
         findVaccinationCenterByCode(code).getTimeslots()
@@ -128,7 +131,6 @@ public class VaccinationCenterService {
     public List<VaccinationCenter> getAllVaccinationCenters() {
         return allVaccinationCenters;
     }
-
 
 
 }

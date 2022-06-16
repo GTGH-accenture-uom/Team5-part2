@@ -1,5 +1,7 @@
 package team5.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import team5.config.SyntheticData;
@@ -29,23 +31,10 @@ public class InsuredService {
 
     private final List<Insured> allInsured = new ArrayList<>();
 
+    private final Logger logger = LoggerFactory.getLogger(InsuredService.class);
 
 
-
-    //First method create insured not to be used from the controller
-    public void createInsured(String afm, String amka, String name, LocalDate birthdate, String surname, String email) {
-        if (allInsured.stream().noneMatch(insured -> insured.getAmka().equals(amka))) {
-            if (InputValidator.checkAfm(afm) && InputValidator.checkAmka(amka)) {
-                Insured insured = new Insured(afm, amka, name, surname, birthdate, email);
-                System.out.println("Insured " + insured);
-                allInsured.add(insured);
-            }
-        } else {
-            System.err.println(MessagesForExistingValues.INSURED_ALREADY_EXISTS);
-        }
-    }
-
-    //Second method create Insured to be used from the controller
+    //First method create Insured to be used from the controller
     public Insured createInsured(InsuredDTO insuredDTO) {
         if (findInsuredByAmka(insuredDTO.getAmka()) == null) {
             if (InputValidator.checkAfm(insuredDTO.getAfm()) && InputValidator.checkAmka(insuredDTO.getAmka())) {
@@ -56,8 +45,23 @@ public class InsuredService {
             } else {
                 throw new CheckYourDataException();
             }
+        } else {
+            throw new ExistingRecordException(MessagesForExistingValues.INSURED_ALREADY_EXISTS.name());
         }
-        throw new ExistingRecordException(MessagesForExistingValues.INSURED_ALREADY_EXISTS.getErrorMessage());
+    }
+
+    public Insured createInsured(String afm, String amka, String name, LocalDate birthdate, String surname, String email) {
+        Insured insured = null;
+        if (allInsured.stream().noneMatch(ins -> ins.getAmka().equals(amka))) {
+            if (InputValidator.checkAfm(afm) && InputValidator.checkAmka(amka)) {
+                insured = new Insured(afm, amka, name, surname, birthdate, email);
+                logger.info("Insured Created " + insured);
+                allInsured.add(insured);
+            } else {
+                logger.warn("->" + MessagesForExistingValues.INSURED_ALREADY_EXISTS);
+            }
+        }
+        return insured;
     }
 
     //First find Insured method to be used from the controller
@@ -98,7 +102,6 @@ public class InsuredService {
             throw new InsuredNotFoundException(amka);
         }
     }
-
 
 
     public List<Insured> getAllInsured() {

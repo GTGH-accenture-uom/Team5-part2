@@ -32,9 +32,9 @@ public class VaccinationController {
         return vaccinationService.createVaccination(vaccinationDTO,doctorAmka);
     }
 
-    @PostMapping("/vaccination/state/generateQRCode/brand/{vacc_brand}/{insuredAmka}")
+    @GetMapping("/vaccination/state/generateQRCode/brand/{vacc_brand}/{insuredAmka}")
     public byte [] generateQRCode(@PathVariable String insuredAmka
-            ,@PathVariable String vacc_brand, HttpServletResponse response) throws IOException {
+            ,@PathVariable String vacc_brand, HttpServletResponse response)  {
        return vaccinationService.generateQRCode(vacc_brand,insuredAmka,response);
     }
 

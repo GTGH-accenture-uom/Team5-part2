@@ -8,20 +8,18 @@ import team5.exceptions.*;
 import team5.model.*;
 import team5.utilities.InputValidator;
 import team5.utilities.MessagesForExistingValues;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class DoctorService {
-
 
     private final List<Doctor> allDoctors = new ArrayList<>();
 
     private final Logger logger = LoggerFactory.getLogger(DoctorService.class);
 
+    //First method create doctor to be used by the controller
     public Doctor createDoctor(DoctorDTO doctorDTO) {
         if (findDocByAmka(doctorDTO.getAmka()) == null) {
             if (InputValidator.checkAfm(doctorDTO.getAmka())) {
@@ -33,10 +31,10 @@ public class DoctorService {
                 throw new CheckYourDataException();
             }
         }
-        throw new ExistingRecordException(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS.getErrorMessage());
+        throw new ExistingRecordException(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS.name());
     }
 
-    //Second method of create doctor not to be used by the controller
+
     public Doctor createDoctor(String amka, String firstName, String lastName) {
         Doctor doc = null;
         if (allDoctors.stream().noneMatch(doctor -> doctor.getAmka().equals(amka))) {
@@ -46,7 +44,7 @@ public class DoctorService {
                 allDoctors.add(doc);
             }
         } else {
-            System.err.println(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS);
+            logger.warn("->" + MessagesForExistingValues.DOCTOR_ALREADY_EXISTS);
         }
         return doc;
     }
@@ -80,7 +78,7 @@ public class DoctorService {
 
     public void deleteDoctor(String amka) {
         if (allDoctors.removeIf(doctor -> doctor.getAmka().equals(amka))) {
-            System.out.println("Insured with amka " + amka + " deleted");
+            logger.info("Doctor with amka " + amka + " deleted");
         } else {
             throw new DoctorNotFoundException(amka);
         }
@@ -93,11 +91,9 @@ public class DoctorService {
             doctor.addTimeslot(timeslot);
             timeslot.setDoctor(doctor);
         } else {
-            logger.warn("Timeslot with id " + timeslot.getId() + " cannot be added");
+            logger.warn("This timeslot cannot be added");
         }
     }
-
-
 
 
     public List<Doctor> getAllDoctors() {

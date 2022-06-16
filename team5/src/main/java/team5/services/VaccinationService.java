@@ -1,5 +1,7 @@
 package team5.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team5.dto.VaccinationDTO;
@@ -24,6 +26,8 @@ public class VaccinationService {
 
     private TimeslotService timeslotService;
 
+    private final Logger logger = LoggerFactory.getLogger(VaccinationService.class);
+
     @Autowired
     public VaccinationService(ReservationService reservationService, DoctorService doctorService, InsuredService insuredService, TimeslotService timeslotService, QRCodeService qrCodeService) {
         this.reservationService = reservationService;
@@ -34,36 +38,40 @@ public class VaccinationService {
     }
 
     public Vaccination createVaccination(VaccinationDTO vaccinationDTO, String doctorAmka) {
+        Vaccination vaccination = null;
         long timeslotId = vaccinationDTO.getTimeslotId();
         String insuredAmka = vaccinationDTO.getInsuredAmka();
         Timeslot foundTimeslot = timeslotService.findTimeslotById(timeslotId);
-        if (findVaccinationByTimeslotId(timeslotId) != null) {
-            throw new ExistingRecordException(MessagesForExistingValues.VACCINATION_ALREADY_MADE.getErrorMessage());
-        }
-        if (foundTimeslot == null) {
-            throw new TimeslotNotFoundException(timeslotId);
-        }
         Reservation foundReservation = reservationService.findReservationByTimeslotId(timeslotId);
-        if (foundReservation == null) {
+        logger.info("RESERVATION->>>" + foundReservation);
+        if (foundReservation != null) {
+            if (findVaccinationByTimeslotId(timeslotId) != null) {
+                throw new ExistingRecordException(MessagesForExistingValues.VACCINATION_ALREADY_MADE.name());
+            }
+            if (foundTimeslot == null) {
+                throw new TimeslotNotFoundException(timeslotId);
+            }
+            Insured foundInsured = insuredService.findInsuredByAmka(vaccinationDTO.getInsuredAmka());
+            if (foundInsured == null) {
+                throw new InsuredNotFoundException(insuredAmka);
+            }
+            Doctor foundDoctor = doctorService.findDoctorByAmka(doctorAmka);
+            if (foundDoctor == null) {
+                throw new DoctorNotFoundException(doctorAmka);
+            }
+            LocalDateTime vaccinationDate = LocalDateTime.now();
+            LocalDateTime expirationDate = vaccinationDTO.getExpirationDate();
+            if (expirationDate.isBefore(vaccinationDate)) {
+                throw new InvalidExpirationDateException(vaccinationDate);
+            }
+            String vacc_Name = vaccinationDTO.getVacc_Name();
+            vaccination = new Vaccination(vacc_Name, foundInsured, foundDoctor, vaccinationDate, expirationDate);
+            vaccination.setReservation(foundReservation);
+            foundReservation.setVaccination(vaccination);
+            allVaccinations.add(vaccination);
+        } else {
             throw new ReservationNotFoundException(timeslotId);
         }
-        Insured foundInsured = insuredService.findInsuredByAmka(vaccinationDTO.getInsuredAmka());
-        if (foundInsured == null) {
-            throw new InsuredNotFoundException(insuredAmka);
-        }
-        Doctor foundDoctor = doctorService.findDoctorByAmka(doctorAmka);
-        if (foundDoctor == null) {
-            throw new DoctorNotFoundException(doctorAmka);
-        }
-        LocalDateTime vaccinationDate = LocalDateTime.now();
-        LocalDateTime expirationDate = vaccinationDTO.getExpirationDate();
-        if (expirationDate.isBefore(vaccinationDate)) {
-            throw new InvalidExpirationDateException(vaccinationDate);
-        }
-        String vacc_Name = vaccinationDTO.getVacc_Name();
-        Vaccination vaccination = new Vaccination(vacc_Name, foundInsured, foundDoctor, vaccinationDate, expirationDate);
-        foundReservation.setVaccination(vaccination);
-        allVaccinations.add(vaccination);
         return vaccination;
     }
 
@@ -105,52 +113,42 @@ public class VaccinationService {
 
 
     public Vaccination findVaccinationByInsuredByVaccine(String vaccine, String amka, List<Vaccination> vaccinationsByInsured) {
-        try {
-            LocalDateTime expirationDateTime = vaccinationsByInsured.get(0).getExpirationDate();
-            Vaccination vaccination = vaccinationsByInsured.get(0);
-            for (Vaccination v : vaccinationsByInsured) {
-                if (v.getVacc_Name().equals(vaccine) && v.getExpirationDate().isAfter(expirationDateTime)) {
-                    expirationDateTime = v.getExpirationDate();
-                    vaccination = v;
-                }
+        LocalDateTime expirationDateTime = vaccinationsByInsured.get(0).getExpirationDate();
+        Vaccination vaccination = vaccinationsByInsured.get(0);
+        for (Vaccination v : vaccinationsByInsured) {
+            if (v.getVacc_Name().equals(vaccine) && v.getExpirationDate().isAfter(expirationDateTime)) {
+                expirationDateTime = v.getExpirationDate();
+                vaccination = v;
             }
-            System.out.println("2.********************vaccination");
-            System.out.println(vaccination);
-            return vaccination;
-        } catch (Exception e) {
-            throw new RuntimeException("Cannot parse vaccination list by insured bu id");
         }
+        System.out.println("2.********************vaccination");
+        System.out.println(vaccination);
+        return vaccination;
     }
 
     public Vaccination findVaccinationByTimeslotId(long id) {
-        Vaccination foundVaccination = null;
-        Optional<Vaccination> optionalVaccination = allVaccinations
-                .stream()
+        return allVaccinations.stream()
                 .filter(vaccination -> vaccination.getReservation().getTimeslot().getId() == id)
-                .findFirst();
-        if (optionalVaccination.isPresent()) {
-            foundVaccination = optionalVaccination.get();
-        }
-        return foundVaccination;
+                .findAny()
+                .orElse(null);
     }
 
     public String findRecentVaccinationStateInBrand(String brand, String insuredAmka) {
-
         List<VaccinationWithStateDTO> listOfVaccinationState = findAllRecentVaccinationsWithStatus(insuredAmka);
         VaccinationWithStateDTO vaccinationWithStateDTO = listOfVaccinationState
                 .stream().filter(e -> e.getVaccination().getVacc_Name()
                         .equals(brand)).reduce((first, second) -> second)
                 .orElse(null);
-
         if (vaccinationWithStateDTO != null) {
             return vaccinationWithStateDTO.getVaccinationState().name();
         }
-        throw new VaccinationStateNotFoundException(brand);
+        throw new VaccinationStateNotFoundException(brand, insuredAmka);
     }
 
     public byte[] generateQRCode(String vacc_brand, String insuredAmka, HttpServletResponse response) {
         String lastVaccStateInBrand = findRecentVaccinationStateInBrand(vacc_brand, insuredAmka);
         response.setContentType("image/png");
+        logger.info("The last vaccination state for brand " + vacc_brand + " is " + lastVaccStateInBrand);
         return qrCodeService.generateQRCode(lastVaccStateInBrand, 500, 500);
     }
 

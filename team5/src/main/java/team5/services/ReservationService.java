@@ -1,11 +1,11 @@
 package team5.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team5.dto.ReservationDTO;
-import team5.exceptions.CheckYourDataException;
-import team5.exceptions.ReservationCannotBeUpdated;
-import team5.exceptions.ReservationNotFoundException;
+import team5.exceptions.*;
 import team5.model.*;
 import team5.utilities.DateUtils;
 
@@ -20,8 +20,7 @@ public class ReservationService {
     private final TimeslotService timeslotService;
     private final DoctorService doctorService;
     private final InsuredService insuredService;
-
-
+    private final Logger logger = LoggerFactory.getLogger(ReservationService.class);
 
     @Autowired
     public ReservationService(TimeslotService timeslotService, DoctorService doctorService,
@@ -30,7 +29,6 @@ public class ReservationService {
         this.doctorService = doctorService;
         this.insuredService = insuredService;
     }
-
 
     public Reservation createReservationBody(ReservationDTO body){
         if (body!=null && body.getAmkaInsured()!=null && body.getAmkaDoctor()!=null
@@ -84,14 +82,9 @@ public class ReservationService {
     }
 
     public Reservation findReservationByTimeslotId(long id) {
-        Reservation reservation = null;
-        Optional<Reservation> optionalReservation = allReservations
-                .stream()
-                .filter(reserv -> reserv.getTimeslot().getId() == id).findFirst();
-        if (optionalReservation.isPresent()) {
-            reservation = optionalReservation.get();
-        }
-        return reservation;
+        return allReservations.stream().filter(reservation -> reservation.getTimeslot().getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new TimeslotNotFoundException(id));
     }
 
     public Reservation findReservationById(long id) {
@@ -104,7 +97,6 @@ public class ReservationService {
         }
         return foundReservation;
     }
-
 
 
     /////////////////////////////////////////////////////////////
@@ -121,20 +113,20 @@ public class ReservationService {
         System.out.println("amkaDoctor");
         System.out.println(amkaDoctor);
 
-        if (amkaDoctor != null && amkaDoctor !="") {
+        if (amkaDoctor != null && amkaDoctor != "") {
             reservations = findReservationsByDoctor(amkaDoctor, reservations);
-            if (amkaInsured != null && amkaInsured !="") {
+            if (amkaInsured != null && amkaInsured != "") {
                 reservations = findReservationsByInsured(amkaInsured, reservations);
             }
-            if (code != null && code !="") {
+            if (code != null && code != "") {
                 reservations = findReservationsByCenter(code, reservations);
             }
-            if (date != null && date !="") {
+            if (date != null && date != "") {
                 reservations = findReservationsByDate(date, reservations);
             }
             return reservations;
         } else {
-            throw new RuntimeException("The doctor's AMKA provided is not correct.");
+            throw new CheckYourDataException();
         }
 
     }
@@ -158,7 +150,6 @@ public class ReservationService {
                 ReservationsByInsured.add(r);
             }
         }
-        System.out.println("ReservationsByInsured");
         System.out.println(ReservationsByInsured);
         return ReservationsByInsured;
     }
@@ -190,7 +181,6 @@ public class ReservationService {
             System.out.println(r.getTimeslot().getDoctor().getAmka());
             System.out.println(doctor.getAmka());
             if (r.getTimeslot().getDoctor().getAmka().equals(doctor.getAmka())) {
-                System.out.println(111111111);
                 ReservationsByDoctor.add(r);
             }
         }
@@ -209,7 +199,9 @@ public class ReservationService {
 
     public Reservation updateReservation(long reservationId, long timeslotId) {
         Reservation reservation = findReservationById(reservationId);
+        logger.info("resevation in update is " + reservation);
         Timeslot foundTimeslot = timeslotService.findTimeslotById(timeslotId);
+        logger.info("Timeslot is " + foundTimeslot);
         if (foundTimeslot != null && reservation.getReservationChanges() < 2) {
             //Set free the previous timeslot
             reservation.getTimeslot().setAvailable(true);
