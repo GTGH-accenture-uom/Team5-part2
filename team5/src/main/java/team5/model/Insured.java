@@ -1,6 +1,8 @@
 package team5.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -71,6 +73,8 @@ public class Insured {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

@@ -38,15 +38,13 @@ public class VaccinationService {
     }
 
     public Vaccination createVaccination(VaccinationDTO vaccinationDTO, String doctorAmka) {
-        Vaccination vaccination = null;
         long timeslotId = vaccinationDTO.getTimeslotId();
         String insuredAmka = vaccinationDTO.getInsuredAmka();
-        //Timeslot foundTimeslot = timeslotService.findTimeslotById(timeslotId);
         Reservation foundReservation = reservationService.findReservationByTimeslotId(timeslotId);
         if (foundReservation == null) {
             throw new ReservationNotFoundException(timeslotId);
         }
-        logger.info("RESERVATION->>>" + foundReservation);
+        logger.info("Reservation with id=" + foundReservation.getId());
         Doctor authorizedDoctor = reservationService.isReservationAssignedToDoctor(doctorAmka, timeslotId);
         if (authorizedDoctor != null) {
             if (findVaccinationByTimeslotId(timeslotId) != null) {
@@ -62,7 +60,7 @@ public class VaccinationService {
                 throw new InvalidExpirationDateException(vaccinationDate);
             }
             String vacc_Name = vaccinationDTO.getVacc_Name();
-            vaccination = new Vaccination(vacc_Name, foundInsured, authorizedDoctor, vaccinationDate, expirationDate);
+            Vaccination vaccination = new Vaccination(vacc_Name, foundInsured, authorizedDoctor, vaccinationDate, expirationDate);
             vaccination.setReservation(foundReservation);
             foundReservation.setVaccination(vaccination);
             allVaccinations.add(vaccination);
@@ -72,11 +70,11 @@ public class VaccinationService {
     }
 
 
-
     public List<Vaccination> findRecentVaccinationsByInsured(String amka) {
         List<Vaccination> vaccinationsByInsured = new ArrayList<>();
         Set<String> names = new HashSet<>();
         for (Vaccination v : allVaccinations) {
+            logger.warn("++" + v);
             if (v != null && v.getInsured() != null) {
                 if (v.getInsured().getAmka().equals(amka)) {
                     vaccinationsByInsured.add(v);
@@ -84,16 +82,14 @@ public class VaccinationService {
                 }
             }
         }
-        System.out.println("4*********************vaccinationsByInsured");
         System.out.println(vaccinationsByInsured);
-        System.out.println("3*************************names");
         System.out.println(names);
         List<Vaccination> RecentVaccinationsByName = new ArrayList<>();
         for (String name : names) {
             Vaccination vaccination = findVaccinationByInsuredByVaccine(name, amka, vaccinationsByInsured);
             RecentVaccinationsByName.add(vaccination);
         }
-        System.out.println("1.*************************RecentVaccinationsByName");
+
         System.out.println(RecentVaccinationsByName);
         return RecentVaccinationsByName;
     }
@@ -118,7 +114,6 @@ public class VaccinationService {
                 vaccination = v;
             }
         }
-        System.out.println("2.********************vaccination");
         System.out.println(vaccination);
         return vaccination;
     }
