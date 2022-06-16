@@ -1,4 +1,4 @@
-# Project: Vaccine Recording System
+#Vaccine Recording System
 
 
 # Project Description
