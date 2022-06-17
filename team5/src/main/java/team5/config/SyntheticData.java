@@ -120,7 +120,7 @@ public class SyntheticData implements CommandLineRunner {
         doctorService.addTimeslotToDoctor("12345678915",t20);
 
 
-//        //Reservations for Center1
+
           reservationService.createReservation("22202223333", t6, "12345678919");
           reservationService.createReservation("22202223333", t7, "12345678919");
           reservationService.createReservation("22202223333", t8, "12345678919");
