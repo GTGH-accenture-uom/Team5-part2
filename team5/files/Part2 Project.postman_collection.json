@@ -1,0 +1,332 @@
+{
+	"info": {
+		"_postman_id": "c928f07e-43ea-4e53-9e1a-9bb95ed18203",
+		"name": "Part2 Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9285056"
+	},
+	"item": [
+		{
+			"name": "Insured",
+			"item": [
+				{
+					"name": "Get all insured",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/insured",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"insured"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Timeslot",
+			"item": [
+				{
+					"name": "Timeslots",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/timeslots?date=12-3-22",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeslots"
+							],
+							"query": [
+								{
+									"key": "vaccinationcenter",
+									"value": "15-23-32",
+									"disabled": true
+								},
+								{
+									"key": "date",
+									"value": "12-3-22"
+								},
+								{
+									"key": "doctor",
+									"value": "5",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Timeslots Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/timeslots?date=12-03-22&doctor=12345678915",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"timeslots"
+							],
+							"query": [
+								{
+									"key": "vaccinationcenter",
+									"value": "15-23-32",
+									"disabled": true
+								},
+								{
+									"key": "date",
+									"value": "12-03-22"
+								},
+								{
+									"key": "doctor",
+									"value": "12345678915"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Doctors by VaccinationCenter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/doctors?vaccinationcenter=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"doctors"
+							],
+							"query": [
+								{
+									"key": "vaccinationcenter",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vaccination",
+			"item": [
+				{
+					"name": "Vaccination state",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/vaccinations/state/12345678912",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vaccinations",
+								"state",
+								"12345678912"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vaccination",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"timeslotId\": 3,\r\n    \"insuredAmka\": \"32228223309\",\r\n    \"expirationDate\":\"2023-08-20T19:00:00\",\r\n    \"vacc_Name\": \"covid\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/vaccinations/vaccination/doctors/12345678912",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"vaccinations",
+								"vaccination",
+								"doctors",
+								"12345678912"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reservation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amkaInsured\" : \"22222223333\",\r\n    \"amkaDoctor\" : \"12345678915\",\r\n    \"timeslot\" : \"07-11-2022 16:30\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/reservation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"reservation"
+					],
+					"query": [
+						{
+							"key": "amkaInsured",
+							"value": "22222223333",
+							"description": "1",
+							"disabled": true
+						},
+						{
+							"key": "amkaDoctor",
+							"value": "12345678912",
+							"description": "1",
+							"disabled": true
+						},
+						{
+							"key": "timeslot",
+							"value": "2022-08-20 18:30",
+							"description": "1",
+							"disabled": true
+						},
+						{
+							"key": "amkaInsured",
+							"value": "32228223309",
+							"description": "2",
+							"disabled": true
+						},
+						{
+							"key": "amkaDoctor",
+							"value": "12345678915",
+							"description": "2",
+							"disabled": true
+						},
+						{
+							"key": "timeslot",
+							"value": "2022-08-21 18:30",
+							"description": "2",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reservation",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/reservation/1?timeslotId=3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"reservation",
+						"1"
+					],
+					"query": [
+						{
+							"key": "timeslotId",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reservation by amkaInsured, amkaDoctor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/reservations/doctor/12345678912",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"reservations",
+						"doctor",
+						"12345678912"
+					],
+					"query": [
+						{
+							"key": "amkaInsured",
+							"value": "22222223333",
+							"disabled": true
+						},
+						{
+							"key": "code",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "date",
+							"value": "2022-08-21T14:30",
+							"disabled": true
+						},
+						{
+							"key": "amkaDoctor",
+							"value": "12345678915",
+							"description": "deli",
+							"disabled": true
+						},
+						{
+							"key": "amkaDoctor",
+							"value": "12345678912",
+							"description": "vasileiou",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
