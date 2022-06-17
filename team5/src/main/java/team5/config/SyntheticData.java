@@ -120,16 +120,15 @@ public class SyntheticData implements CommandLineRunner {
         doctorService.addTimeslotToDoctor("12345678915",t20);
 
 
-
-        //doctorService.addTimeslotToDoctor();
-
-
 //        //Reservations for Center1
-//        vaccinationCenterService.createReservation(insured1, timeslot1center1, vaccCenter1);
-//        vaccinationCenterService.createReservation(insured2, timeslot2center1, vaccCenter1);
-//        vaccinationCenterService.createReservation(insured3, timeslot3center1, vaccCenter1);
-//        vaccinationCenterService.createReservation(insured4, timeslot4center1, vaccCenter1);
-//
+          reservationService.createReservation("22202223333", t6, "12345678919");
+          reservationService.createReservation("22202223333", t7, "12345678919");
+          reservationService.createReservation("22202223333", t8, "12345678919");
+          reservationService.createReservation("22222223309", t9, "12345678919");
+          reservationService.createReservation("22222223309", t10, "12345678919");
+          reservationService.createReservation("22222223309", t4, "12345678912");
+          reservationService.createReservation("22222223309", t2, "12345678912");
+
 //        //Reservations for Center2
 //        vaccinationCenterService.createReservation(insured5, timeslot1center2, vaccCenter2);
 //        vaccinationCenterService.createReservation(insured6, timeslot2center2, vaccCenter2);
@@ -137,12 +136,13 @@ public class SyntheticData implements CommandLineRunner {
 //        vaccinationCenterService.createReservation(insured8, timeslot4center2, vaccCenter2);
 //
 //        //vaccinations
-//        vaccinationCenterService.createVaccination("Pfizer", 2, insured1, vaccCenter1);
-//        vaccinationCenterService.createVaccination("Moderna", 3, insured2, vaccCenter1);
-//        vaccinationCenterService.createVaccination("Pfizer", 2, insured3, vaccCenter1);
-//        vaccinationCenterService.createVaccination("Pfizer", 2, insured4, vaccCenter1);
-//        vaccinationCenterService.createVaccination("Pfizer", 2, insured5, vaccCenter2);
-//        vaccinationCenterService.createVaccination("Pfizer", 2, insured6, vaccCenter2);
+
+//        vaccinationService.createVaccination("Tetanus", 2, insured1, vaccCenter1);
+//        vaccinationService.createVaccination("covid", 3, insured2, vaccCenter1);
+//        vaccinationService.createVaccination("flu", 2, insured3, vaccCenter1);
+//        vaccinationService.createVaccination("covid", 2, insured4, vaccCenter1);
+//        vaccinationService.createVaccination("covid", 2, insured5, vaccCenter2);
+//        vaccinationService.createVaccination("flu", 2, insured6, vaccCenter2);
 
         /*
         Timeslot timeslot10 = timeslotService.findTimeslotById(10);

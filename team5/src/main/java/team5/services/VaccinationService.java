@@ -84,16 +84,13 @@ public class VaccinationService {
                 }
             }
         }
-        System.out.println("4*********************vaccinationsByInsured");
         System.out.println(vaccinationsByInsured);
-        System.out.println("3*************************names");
         System.out.println(names);
         List<Vaccination> RecentVaccinationsByName = new ArrayList<>();
         for (String name : names) {
             Vaccination vaccination = findVaccinationByInsuredByVaccine(name, amka, vaccinationsByInsured);
             RecentVaccinationsByName.add(vaccination);
         }
-        System.out.println("1.*************************RecentVaccinationsByName");
         System.out.println(RecentVaccinationsByName);
         return RecentVaccinationsByName;
     }
