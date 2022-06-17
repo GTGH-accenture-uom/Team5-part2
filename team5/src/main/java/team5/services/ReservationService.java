@@ -199,8 +199,17 @@ public class ReservationService {
     public Doctor isReservationAssignedToDoctor(String doctorAmka, long timeslotId) {
         Doctor foundDoctor = doctorService.findDoctorByAmka(doctorAmka);
         boolean assigned = foundDoctor.getTimeslots().stream().anyMatch(e -> e.getId() == timeslotId);
-        return assigned?foundDoctor:null;
+        return assigned ? foundDoctor : null;
     }
+
+    /*
+    public Insured isReservationAssignedToInsured(String insuredAmka, long timeslotId) {
+        Insured foundInsured = insuredService.findInsuredByAmka(insuredAmka);
+        boolean assigned = foundInsured.getReservations().stream().anyMatch(e -> e.getId() == timeslotId);
+        return assigned ? foundInsured : null;
+    }
+
+     */
     //////////////////////////////////////////
 
     public Reservation updateReservation(long reservationId, long timeslotId) {

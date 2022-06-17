@@ -25,7 +25,7 @@ public class VaccinationController {
         return vaccinationService.findAllRecentVaccinationsWithState(amka);
     }
 
-    @PostMapping("/doctors/vaccinations/vaccination/doctors/{doctorAmka}")
+    @PostMapping("/vaccinations/vaccination/doctors/{doctorAmka}")
     public Vaccination createVaccination(@RequestBody VaccinationDTO vaccinationDTO,
                                          @PathVariable(value = "doctorAmka")String doctorAmka){
         return vaccinationService.createVaccination(vaccinationDTO,doctorAmka);
