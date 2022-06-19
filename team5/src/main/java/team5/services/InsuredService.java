@@ -84,6 +84,7 @@ public class InsuredService {
         return null;
     }
 
+
     public Insured updateInsured(String amka, InsuredDTO insuredDTO) {
         Insured insured = findInsByAmka(amka);
         insured.setName(insuredDTO.getName());

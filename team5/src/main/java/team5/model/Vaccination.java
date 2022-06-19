@@ -1,17 +1,15 @@
 package team5.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import team5.utilities.VaccinationState;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Vaccination {
 
     private static final AtomicLong count = new AtomicLong(0);
     private long id;
-    private String vacc_Name;
+    private String vacc_type;
     private Insured insured;
     private Doctor doctor;
     private LocalDateTime vaccinationDate;
@@ -32,21 +30,21 @@ public class Vaccination {
     }
 
 
-    public Vaccination(String vacc_Name, Insured insured, Doctor doctor, LocalDateTime vaccinationDate, LocalDateTime expirationDate) {
+    public Vaccination(String vacc_type, Insured insured, Doctor doctor, LocalDateTime vaccinationDate, LocalDateTime expirationDate) {
         this(insured, doctor, vaccinationDate, expirationDate);
-        this.vacc_Name = vacc_Name;
+        this.vacc_type = vacc_type;
     }
 
     public long getId() {
         return id;
     }
 
-    public String getVacc_Name() {
-        return vacc_Name;
+    public String getVacc_type() {
+        return vacc_type;
     }
 
-    public void setVacc_Name(String vacc_Name) {
-        this.vacc_Name = vacc_Name;
+    public void setVacc_type(String vacc_type) {
+        this.vacc_type = vacc_type;
     }
 
     public Insured getInsured() {
@@ -93,8 +91,8 @@ public class Vaccination {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Vaccination{");
         sb.append("id='").append(id).append('\'');
-        if (vacc_Name != null) {
-            sb.append("vacc_brand='").append(vacc_Name).append('\'');
+        if (vacc_type != null) {
+            sb.append("vacc_brand='").append(vacc_type).append('\'');
         }
         if (insured != null) {
             sb.append(", Insured=").append(insured);
