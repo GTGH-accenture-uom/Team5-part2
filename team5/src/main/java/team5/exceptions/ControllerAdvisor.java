@@ -104,4 +104,12 @@ public class ControllerAdvisor {
         errorResponse.setMessage(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(value = {TimeslotNotAvailableException.class})
+    public ResponseEntity<ErrorResponse> handleTimeslotNotAvailableException(TimeslotNotAvailableException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setErrorCode(HttpStatus.CONFLICT.value());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
 }

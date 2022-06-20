@@ -34,10 +34,7 @@ public class InsuredController {
         return insuredService.getAllInsured();
     }
 
-    @GetMapping("/insureds/{id}")
-    public Insured getInsured(@PathVariable String amka) {
-        return insuredService.findInsuredByAmka(amka);
-    }
+
 
     @PutMapping("/insureds/{amka}")
     public Insured updateInsured(@PathVariable String amka, @RequestBody InsuredDTO insuredDTO) {

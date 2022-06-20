@@ -45,28 +45,27 @@ public class VaccinationService {
             throw new ReservationNotFoundException(timeslotId);
         }
         logger.info("Reservation with id=" + foundReservation.getId());
-        Doctor authorizedDoctor = reservationService.isReservationAssignedToDoctor(doctorAmka, timeslotId);
-        if (authorizedDoctor != null) {
+        boolean isInsuredOwnerReservation = foundReservation.getInsured().getAmka().equals(insuredAmka);
+        boolean isDoctorAssignedReservation = foundReservation.getTimeslot().getDoctor().getAmka().equals(doctorAmka);
+        if (isInsuredOwnerReservation && isDoctorAssignedReservation) {
             if (findVaccinationByTimeslotId(timeslotId) != null) {
                 throw new ExistingRecordException(MessagesForExistingValues.VACCINATION_ALREADY_MADE.name());
             }
-            Insured foundInsured = insuredService.findInsuredByAmka(vaccinationDTO.getInsuredAmka());
-            if (foundInsured == null) {
-                throw new InsuredNotFoundException(insuredAmka);
-            }
+            String vacc_Name = vaccinationDTO.getVacc_Name();
+            Insured insured = foundReservation.getInsured();
+            Doctor doctor = foundReservation.getTimeslot().getDoctor();
             LocalDateTime vaccinationDate = LocalDateTime.now();
             LocalDateTime expirationDate = vaccinationDTO.getExpirationDate();
             if (expirationDate.isBefore(vaccinationDate)) {
                 throw new InvalidExpirationDateException(vaccinationDate);
             }
-            String vacc_Name = vaccinationDTO.getVacc_Name();
-            Vaccination vaccination = new Vaccination(vacc_Name, foundInsured, authorizedDoctor, vaccinationDate, expirationDate);
+            Vaccination vaccination = new Vaccination(vacc_Name,insured,doctor, vaccinationDate, expirationDate);
             vaccination.setReservation(foundReservation);
             foundReservation.setVaccination(vaccination);
             allVaccinations.add(vaccination);
             return vaccination;
         }
-        throw new DoctorNotAuthorizedException(timeslotId);
+        throw new CheckYourDataException();
     }
 
 
@@ -78,7 +77,7 @@ public class VaccinationService {
             if (v != null && v.getInsured() != null) {
                 if (v.getInsured().getAmka().equals(amka)) {
                     vaccinationsByInsured.add(v);
-                    names.add(v.getVacc_Name());
+                    names.add(v.getVacc_type());
                 }
             }
         }
@@ -105,7 +104,7 @@ public class VaccinationService {
         LocalDateTime expirationDateTime = vaccinationsByInsured.get(0).getExpirationDate();
         Vaccination vaccination = vaccinationsByInsured.get(0);
         for (Vaccination v : vaccinationsByInsured) {
-            if (v.getVacc_Name().equals(vaccine) && v.getExpirationDate().isAfter(expirationDateTime)) {
+            if (v.getVacc_type().equals(vaccine) && v.getExpirationDate().isAfter(expirationDateTime)) {
                 expirationDateTime = v.getExpirationDate();
                 vaccination = v;
             }
@@ -121,22 +120,22 @@ public class VaccinationService {
                 .orElse(null);
     }
 
-    public String findRecentVaccinationStateInBrand(String brand, String insuredAmka) {
+    public String findRecentVaccinationStateInVaccType(String vacc_type, String insuredAmka) {
         List<VaccinationWithStateDTO> listOfVaccinationState = findAllRecentVaccinationsWithState(insuredAmka);
         VaccinationWithStateDTO vaccinationWithStateDTO = listOfVaccinationState
-                .stream().filter(e -> e.getVaccination().getVacc_Name()
-                        .equals(brand)).reduce((first, second) -> second)
+                .stream().filter(e -> e.getVaccination().getVacc_type()
+                        .equals(vacc_type)).reduce((first, second) -> second)
                 .orElse(null);
         if (vaccinationWithStateDTO != null) {
             return vaccinationWithStateDTO.getVaccinationState().name();
         }
-        throw new VaccinationStateNotFoundException(brand, insuredAmka);
+        throw new VaccinationStateNotFoundException(vacc_type, insuredAmka);
     }
 
-    public byte[] generateQRCode(String vacc_brand, String insuredAmka, HttpServletResponse response) {
-        String lastVaccStateInBrand = findRecentVaccinationStateInBrand(vacc_brand, insuredAmka);
+    public byte[] generateQRCode(String vacc_type, String insuredAmka, HttpServletResponse response) {
+        String lastVaccStateInBrand = findRecentVaccinationStateInVaccType(vacc_type, insuredAmka);
         response.setContentType("image/png");
-        logger.info("The last vaccination state for brand " + vacc_brand + " is " + lastVaccStateInBrand);
+        logger.info("The last vaccination state for vacc_type " + vacc_type + " is " + lastVaccStateInBrand);
         return qrCodeService.generateQRCode(lastVaccStateInBrand, 500, 500);
     }
 

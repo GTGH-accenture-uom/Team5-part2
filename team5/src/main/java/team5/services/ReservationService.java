@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team5.dto.ReservationDTO;
+import team5.dto.VaccinationWithStateDTO;
 import team5.exceptions.*;
 import team5.model.*;
 import team5.utilities.DateUtils;
@@ -48,6 +49,7 @@ public class ReservationService {
         if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
             Timeslot timeslot = timeslots.get(0);
             Reservation reservation = new Reservation(insured, timeslot);
+            insured.addReservation(reservation);
             System.out.println(reservation);
             timeslot.setAvailable(false);
             timeslot.setReservation(reservation);//
@@ -66,19 +68,24 @@ public class ReservationService {
         System.out.println(timeslots);
         Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);//
         Insured insured = insuredService.findInsuredByAmka(amkaInsured);
-        if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
-            Timeslot timeslot = timeslots.get(0);
-            Reservation reservation = new Reservation(insured, timeslot);
-            System.out.println(reservation);
-            timeslot.setAvailable(false);
-            timeslot.setReservation(reservation);
-            allReservations.add(reservation);
+        if (timeslot2.isAvailable()) {
+            if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
+                Timeslot timeslot = timeslots.get(0);
+                timeslot.setAvailable(false);
+                Reservation reservation = new Reservation(insured, timeslot);
+                insured.addReservation(reservation);
+                System.out.println(reservation);
+                timeslot.setReservation(reservation);
+                allReservations.add(reservation);
 
-            return reservation;
-        } else {
-            System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots);
-            throw new RuntimeException("exception");
+                return reservation;
+            } else {
+                System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots);
+                throw new RuntimeException("exception");
+            }
         }
+        throw new TimeslotNotAvailableException(timeslot2.getId());
+
     }
 
     public Reservation findReservationByTimeslotId(long id) {
@@ -196,20 +203,7 @@ public class ReservationService {
         return findReservationsByDoctor(doctor, reservations);
     }
 
-    public Doctor isReservationAssignedToDoctor(String doctorAmka, long timeslotId) {
-        Doctor foundDoctor = doctorService.findDoctorByAmka(doctorAmka);
-        boolean assigned = foundDoctor.getTimeslots().stream().anyMatch(e -> e.getId() == timeslotId);
-        return assigned ? foundDoctor : null;
-    }
 
-    /*
-    public Insured isReservationAssignedToInsured(String insuredAmka, long timeslotId) {
-        Insured foundInsured = insuredService.findInsuredByAmka(insuredAmka);
-        boolean assigned = foundInsured.getReservations().stream().anyMatch(e -> e.getId() == timeslotId);
-        return assigned ? foundInsured : null;
-    }
-
-     */
     //////////////////////////////////////////
 
     public Reservation updateReservation(long reservationId, long timeslotId) {
@@ -221,20 +215,26 @@ public class ReservationService {
         if (foundTimeslot == null) {
             throw new TimeslotNotFoundException(timeslotId);
         }
-        if (reservation.getReservationChanges() < 2) {
-            //Set free the previous timeslot
-            reservation.getTimeslot().setAvailable(true);
-            //Set the reservation of this timeslot to null
-            reservation.getTimeslot().setReservation(null);
-            //add the new timeslot
-            reservation.setTimeslot(foundTimeslot);
-            foundTimeslot.setReservation(reservation);
-            //reserve the new timeslot
-            foundTimeslot.setAvailable(false);
-            reservation.increaseReservationCounter();
+        if (foundTimeslot.isAvailable()) {
+            if (reservation.getReservationChanges() < 2) {
+                //Set free the previous timeslot
+                reservation.getTimeslot().setAvailable(true);
+                //Set the reservation of this timeslot to null
+                reservation.getTimeslot().setReservation(null);
+                //add the new timeslot
+                reservation.setTimeslot(foundTimeslot);
+                foundTimeslot.setReservation(reservation);
+                //reserve the new timeslot
+                foundTimeslot.setAvailable(false);
+                reservation.increaseReservationCounter();
+                logger.info("->" + reservation);
+            } else {
+                throw new ReservationCannotBeUpdated(reservationId);
+            }
         } else {
-            throw new ReservationCannotBeUpdated(reservationId);
+            throw new TimeslotNotAvailableException(timeslotId);
         }
+
         return reservation;
     }
 
