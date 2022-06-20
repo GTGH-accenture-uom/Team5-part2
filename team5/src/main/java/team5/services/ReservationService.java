@@ -46,7 +46,8 @@ public class ReservationService {
         System.out.println(timeslots);
         Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);//
         Insured insured = insuredService.findInsuredByAmka(amkaInsured);
-        if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
+        if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null
+                && timeslots.get(0).getDoctor().equals(doctor) && timeslots.get(0).isAvailable()==true) {
             Timeslot timeslot = timeslots.get(0);
             Reservation reservation = new Reservation(insured, timeslot);
             insured.addReservation(reservation);
