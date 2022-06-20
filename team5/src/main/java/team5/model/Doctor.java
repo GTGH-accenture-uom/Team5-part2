@@ -6,10 +6,13 @@ package team5.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class Doctor {
-    //@JsonIgnore
+    private static final AtomicLong count = new AtomicLong(0);
+
+    private final long id;
     private String amka;
     private String name;
     private String surname;
@@ -21,6 +24,7 @@ public class Doctor {
     //private List<Reservation> reservations = new ArrayList<>();
 
     public Doctor(String amka, String name, String surname) {
+        this.id = count.incrementAndGet();
         this.amka = amka;
         this.name = name;
         this.surname = surname;

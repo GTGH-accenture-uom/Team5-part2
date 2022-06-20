@@ -49,7 +49,7 @@ public class VaccinationService {
         boolean isDoctorAssignedReservation = foundReservation.getTimeslot().getDoctor().getAmka().equals(doctorAmka);
         if (isInsuredOwnerReservation && isDoctorAssignedReservation) {
             if (findVaccinationByTimeslotId(timeslotId) != null) {
-                throw new ExistingRecordException(MessagesForExistingValues.VACCINATION_ALREADY_MADE.name());
+                throw new ExistingRecordException(MessagesForExistingValues.VACCINATION_ALREADY_MADE.getErrorMessage());
             }
             String vacc_Name = vaccinationDTO.getVacc_Name();
             Insured insured = foundReservation.getInsured();

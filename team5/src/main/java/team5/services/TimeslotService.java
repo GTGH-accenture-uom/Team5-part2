@@ -27,9 +27,7 @@ public class TimeslotService {
     }
 
     public Timeslot createTimeslot(TimeslotDTO timeslotDTO) {
-        Timeslot timeslot = new Timeslot(timeslotDTO.getStartDateTime(), timeslotDTO.getDuration());
-        allTimeslots.add(timeslot);
-        return timeslot;
+        return createTimeslot(timeslotDTO.getStartDateTime(), timeslotDTO.getDuration());
     }
 
     public Timeslot findTimeslotById(long id) {

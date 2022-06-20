@@ -6,7 +6,6 @@ public class DoctorDTO {
     private String name;
     private String surname;
 
-
     public String getAmka() {
         return amka;
     }

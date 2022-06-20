@@ -8,6 +8,7 @@ import team5.exceptions.*;
 import team5.model.*;
 import team5.utilities.InputValidator;
 import team5.utilities.MessagesForExistingValues;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class DoctorService {
     //First method create doctor to be used by the controller
     public Doctor createDoctor(DoctorDTO doctorDTO) {
         if (findDocByAmka(doctorDTO.getAmka()) == null) {
-            if (InputValidator.checkAfm(doctorDTO.getAmka())) {
+            if (InputValidator.checkAmka(doctorDTO.getAmka())) {
                 Doctor doctor = createDoctor(doctorDTO.getAmka(), doctorDTO.getName(), doctorDTO.getSurname());
                 allDoctors.add(doctor);
                 logger.info("Doctor Created " + doctor);
@@ -31,7 +32,7 @@ public class DoctorService {
                 throw new CheckYourDataException();
             }
         }
-        throw new ExistingRecordException(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS.name());
+        throw new ExistingRecordException(MessagesForExistingValues.DOCTOR_ALREADY_EXISTS.getErrorMessage());
     }
 
 
@@ -44,7 +45,7 @@ public class DoctorService {
                 allDoctors.add(doc);
             }
         } else {
-            logger.warn("->" + MessagesForExistingValues.DOCTOR_ALREADY_EXISTS);
+            logger.warn("This doctor already exists with amka " + amka);
         }
         return doc;
     }
@@ -52,28 +53,33 @@ public class DoctorService {
     public Doctor findDoctorByAmka(String amka) {
         return allDoctors.stream().filter(e -> e.getAmka().equals(amka))
                 .findFirst()
-                .orElseThrow(() -> new DoctorNotFoundException(amka));
+                .orElseThrow(()->new DoctorNotFoundException(amka));
     }
 
-    //Second method of find doctor not to be used from the controllers
     public Doctor findDocByAmka(String amka) {
-        try {
-            return allDoctors
-                    .stream()
-                    .filter(e -> e.getAmka().equals(amka)).findFirst()
-                    .orElseThrow(() -> new DoctorNotFoundException(amka));
-        } catch (DoctorNotFoundException doctorNotFoundException) {
-            logger.warn(doctorNotFoundException.getMessage());
-        }
-        return null;
+        return allDoctors.stream().filter(e -> e.getAmka().equals(amka))
+                .findFirst()
+                .orElse(null);
     }
+
+
 
     public Doctor updateDoctor(String amka, DoctorDTO doctorDTO) {
         Doctor doctor = findDoctorByAmka(amka);
-        doctor.setName(doctorDTO.getName());
-        doctor.setAmka(doctorDTO.getAmka());
-        doctor.setSurname(doctorDTO.getSurname());
-        return doctor;
+        if (doctor != null) {
+            if (InputValidator.checkAmka(doctorDTO.getAmka())) {
+                logger.info("Doctor before update " + doctor);
+                doctor.setName(doctorDTO.getName());
+                doctor.setAmka(doctorDTO.getAmka());
+                doctor.setSurname(doctorDTO.getSurname());
+                logger.info("Doctor after update " + doctor);
+                return doctor;
+            } else {
+                throw new CheckYourDataException();
+            }
+        } else {
+            throw new DoctorNotFoundException(amka);
+        }
     }
 
     public void deleteDoctor(String amka) {
@@ -90,8 +96,8 @@ public class DoctorService {
                 && !doctor.getTimeslots().contains(timeslot)) {
             doctor.addTimeslot(timeslot);
             timeslot.setDoctor(doctor);
-        } else {
-            logger.warn("This timeslot cannot be added");
+        } else if (timeslot != null) {
+            logger.warn("Cannot add this timeslot with id " + timeslot.getId() + " with amka " + amka);
         }
     }
 
