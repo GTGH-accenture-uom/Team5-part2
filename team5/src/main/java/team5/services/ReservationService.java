@@ -59,7 +59,7 @@ public class ReservationService {
             return reservation;
         } else {
             System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots.get(0));
-            throw new RuntimeException("exception");
+            throw new RuntimeException("Invalid data input");
         }
     }
 
