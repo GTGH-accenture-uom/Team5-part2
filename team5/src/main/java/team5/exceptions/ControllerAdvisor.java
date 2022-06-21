@@ -89,19 +89,14 @@ public class ControllerAdvisor {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {TimeslotOwnerException.class})
-    public ResponseEntity<ErrorResponse> handleTimeslotOwnerException(TimeslotOwnerException ex) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setErrorCode(HttpStatus.NOT_FOUND.value());
-        errorResponse.setMessage(ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
 
-    @ExceptionHandler(value = {DoctorNotAuthorizedException.class})
-    public ResponseEntity<ErrorResponse> handleDoctorNotAuthorizedException(DoctorNotAuthorizedException ex) {
+
+
+    @ExceptionHandler(value = {TimeslotNotAvailableException.class})
+    public ResponseEntity<ErrorResponse> handleTimeslotNotAvailableException(TimeslotNotAvailableException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setErrorCode(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setErrorCode(HttpStatus.CONFLICT.value());
         errorResponse.setMessage(ex.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 }

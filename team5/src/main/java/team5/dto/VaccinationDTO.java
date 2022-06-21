@@ -6,7 +6,6 @@ public class VaccinationDTO {
 
     private long timeslotId;
     private String insuredAmka;
-
     private String vacc_Name;
     private LocalDateTime expirationDate;
 

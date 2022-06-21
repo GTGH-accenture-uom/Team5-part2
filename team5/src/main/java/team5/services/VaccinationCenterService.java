@@ -31,7 +31,7 @@ public class VaccinationCenterService {
         if (!allVaccinationCenters.contains(vaccinationCenter)) {
             allVaccinationCenters.add(vaccinationCenter);
         } else {
-            throw new ExistingRecordException(MessagesForExistingValues.VACCINATION_CENTER_EXISTS.name());
+            throw new ExistingRecordException(MessagesForExistingValues.VACCINATION_CENTER_EXISTS.getErrorMessage());
         }
         return vaccinationCenter;
     }

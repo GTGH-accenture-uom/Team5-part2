@@ -31,10 +31,10 @@ public class VaccinationController {
         return vaccinationService.createVaccination(vaccinationDTO,doctorAmka);
     }
 
-    @GetMapping("/vaccination/state/generateQRCode/brand/{vacc_brand}/{insuredAmka}")
+    @GetMapping("/vaccination/state/generateQRCode/{vacc_type}/{insuredAmka}")
     public byte [] generateQRCode(@PathVariable String insuredAmka
-            ,@PathVariable String vacc_brand, HttpServletResponse response)  {
-       return vaccinationService.generateQRCode(vacc_brand,insuredAmka,response);
+            ,@PathVariable String vacc_type, HttpServletResponse response)  {
+       return vaccinationService.generateQRCode(vacc_type,insuredAmka,response);
     }
 
 
