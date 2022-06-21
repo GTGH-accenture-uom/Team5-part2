@@ -31,6 +31,7 @@ public class ReservationService {
         this.insuredService = insuredService;
     }
 
+    //used in endpoint
     public Reservation createReservationBody(ReservationDTO body) {
         if (body != null && body.getAmkaInsured() != null && body.getAmkaDoctor() != null
                 && body.getTimeslot() != null && body.getTimeslot() != null) { //timeslot = date //
@@ -46,17 +47,19 @@ public class ReservationService {
         System.out.println(timeslots);
         Doctor doctor = doctorService.findDoctorByAmka(amkaDoctor);//
         Insured insured = insuredService.findInsuredByAmka(amkaInsured);
-        if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
+        if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null
+                && timeslots.get(0).getDoctor().equals(doctor) && timeslots.get(0).isAvailable()==true) {
             Timeslot timeslot = timeslots.get(0);
             Reservation reservation = new Reservation(insured, timeslot);
             System.out.println(reservation);
             timeslot.setAvailable(false);
             timeslot.setReservation(reservation);//
             allReservations.add(reservation);
+
             return reservation;
         } else {
             System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots.get(0));
-            throw new RuntimeException("exception");
+            throw new RuntimeException("Invalid data input");
         }
     }
 
@@ -82,7 +85,6 @@ public class ReservationService {
             }
         }
         throw new TimeslotNotAvailableException(timeslot2.getId());
-
     }
 
     public Reservation findReservationByTimeslotId(long id) {
