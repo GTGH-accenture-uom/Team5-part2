@@ -35,8 +35,8 @@ public class InsuredService {
     public Insured createInsured(InsuredDTO insuredDTO) {
         if (findInsByAmka(insuredDTO.getAmka()) == null) {
             if (InputValidator.checkAfm(insuredDTO.getAfm()) && InputValidator.checkAmka(insuredDTO.getAmka())) {
-                Insured insured = new Insured(insuredDTO.getAfm(), insuredDTO.getAmka(), insuredDTO.getName(),
-                        insuredDTO.getSurname(), insuredDTO.getBirthdate(), insuredDTO.getEmail());
+                Insured insured = createInsured(insuredDTO.getAfm(), insuredDTO.getAmka(), insuredDTO.getName(),
+                        insuredDTO.getBirthdate(), insuredDTO.getSurname(), insuredDTO.getEmail());
                 allInsured.add(insured);
                 return insured;
             } else {
@@ -54,6 +54,8 @@ public class InsuredService {
                 insured = new Insured(afm, amka, name, surname, birthdate, email);
                 logger.info("Insured Created " + insured);
                 allInsured.add(insured);
+            } else {
+                logger.warn("Check your input amka is defined with 11 digits ");
             }
         } else {
             logger.warn("This insured already exists with amka " + amka);
@@ -64,8 +66,9 @@ public class InsuredService {
     public Insured findInsuredByAmka(String amka) {
         return allInsured.stream().filter(e -> e.getAmka().equals(amka))
                 .findFirst()
-                .orElseThrow(()->new InsuredNotFoundException(amka));
+                .orElseThrow(() -> new InsuredNotFoundException(amka));
     }
+
     public Insured findInsByAmka(String amka) {
         return allInsured.stream().filter(e -> e.getAmka().equals(amka))
                 .findFirst()
@@ -73,11 +76,10 @@ public class InsuredService {
     }
 
 
-
     public Insured updateInsured(String amka, InsuredDTO insuredDTO) {
         Insured insured = findInsuredByAmka(amka);
         if (insured != null) {
-            if (InputValidator.checkAfm(insuredDTO.getAfm()) && InputValidator.checkAmka(insuredDTO.getAmka())){
+            if (InputValidator.checkAfm(insuredDTO.getAfm()) && InputValidator.checkAmka(insuredDTO.getAmka())) {
                 logger.info("Insured before update " + insured);
                 insured.setName(insuredDTO.getName());
                 insured.setAmka(insuredDTO.getAmka());

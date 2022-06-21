@@ -49,12 +49,10 @@ public class ReservationService {
         if (insured != null && timeslots.size() > 0 && timeslots.get(0) != null && timeslots.get(0).getDoctor() != null) {//&& timeslots.get(0).getDoctor().equals(doctor)
             Timeslot timeslot = timeslots.get(0);
             Reservation reservation = new Reservation(insured, timeslot);
-            insured.addReservation(reservation);
             System.out.println(reservation);
             timeslot.setAvailable(false);
             timeslot.setReservation(reservation);//
             allReservations.add(reservation);
-
             return reservation;
         } else {
             System.err.println("Cannot make this reservation with insured " + insured + ", " + "timeslot" + timeslots.get(0));
@@ -73,7 +71,6 @@ public class ReservationService {
                 Timeslot timeslot = timeslots.get(0);
                 timeslot.setAvailable(false);
                 Reservation reservation = new Reservation(insured, timeslot);
-                insured.addReservation(reservation);
                 System.out.println(reservation);
                 timeslot.setReservation(reservation);
                 allReservations.add(reservation);

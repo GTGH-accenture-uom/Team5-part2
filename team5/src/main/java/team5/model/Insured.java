@@ -17,8 +17,7 @@ public class Insured {
     private String surname;
     private LocalDate birthdate;
     private String email;
-    @JsonIgnore
-    private List<Reservation> reservations = new ArrayList<>();
+
 
     public Insured(String afm, String amka, String name, String surname, LocalDate birthdate, String email) {
         this.id = count.incrementAndGet();
@@ -87,17 +86,6 @@ public class Insured {
         return afm.equals(insured.afm);
     }
 
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-
-    public void addReservation(Reservation reservation) {
-        reservations.add(reservation);
-    }
 
     @Override
     public int hashCode() {

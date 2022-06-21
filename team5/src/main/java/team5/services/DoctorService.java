@@ -43,6 +43,8 @@ public class DoctorService {
                 doc = new Doctor(amka, firstName, lastName);
                 logger.info("Doctor Created " + doc);
                 allDoctors.add(doc);
+            } else {
+                logger.warn("Check your input amka is defined with 11 digits ");
             }
         } else {
             logger.warn("This doctor already exists with amka " + amka);
@@ -51,17 +53,18 @@ public class DoctorService {
     }
 
     public Doctor findDoctorByAmka(String amka) {
-        return allDoctors.stream().filter(e -> e.getAmka().equals(amka))
-                .findFirst()
-                .orElseThrow(()->new DoctorNotFoundException(amka));
+        return allDoctors.stream()
+                .filter(e -> e.getAmka()
+                        .equals(amka))
+                .findFirst().orElseThrow(() -> new DoctorNotFoundException(amka));
     }
 
     public Doctor findDocByAmka(String amka) {
-        return allDoctors.stream().filter(e -> e.getAmka().equals(amka))
-                .findFirst()
-                .orElse(null);
+        return allDoctors.stream()
+                .filter(e -> e.getAmka()
+                        .equals(amka))
+                .findFirst().orElse(null);
     }
-
 
 
     public Doctor updateDoctor(String amka, DoctorDTO doctorDTO) {
@@ -92,10 +95,8 @@ public class DoctorService {
 
     public void addTimeslotToDoctor(String amka, Timeslot timeslot) {
         Doctor doctor = findDocByAmka(amka);
-        if (doctor != null && timeslot != null && timeslot.isAvailable()
-                && !doctor.getTimeslots().contains(timeslot)) {
+        if (doctor != null && timeslot != null && timeslot.isAvailable() && !doctor.getTimeslots().contains(timeslot)) {
             doctor.addTimeslot(timeslot);
-            timeslot.setDoctor(doctor);
         } else if (timeslot != null) {
             logger.warn("Cannot add this timeslot with id " + timeslot.getId() + " with amka " + amka);
         }

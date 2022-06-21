@@ -19,21 +19,13 @@ public class VaccinationService {
 
     private final List<Vaccination> allVaccinations = new ArrayList<>();
     private final QRCodeService qrCodeService;
-    private ReservationService reservationService;
-    private DoctorService doctorService;
-
-    private InsuredService insuredService;
-
-    private TimeslotService timeslotService;
+    private final ReservationService reservationService;
 
     private final Logger logger = LoggerFactory.getLogger(VaccinationService.class);
 
     @Autowired
-    public VaccinationService(ReservationService reservationService, DoctorService doctorService, InsuredService insuredService, TimeslotService timeslotService, QRCodeService qrCodeService) {
+    public VaccinationService(ReservationService reservationService,QRCodeService qrCodeService) {
         this.reservationService = reservationService;
-        this.doctorService = doctorService;
-        this.insuredService = insuredService;
-        this.timeslotService = timeslotService;
         this.qrCodeService = qrCodeService;
     }
 
