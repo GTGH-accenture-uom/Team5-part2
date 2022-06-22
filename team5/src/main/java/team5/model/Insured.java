@@ -1,5 +1,7 @@
 package team5.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ public class Insured {
     private String surname;
     private LocalDate birthdate;
     private String email;
+
 
     public Insured(String afm, String amka, String name, String surname, LocalDate birthdate, String email) {
         this.id = count.incrementAndGet();
@@ -75,7 +78,6 @@ public class Insured {
     }
 
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,6 +85,7 @@ public class Insured {
         Insured insured = (Insured) o;
         return afm.equals(insured.afm);
     }
+
 
     @Override
     public int hashCode() {

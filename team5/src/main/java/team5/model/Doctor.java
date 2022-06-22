@@ -1,26 +1,24 @@
 package team5.model;
 
 
-//import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicLong;
+
 
 public class Doctor {
-    //@JsonIgnore
+    private static final AtomicLong count = new AtomicLong(0);
+
+    private final long id;
     private String amka;
     private String name;
     private String surname;
     @JsonIgnore
     private List<Timeslot> timeslots = new ArrayList<>();
-    //@JsonIgnore
-    //private List<Vaccination> vaccinations = new ArrayList<>();
-    //@JsonIgnore
-    //private List<Reservation> reservations = new ArrayList<>();
 
     public Doctor(String amka, String name, String surname) {
+        this.id = count.incrementAndGet();
         this.amka = amka;
         this.name = name;
         this.surname = surname;
@@ -50,41 +48,6 @@ public class Doctor {
         this.surname = surname;
     }
 
-//    public List<Vaccination> getVaccinations() {
-//        return vaccinations;
-//    }
-//
-//    public void setVaccinations(List<Vaccination> vaccinations) {
-//        this.vaccinations = vaccinations;
-//    }
-//
-//    public void addVaccination(Vaccination vaccination) {
-//        vaccinations.add(vaccination);
-//    }
-//
-//    public List<VaccinationCenter> getVaccinationCenters() {
-//        return vaccinationCenters;
-//    }
-//
-//    public void setVaccinationCenters(List<VaccinationCenter> vaccinationCenters) {
-//        this.vaccinationCenters = vaccinationCenters;
-//    }
-
-//    public List<Reservation> getReservations() {
-//        return reservations;
-//    }
-//
-//    public void setReservations(List<Reservation> reservations) {
-//        this.reservations = reservations;
-//    }
-//
-//    public void addReservation(Reservation reservation) {
-//        reservations.add(reservation);
-//    }
-
-//    public void addVaccinationCenter(VaccinationCenter vaccinationCenter) {
-//        vaccinationCenters.add(vaccinationCenter);
-//    }
 
     public List<Timeslot> getTimeslots() {
         return timeslots;
@@ -97,11 +60,10 @@ public class Doctor {
 
 
     public void addTimeslot(Timeslot timeslot) {
-        if (!timeslots.contains(timeslot)) {
-            timeslots.add(timeslot);
-            timeslot.setDoctor(this);
-        }
+        timeslots.add(timeslot);
+        timeslot.setDoctor(this);
     }
+
 
     @Override
     public boolean equals(Object o) {

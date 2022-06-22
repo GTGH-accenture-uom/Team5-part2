@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import team5.config.SyntheticData;
 import team5.dto.InsuredDTO;
 import team5.dto.VaccinationWithStateDTO;
-import team5.exceptions.CheckYourDataException;
-import team5.exceptions.ExistingRecordException;
-import team5.exceptions.InsuredNotFoundException;
-import team5.exceptions.TimeslotNotFoundException;
+import team5.exceptions.*;
 import team5.model.*;
 import org.springframework.stereotype.Service;
 import team5.utilities.InputValidator;
@@ -36,17 +33,17 @@ public class InsuredService {
 
     //First method create Insured to be used from the controller
     public Insured createInsured(InsuredDTO insuredDTO) {
-        if (findInsuredByAmka(insuredDTO.getAmka()) == null) {
+        if (findInsByAmka(insuredDTO.getAmka()) == null) {
             if (InputValidator.checkAfm(insuredDTO.getAfm()) && InputValidator.checkAmka(insuredDTO.getAmka())) {
-                Insured insured = new Insured(insuredDTO.getAfm(), insuredDTO.getAmka(), insuredDTO.getName(),
-                        insuredDTO.getSurname(), insuredDTO.getBirthdate(), insuredDTO.getEmail());
+                Insured insured = createInsured(insuredDTO.getAfm(), insuredDTO.getAmka(), insuredDTO.getName(),
+                        insuredDTO.getBirthdate(), insuredDTO.getSurname(), insuredDTO.getEmail());
                 allInsured.add(insured);
                 return insured;
             } else {
                 throw new CheckYourDataException();
             }
         } else {
-            throw new ExistingRecordException(MessagesForExistingValues.INSURED_ALREADY_EXISTS.name());
+            throw new ExistingRecordException(MessagesForExistingValues.INSURED_ALREADY_EXISTS.getErrorMessage());
         }
     }
 
@@ -58,41 +55,46 @@ public class InsuredService {
                 logger.info("Insured Created " + insured);
                 allInsured.add(insured);
             } else {
-                logger.warn("->" + MessagesForExistingValues.INSURED_ALREADY_EXISTS);
+                logger.warn("Check your input amka is defined with 11 digits ");
             }
+        } else {
+            logger.warn("This insured already exists with amka " + amka);
         }
         return insured;
     }
 
-    //First find Insured method to be used from the controller
     public Insured findInsuredByAmka(String amka) {
         return allInsured.stream().filter(e -> e.getAmka().equals(amka))
                 .findFirst()
                 .orElseThrow(() -> new InsuredNotFoundException(amka));
     }
 
-    //Second method of find insured not to be used from the controllers
     public Insured findInsByAmka(String amka) {
-        try {
-            return allInsured
-                    .stream()
-                    .filter(insured -> insured.getAmka().equals(amka)).findFirst()
-                    .orElseThrow(() -> new InsuredNotFoundException(amka));
-        } catch (InsuredNotFoundException insuredNotFoundException) {
-            System.err.println(insuredNotFoundException.getMessage());
-        }
-        return null;
+        return allInsured.stream().filter(e -> e.getAmka().equals(amka))
+                .findFirst()
+                .orElseThrow(null);
     }
 
+
     public Insured updateInsured(String amka, InsuredDTO insuredDTO) {
-        Insured insured = findInsByAmka(amka);
-        insured.setName(insuredDTO.getName());
-        insured.setSurname(insuredDTO.getSurname());
-        insured.setEmail(insuredDTO.getEmail());
-        insured.setAmka(insuredDTO.getAmka());
-        insured.setAfm(insuredDTO.getAfm());
-        insured.setBirthdate(insuredDTO.getBirthdate());
-        return insured;
+        Insured insured = findInsuredByAmka(amka);
+        if (insured != null) {
+            if (InputValidator.checkAfm(insuredDTO.getAfm()) && InputValidator.checkAmka(insuredDTO.getAmka())) {
+                logger.info("Insured before update " + insured);
+                insured.setName(insuredDTO.getName());
+                insured.setAmka(insuredDTO.getAmka());
+                insured.setAfm(insuredDTO.getAfm());
+                insured.setBirthdate(insuredDTO.getBirthdate());
+                insured.setEmail(insuredDTO.getEmail());
+                insured.setSurname(insuredDTO.getSurname());
+                logger.info("Insured after update " + insured);
+                return insured;
+            } else {
+                throw new CheckYourDataException();
+            }
+        } else {
+            throw new InsuredNotFoundException(amka);
+        }
     }
 
     public void deleteInsured(String amka) {

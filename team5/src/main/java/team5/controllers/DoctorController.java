@@ -37,7 +37,7 @@ public class DoctorController {
     }
 
     @PutMapping("/doctors/{amka}")
-    public Doctor updateDoctor(@PathVariable String amka, DoctorDTO doctorDTO) {
+    public Doctor updateDoctor(@PathVariable String amka, @RequestBody DoctorDTO doctorDTO) {
         return doctorService.updateDoctor(amka, doctorDTO);
     }
 
